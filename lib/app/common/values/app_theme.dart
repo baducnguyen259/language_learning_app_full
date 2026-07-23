@@ -10,10 +10,11 @@ abstract final class AppTheme {
   AppTheme._();
 
   /// Theme sáng của ứng dụng.
-  static ThemeData get light => _buildTheme(Brightness.light);
+  // Cache the theme so rebuilds do not recreate the full ThemeData tree.
+  static final ThemeData light = _buildTheme(Brightness.light);
 
   /// Theme tối của ứng dụng.
-  static ThemeData get dark => _buildTheme(Brightness.dark);
+  static final ThemeData dark = _buildTheme(Brightness.dark);
 
   static ThemeData _buildTheme(Brightness brightness) {
     final colorScheme = ColorScheme.fromSeed(
