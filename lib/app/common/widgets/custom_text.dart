@@ -44,7 +44,7 @@ class CustomText extends StatelessWidget {
     return Text(
       text,
       style: baseStyle.copyWith(
-        color: color ?? baseStyle.color ?? theme.colorScheme.onSurface,
+        color: color ?? baseStyle.color ?? Colors.black,
         height: height,
         decoration: textDecoration,
       ),

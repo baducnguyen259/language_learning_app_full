@@ -7,6 +7,7 @@ abstract class AppIcons {
   static const String icLock = 'assets/icons/ic_lock.svg';
   static const String icMail = 'assets/icons/ic_mail.svg';
   static const String icBack = 'assets/icons/ic_arrowBack_circle.svg';
+  static const String icGoogle = 'assets/icons/ic_google.svg';
   static const String icArrowBackCircle =
       'assets/icons/ic_arrowBack_circle.svg';
   static const String icPhone = 'assets/icons/ic_phone.svg';

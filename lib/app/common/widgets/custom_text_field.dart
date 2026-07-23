@@ -258,7 +258,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       children: [
         if (widget.labelInput?.isNotEmpty ?? false)
           Padding(
-            padding: const EdgeInsets.only(bottom: 8),
+            padding: const EdgeInsets.only(bottom: 2),
             child: Row(
               children: [
                 Flexible(
@@ -269,7 +269,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                           widget.labelStyle ??
                           theme.textTheme.labelMedium?.copyWith(
                             color: colorScheme.onSurface,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w500,
                           ),
                     ),
                   ),
