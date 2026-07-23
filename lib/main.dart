@@ -29,7 +29,8 @@ class LanguageLearningApp extends StatelessWidget {
       initialBinding: GlobalBinding(),
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
-      themeMode: ThemeMode.system,
+      // Luôn khởi động với giao diện sáng, không phụ thuộc cài đặt hệ điều hành.
+      themeMode: ThemeMode.light,
     );
   }
 }

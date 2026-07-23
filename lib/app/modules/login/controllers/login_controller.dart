@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 /// Điểm mở rộng cho trạng thái và hành động đăng nhập.
@@ -7,4 +8,7 @@ import 'package:get/get.dart';
 /// ```dart
 /// final controller = Get.find<LoginController>();
 /// ```
-class LoginController extends GetxController {}
+class LoginController extends GetxController {
+  final emailcontroller = TextEditingController();
+  final passwordcontroller = TextEditingController();
+}

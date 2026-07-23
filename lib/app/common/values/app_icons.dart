@@ -1,27 +1,12 @@
 part of 'values.dart';
 
-/// Đường dẫn asset cho các biểu tượng của ứng dụng.
-///
-/// Các file được tham chiếu phải tồn tại với đúng kiểu chữ hoa thường và
-/// thư mục của chúng phải được đăng ký trong `flutter.assets` của `pubspec.yaml`
-/// trước khi sử dụng các hằng số này. Ví dụ:
-///
-/// ```yaml
-/// flutter:
-///   assets:
-///     - assets/icons/
-///     - assets/svgs/
-/// ```
-///
-/// ```dart
-/// CustomImage.asset(AppIcons.icEye);
-/// ```
 abstract class AppIcons {
   static const String icErrorIcon = 'assets/svgs/ic_error_icon.svg';
   static const String icEye = 'assets/icons/ic_eye.svg';
   static const String icEyeHide = 'assets/icons/ic_eye_hide.svg';
   static const String icLock = 'assets/icons/ic_lock.svg';
   static const String icMail = 'assets/icons/ic_mail.svg';
+  static const String icBack = 'assets/icons/ic_arrowBack_circle.svg';
   static const String icArrowBackCircle =
       'assets/icons/ic_arrowBack_circle.svg';
   static const String icPhone = 'assets/icons/ic_phone.svg';
@@ -75,15 +60,6 @@ abstract class AppIcons {
   static const String icSIMCard = 'assets/svgs/ic_sim_card.svg';
   static const String icPhoto = 'assets/svgs/ic_photo.svg';
   static const String icGlobe = 'assets/svgs/ic_globe.svg';
-
-  /// Biểu tượng chuẩn bị cuộc gọi video.
-  static const String icMicrophone = 'assets/svgs/ic_microphone.svg';
-  static const String icMicrophoneUnfill =
-      'assets/svgs/ic_microphone_unfill.svg';
-  static const String icFaceId2 = 'assets/svgs/ic_faceid.svg';
-  static const String icVolume = 'assets/svgs/ic_volume.svg';
-  static const String icProtectVCheck = 'assets/svgs/icon-protect-vcheck.svg';
-  static const String icInfoBlue = 'assets/svgs/ic_infoBlue.svg';
 
   /// Biểu tượng sử dụng asset cục bộ.
   static const String icMessagesVCheck = 'assets/icons/ic_messages_vcheck.svg';

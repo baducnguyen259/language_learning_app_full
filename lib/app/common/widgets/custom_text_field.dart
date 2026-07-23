@@ -2,6 +2,7 @@ import 'dart:ui' show SemanticsValidationResult;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:language_learning_app/app/common/values/values.dart';
 
 /// Trường văn bản Material 3 với nhãn, trạng thái kiểm tra hợp lệ và văn bản trợ giúp.
 ///
@@ -43,7 +44,7 @@ class CustomTextField extends StatefulWidget {
     this.showBorder = true,
     this.onChanged,
     this.onSubmitted,
-    this.radius = 12,
+    this.radius = 14,
     this.fillColor,
     this.focusedBorderColor,
     this.enabledBorderColor,
@@ -246,7 +247,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
               width: hasVisibleError ? 2 : widget.focusBorderWidth,
               color: hasVisibleError
                   ? errorColor
-                  : widget.focusedBorderColor ?? colorScheme.primary,
+                  : widget.focusedBorderColor ?? AppColors.contentBlack,
             )
           : BorderSide.none,
     );
@@ -316,6 +317,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   widget.style ??
                   theme.textTheme.bodyLarge?.copyWith(
                     color: colorScheme.onSurface,
+                    height: 1,
                   ),
               onTap: widget.actionFunction,
               onChanged: _handleChanged,
@@ -331,8 +333,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                     widget.contentPadding ??
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                 filled: true,
-                fillColor:
-                    widget.fillColor ?? colorScheme.surfaceContainerHighest,
+                fillColor: widget.fillColor ?? Colors.white,
                 border: enabledBorder,
                 enabledBorder: enabledBorder,
                 focusedBorder: focusedBorder,
