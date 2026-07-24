@@ -270,6 +270,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                           theme.textTheme.labelMedium?.copyWith(
                             color: colorScheme.onSurface,
                             fontWeight: FontWeight.w500,
+                            fontSize: 12,
                           ),
                     ),
                   ),
@@ -318,6 +319,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   theme.textTheme.bodyLarge?.copyWith(
                     color: colorScheme.onSurface,
                     height: 1,
+                    fontSize: 12,
                   ),
               onTap: widget.actionFunction,
               onChanged: _handleChanged,
@@ -328,6 +330,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                     widget.hintStyle ??
                     theme.textTheme.bodyLarge?.copyWith(
                       color: colorScheme.onSurfaceVariant,
+                      fontSize: 12,
                     ),
                 contentPadding:
                     widget.contentPadding ??

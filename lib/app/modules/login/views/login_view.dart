@@ -8,6 +8,7 @@ import 'package:language_learning_app/app/common/widgets/custom_image.dart';
 import 'package:language_learning_app/app/common/widgets/custom_text.dart';
 import 'package:language_learning_app/app/common/widgets/custom_text_field.dart';
 import 'package:language_learning_app/app/modules/login/controllers/login_controller.dart';
+import 'package:language_learning_app/app/routes/app_pages.dart';
 
 class LoginView extends GetView<LoginController> {
   const LoginView({super.key});
@@ -15,9 +16,6 @@ class LoginView extends GetView<LoginController> {
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
-      showAppBar: true,
-      leadingIcon: AppIcons.icBack,
-      title: 'App Language',
       appBarTextStyle: AppTextStyle.headingH7Bold.copyWith(
         color: HexColor('#1C1B23'),
       ),
@@ -79,7 +77,7 @@ class LoginView extends GetView<LoginController> {
       mainAxisSize: MainAxisSize.min,
       children: [
         CustomTextField(
-          controller: controller.emailcontroller,
+          controller: controller.emailLoginController,
           isRequired: true,
           labelInput: 'Email',
           labelStyle: AppTextStyle.labelMedSmall,
@@ -88,7 +86,7 @@ class LoginView extends GetView<LoginController> {
           hintStyle: AppTextStyle.labelSmall,
         ),
         CustomTextField(
-          controller: controller.passwordcontroller,
+          controller: controller.passwordLoginController,
           isRequired: true,
           labelInput: 'Mật khẩu',
           labelStyle: AppTextStyle.labelMedSmall,
@@ -205,7 +203,8 @@ class LoginView extends GetView<LoginController> {
                 color: HexColor('#5B43E8'),
                 fontWeight: FontWeight.w400,
               ),
-              recognizer: TapGestureRecognizer(),
+              recognizer: TapGestureRecognizer()
+                ..onTap = () => Get.toNamed(Routes.REGISTER),
             ),
           ],
         ),
