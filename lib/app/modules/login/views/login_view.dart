@@ -120,10 +120,13 @@ class LoginView extends GetView<LoginController> {
             CustomText(text: 'Nhớ mật khẩu', style: AppTextStyle.labelMedSmall),
             const Spacer(),
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Get.toNamed(Routes.FORGOT_PASSWORD);
+              },
               child: CustomText(
                 text: 'Quên mật khẩu?',
                 style: AppTextStyle.labelMedSmall,
+                color: AppColors.red100,
               ),
             ),
           ],

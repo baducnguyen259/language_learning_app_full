@@ -9,7 +9,6 @@ import 'package:language_learning_app/app/common/widgets/status_bar_brightness.d
 /// Dù có tên cũ, widget này không phải là `MaterialApp`. Cần đăng ký
 /// [MaterialAppController] với GetX trước khi dựng widget,
 /// thường thông qua `GlobalBinding`.
-///
 /// Ví dụ:
 /// ```dart
 /// Get.put(MaterialAppController());
