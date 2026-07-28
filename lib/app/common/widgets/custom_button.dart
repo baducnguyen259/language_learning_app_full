@@ -112,10 +112,8 @@ class _BaseButtonState extends State<BaseButton> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final isEnabled = widget.onPressed != null;
-    final foregroundColor =
-        widget.foregroundColor ?? colorScheme.onPrimary;
-    final backgroundColor =
-        widget.backgroundColor ?? colorScheme.primary;
+    final foregroundColor = widget.foregroundColor ?? colorScheme.onPrimary;
+    final backgroundColor = widget.backgroundColor ?? colorScheme.primary;
     final disabledForegroundColor =
         widget.disableForegroundColor ?? colorScheme.onSurfaceVariant;
     final disabledBackgroundColor =
@@ -150,7 +148,9 @@ class _BaseButtonState extends State<BaseButton> {
                   height: 18,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    color: isEnabled ? foregroundColor : disabledForegroundColor,
+                    color: isEnabled
+                        ? foregroundColor
+                        : disabledForegroundColor,
                   ),
                 )
               : widget.child,
@@ -227,10 +227,9 @@ class CustomButton extends BaseButton {
     super.showLoading,
     super.buttonSize,
     super.controller,
-    Color? backgroundColor,
+    super.backgroundColor,
     double radius = 100,
   }) : super(
-         backgroundColor: backgroundColor,
          foregroundColor: Colors.white,
          child: Text(title, style: style ?? AppTextStyle.buttonL),
          radius: radius,

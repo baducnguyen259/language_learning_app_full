@@ -8,6 +8,11 @@ abstract class AppIcons {
   static const String icMail = 'assets/icons/ic_mail.svg';
   static const String icBack = 'assets/icons/ic_arrowBack_circle.svg';
   static const String icGoogle = 'assets/icons/ic_google.svg';
+  static const String icDictionary = 'assets/icons/ic_dictionary.svg';
+  static const String icLesson = 'assets/icons/ic_lesson.svg';
+  static const String icQuiz = 'assets/icons/ic_quiz.svg';
+  static const String icMicro = 'assets/icons/ic_micro.svg';
+  static const String icListen = 'assets/icons/ic_listen.svg';
   static const String icArrowBackCircle =
       'assets/icons/ic_arrowBack_circle.svg';
   static const String icPhone = 'assets/icons/ic_phone.svg';
@@ -23,6 +28,7 @@ abstract class AppIcons {
       'assets/icons/ic_checkCircle_filled.svg';
   static const String icQrCode = 'assets/icons/ic_qr_code.svg';
   static const String icHome = 'assets/icons/ic_home.svg';
+  static const String icHome1 = 'assets/icons/ic_home1.svg';
   static const String icHistory = 'assets/icons/ic_history.svg';
   static const String icBell = 'assets/icons/ic_bell.svg';
   static const String icKeyBoard = 'assets/icons/ic_keyboard.svg';

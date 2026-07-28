@@ -17,10 +17,10 @@ class MainBottomNavigationBar extends StatelessWidget {
   final TextStyle? selectedLabelTextStyle;
 
   static const List<_NavigationItem> _items = [
-    _NavigationItem(label: 'Trang chủ', icon: AppIcons.icHome),
-    _NavigationItem(label: 'Bài học', icon: AppIcons.icIdCard2),
-    _NavigationItem(label: 'Luyện tập', icon: AppIcons.icRecording),
-    _NavigationItem(label: 'Từ vựng', icon: AppIcons.icIdCard),
+    _NavigationItem(label: 'Trang chủ', icon: AppIcons.icHome1),
+    _NavigationItem(label: 'Bài học', icon: AppIcons.icLesson),
+    _NavigationItem(label: 'Luyện tập', icon: AppIcons.icQuiz),
+    _NavigationItem(label: 'Từ vựng', icon: AppIcons.icDictionary),
     _NavigationItem(label: 'Cá nhân', icon: AppIcons.icAccount),
   ];
 

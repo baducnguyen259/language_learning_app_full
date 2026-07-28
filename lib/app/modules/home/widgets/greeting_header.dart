@@ -12,14 +12,8 @@ class GreetingHeader extends StatelessWidget {
       height: 56,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: AppColors.backgroundPrimary,
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.elevationS1,
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        borderRadius: BorderRadius.all(Radius.circular(12)),
+        color: AppColors.backgroundSecondary,
       ),
       child: Row(
         children: [

@@ -6,26 +6,30 @@ import 'package:language_learning_app/app/common/widgets/custom_text.dart';
 class PracticeGrid extends StatelessWidget {
   const PracticeGrid({super.key});
 
-  static const List<_PracticeItem> _items = [
+  static final List<_PracticeItem> _items = [
     _PracticeItem(
       title: 'Từ vựng',
-      icon: AppIcons.icIdCard,
-      color: _PracticeColor.purple,
+      icon: AppIcons.icDictionary,
+      backgroundColor: AppColors.backgroundPPLightAccent,
+      iconColor: AppColors.contentGreen,
     ),
     _PracticeItem(
       title: 'Luyện nghe',
-      icon: AppIcons.icHistory,
-      color: _PracticeColor.blue,
+      icon: AppIcons.icListen,
+      backgroundColor: AppColors.backgroundSecondaryLightBlue,
+      iconColor: AppColors.contentPPInfo,
     ),
     _PracticeItem(
       title: 'Phát âm',
-      icon: AppIcons.icRecording,
-      color: _PracticeColor.orange,
+      icon: AppIcons.icMicro,
+      backgroundColor: AppColors.white,
+      iconColor: AppColors.contentSecondaryOrange,
     ),
     _PracticeItem(
       title: 'Ngữ pháp',
-      icon: AppIcons.icGlobe,
-      color: _PracticeColor.yellow,
+      icon: AppIcons.icHistory,
+      backgroundColor: AppColors.white,
+      iconColor: AppColors.contentSecondaryYellow,
     ),
   ];
 
@@ -41,46 +45,11 @@ class PracticeGrid extends StatelessWidget {
         mainAxisSpacing: 12,
         childAspectRatio: 1.55,
       ),
-      itemBuilder: (context, index) => _PracticeTile(item: _items[index]),
+      itemBuilder: (context, index) => _buildPracticeTile(_items[index]),
     );
   }
-}
 
-enum _PracticeColor { purple, blue, orange, yellow }
-
-class _PracticeItem {
-  const _PracticeItem({
-    required this.title,
-    required this.icon,
-    required this.color,
-  });
-
-  final String title;
-  final String icon;
-  final _PracticeColor color;
-}
-
-class _PracticeTile extends StatelessWidget {
-  const _PracticeTile({required this.item});
-
-  final _PracticeItem item;
-
-  Color get _backgroundColor => switch (item.color) {
-    _PracticeColor.purple => AppColors.backgroundPPLightAccent,
-    _PracticeColor.blue => AppColors.backgroundSecondaryLightBlue,
-    _PracticeColor.orange => AppColors.backgroundSecondaryLightOrange,
-    _PracticeColor.yellow => AppColors.backgroundSecondaryLightYellow,
-  };
-
-  Color get _iconColor => switch (item.color) {
-    _PracticeColor.purple => AppColors.contentPPAccent,
-    _PracticeColor.blue => AppColors.contentPPInfo,
-    _PracticeColor.orange => AppColors.contentSecondaryOrange,
-    _PracticeColor.yellow => AppColors.contentSecondaryYellow,
-  };
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildPracticeTile(_PracticeItem item) {
     return Material(
       color: AppColors.backgroundPrimary,
       borderRadius: BorderRadius.circular(14),
@@ -98,9 +67,9 @@ class _PracticeTile extends StatelessWidget {
                 width: 32,
                 height: 32,
                 padding: const EdgeInsets.all(7),
-                backgroundColor: _backgroundColor,
+                backgroundColor: item.backgroundColor,
                 shape: BoxShape.circle,
-                color: _iconColor,
+                color: item.iconColor,
                 semanticLabel: item.title,
               ),
               CustomText(
@@ -114,4 +83,18 @@ class _PracticeTile extends StatelessWidget {
       ),
     );
   }
+}
+
+class _PracticeItem {
+  const _PracticeItem({
+    required this.title,
+    required this.icon,
+    required this.backgroundColor,
+    required this.iconColor,
+  });
+
+  final String title;
+  final String icon;
+  final Color backgroundColor;
+  final Color iconColor;
 }
