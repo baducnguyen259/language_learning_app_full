@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-class MainShellController extends GetxController {
+class MainController extends GetxController {
   static const int tabCount = 5;
 
   final RxInt currentIndex = 0.obs;

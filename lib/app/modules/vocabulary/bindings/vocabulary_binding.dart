@@ -4,6 +4,6 @@ import 'package:language_learning_app/app/modules/vocabulary/controllers/vocabul
 class VocabularyBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<VocabularyController>(VocabularyController.new);
+    Get.lazyPut<VocabularyController>(() => VocabularyController());
   }
 }

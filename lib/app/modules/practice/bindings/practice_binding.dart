@@ -4,6 +4,6 @@ import 'package:language_learning_app/app/modules/practice/controllers/practice_
 class PracticeBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<PracticeController>(PracticeController.new);
+    Get.lazyPut<PracticeController>(() => PracticeController());
   }
 }

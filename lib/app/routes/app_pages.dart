@@ -5,8 +5,8 @@ import 'package:language_learning_app/app/modules/login/bindings/login_binding.d
 import 'package:language_learning_app/app/modules/login/views/login_view.dart';
 import 'package:language_learning_app/app/modules/home/bindings/home_binding.dart';
 import 'package:language_learning_app/app/modules/home/views/home_view.dart';
-import 'package:language_learning_app/app/modules/main_shell/bindings/main_binding.dart';
-import 'package:language_learning_app/app/modules/main_shell/views/main_view.dart';
+import 'package:language_learning_app/app/modules/main/bindings/main_binding.dart';
+import 'package:language_learning_app/app/modules/main/views/main_view.dart';
 import 'package:language_learning_app/app/modules/register/bindings/register_binding.dart';
 import 'package:language_learning_app/app/modules/register/views/register_view.dart';
 import 'package:language_learning_app/app/modules/reset_password/bindings/reset_password_binding.dart';
@@ -44,7 +44,7 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.mainShell,
-      page: () => const MainShellView(),
+      page: () => const MainView(),
       binding: MainShellBinding(),
     ),
   ];

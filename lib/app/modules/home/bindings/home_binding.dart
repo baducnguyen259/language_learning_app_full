@@ -4,6 +4,6 @@ import 'package:language_learning_app/app/modules/home/controllers/home_controll
 class HomeBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<HomeController>(HomeController.new);
+    Get.lazyPut<HomeController>(() => HomeController());
   }
 }

@@ -4,6 +4,6 @@ import 'package:language_learning_app/app/modules/profile/controllers/profile_co
 class ProfileBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<ProfileController>(ProfileController.new);
+    Get.lazyPut<ProfileController>(() => ProfileController());
   }
 }
