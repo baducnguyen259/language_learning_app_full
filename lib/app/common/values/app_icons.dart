@@ -41,7 +41,7 @@ abstract class AppIcons {
   static const String icPickImage = 'assets/icons/icPickImage.svg';
   static const String icMessagesInfoCircle =
       'assets/icons/icMessagesInfoCircle.svg';
-  static const String icUiSearch = 'assets/icons/icUiSearch.svg';
+  static const String icSearch = 'assets/icons/ic_search.svg';
   static const String icMessagesWarningCircleFill =
       'assets/icons/icMessagesWarningCircleFill.svg';
   static const String icActionArrowRight =

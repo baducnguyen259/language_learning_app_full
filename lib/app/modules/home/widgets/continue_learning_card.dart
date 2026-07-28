@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:language_learning_app/app/common/values/values.dart';
+import 'package:language_learning_app/app/common/widgets/custom_button.dart';
 import 'package:language_learning_app/app/common/widgets/custom_image.dart';
 import 'package:language_learning_app/app/common/widgets/custom_text.dart';
 import 'package:language_learning_app/app/modules/home/controllers/home_controller.dart';
@@ -79,21 +80,22 @@ class ContinueLearningCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 14),
-          FilledButton(
+          CustomButton(
+            radius: 14,
             onPressed: () {},
-            style: FilledButton.styleFrom(
-              backgroundColor: AppColors.purple100,
-              foregroundColor: AppColors.contentPrimaryInvert,
-            ),
+            backgroundColor: AppColors.purple100,
+            foregroundColor: AppColors.contentPrimaryInvert,
             child: Row(
+              mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 CustomText(
                   text: 'Tiếp tục ngay',
                   style: AppTextStyle.buttonL,
                   color: AppColors.contentPrimaryInvert,
+                  height: 1,
                 ),
-                const SizedBox(width: 8),
                 CustomImage.asset(
                   AppIcons.icActionArrowRight,
                   width: 18,

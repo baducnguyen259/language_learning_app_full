@@ -37,8 +37,8 @@ class HomeContent extends GetView<HomeController> {
                   const SizedBox(height: 18),
                   ContinueLearningCard(controller: controller),
                   const SizedBox(height: 18),
-                  DailyGoalCard(controller: controller),
-                  const SizedBox(height: 20),
+                  // DailyGoalCard(controller: controller),
+                  // const SizedBox(height: 20),
                   CustomText(
                     text: 'Luyện tập',
                     style: AppTextStyle.labelMedium,

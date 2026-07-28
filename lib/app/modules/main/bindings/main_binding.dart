@@ -11,7 +11,7 @@ class MainShellBinding extends Bindings {
   void dependencies() {
     Get.lazyPut<MainController>(() => MainController());
     HomeBinding().dependencies();
-    LearningPathBinding().dependencies();
+    LearningBinding().dependencies();
     PracticeBinding().dependencies();
     VocabularyBinding().dependencies();
     ProfileBinding().dependencies();

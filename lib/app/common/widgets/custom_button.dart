@@ -121,40 +121,48 @@ class _BaseButtonState extends State<BaseButton> {
 
     return IgnorePointer(
       ignoring: _isLoading,
-      child: SizedBox(
-        width: widget.width ?? double.infinity,
-        height: widget.buttonSize.height,
-        child: TextButton(
-          onPressed: isEnabled ? _handlePressed : null,
-          style: TextButton.styleFrom(
-            padding: widget.padding,
-            backgroundColor: backgroundColor,
-            foregroundColor: foregroundColor,
-            disabledBackgroundColor: disabledBackgroundColor,
-            disabledForegroundColor: disabledForegroundColor,
-            side: widget.showBorder
-                ? BorderSide(
-                    color: widget.borderColor ?? foregroundColor,
-                    width: widget.borderWidth ?? 1,
-                  )
-                : BorderSide.none,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(widget.radius ?? 100),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final width =
+              widget.width ??
+              (constraints.hasBoundedWidth ? double.infinity : null);
+
+          return SizedBox(
+            width: width,
+            height: widget.buttonSize.height,
+            child: TextButton(
+              onPressed: isEnabled ? _handlePressed : null,
+              style: TextButton.styleFrom(
+                padding: widget.padding,
+                backgroundColor: backgroundColor,
+                foregroundColor: foregroundColor,
+                disabledBackgroundColor: disabledBackgroundColor,
+                disabledForegroundColor: disabledForegroundColor,
+                side: widget.showBorder
+                    ? BorderSide(
+                        color: widget.borderColor ?? foregroundColor,
+                        width: widget.borderWidth ?? 1,
+                      )
+                    : BorderSide.none,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(widget.radius ?? 100),
+                ),
+              ),
+              child: _isLoading
+                  ? SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: isEnabled
+                            ? foregroundColor
+                            : disabledForegroundColor,
+                      ),
+                    )
+                  : widget.child,
             ),
-          ),
-          child: _isLoading
-              ? SizedBox(
-                  width: 18,
-                  height: 18,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: isEnabled
-                        ? foregroundColor
-                        : disabledForegroundColor,
-                  ),
-                )
-              : widget.child,
-        ),
+          );
+        },
       ),
     );
   }
