@@ -1,0 +1,57 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:language_learning_app/app/common/values/values.dart';
+import 'package:language_learning_app/app/common/widgets/custom_text.dart';
+import 'package:language_learning_app/app/modules/home/controllers/home_controller.dart';
+import 'package:language_learning_app/app/modules/home/widgets/continue_learning_card.dart';
+import 'package:language_learning_app/app/modules/home/widgets/daily_goal_card.dart';
+import 'package:language_learning_app/app/modules/home/widgets/greeting_header.dart';
+import 'package:language_learning_app/app/modules/home/widgets/learning_streak_card.dart';
+import 'package:language_learning_app/app/modules/home/widgets/practice_grid.dart';
+
+class HomeContent extends GetView<HomeController> {
+  const HomeContent({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final horizontalPadding = constraints.maxWidth >= 600 ? 40.0 : 16.0;
+
+        return SingleChildScrollView(
+          padding: EdgeInsets.fromLTRB(
+            horizontalPadding,
+            12,
+            horizontalPadding,
+            24,
+          ),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 680),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const GreetingHeader(),
+                  const SizedBox(height: 14),
+                  LearningStreakCard(controller: controller),
+                  const SizedBox(height: 18),
+                  ContinueLearningCard(controller: controller),
+                  const SizedBox(height: 18),
+                  DailyGoalCard(controller: controller),
+                  const SizedBox(height: 20),
+                  CustomText(
+                    text: 'Luyện tập',
+                    style: AppTextStyle.labelMedium,
+                    color: AppColors.contentPrimary,
+                  ),
+                  const SizedBox(height: 12),
+                  const PracticeGrid(),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}

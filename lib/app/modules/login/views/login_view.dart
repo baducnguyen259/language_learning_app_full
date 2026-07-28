@@ -134,7 +134,7 @@ class LoginView extends GetView<LoginController> {
         const SizedBox(height: 12),
         CustomButton.primary(
           title: 'Đăng nhập',
-          onPressed: () {},
+          onPressed: () => Get.offAllNamed(AppRoutes.mainShell),
           backgroundColor: AppColors.red15,
         ),
       ],

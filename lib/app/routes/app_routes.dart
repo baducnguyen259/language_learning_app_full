@@ -1,11 +1,18 @@
 part of 'app_pages.dart';
 
+abstract class AppRoutes {
+  AppRoutes._();
+
+  static const String mainShell = '/main';
+}
+
 abstract class Routes {
   Routes._();
   static const String LOGIN = _Paths.login;
   static const String REGISTER = _Paths.register;
   static const String FORGOT_PASSWORD = _Paths.forgot_password;
   static const String RESET_PASSWORD = _Paths.reset_password;
+  static const String HOME = _Paths.home;
 }
 
 abstract class _Paths {
@@ -13,6 +20,7 @@ abstract class _Paths {
 
   static const String login = '/login';
   static const String register = '/register';
-  static const String forgot_password = '/forgot_pasword';
+  static const String forgot_password = '/forgot_password';
   static const String reset_password = '/reset_password';
+  static const String home = '/home';
 }

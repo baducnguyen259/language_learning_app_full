@@ -3,6 +3,10 @@ import 'package:language_learning_app/app/modules/forgot_password/bindings/forgo
 import 'package:language_learning_app/app/modules/forgot_password/views/forgot_password_view.dart';
 import 'package:language_learning_app/app/modules/login/bindings/login_binding.dart';
 import 'package:language_learning_app/app/modules/login/views/login_view.dart';
+import 'package:language_learning_app/app/modules/home/bindings/home_binding.dart';
+import 'package:language_learning_app/app/modules/home/views/home_view.dart';
+import 'package:language_learning_app/app/modules/main_shell/bindings/main_binding.dart';
+import 'package:language_learning_app/app/modules/main_shell/views/main_view.dart';
 import 'package:language_learning_app/app/modules/register/bindings/register_binding.dart';
 import 'package:language_learning_app/app/modules/register/views/register_view.dart';
 import 'package:language_learning_app/app/modules/reset_password/bindings/reset_password_binding.dart';
@@ -32,6 +36,16 @@ class AppPages {
       name: Routes.RESET_PASSWORD,
       page: () => const ResetPasswordView(),
       binding: ResetPasswordBinding(),
+    ),
+    GetPage(
+      name: Routes.HOME,
+      page: () => const HomeView(),
+      binding: HomeBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.mainShell,
+      page: () => const MainShellView(),
+      binding: MainShellBinding(),
     ),
   ];
 }
