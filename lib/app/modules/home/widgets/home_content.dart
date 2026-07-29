@@ -4,7 +4,6 @@ import 'package:language_learning_app/app/common/values/values.dart';
 import 'package:language_learning_app/app/common/widgets/custom_text.dart';
 import 'package:language_learning_app/app/modules/home/controllers/home_controller.dart';
 import 'package:language_learning_app/app/modules/home/widgets/continue_learning_card.dart';
-import 'package:language_learning_app/app/modules/home/widgets/daily_goal_card.dart';
 import 'package:language_learning_app/app/modules/home/widgets/greeting_header.dart';
 import 'package:language_learning_app/app/modules/home/widgets/learning_streak_card.dart';
 import 'package:language_learning_app/app/modules/home/widgets/practice_grid.dart';
