@@ -17,15 +17,16 @@ class GreetingHeader extends StatelessWidget {
       ),
       child: Row(
         children: [
-          CustomImage.asset(
-            AppIcons.icAccount,
-            width: 32,
-            height: 32,
-            padding: const EdgeInsets.all(5),
-            shape: BoxShape.circle,
+          CircleAvatar(
+            radius: 16,
             backgroundColor: AppColors.backgroundPPLightAccent,
-            color: AppColors.contentPPAccent,
-            semanticLabel: 'Ảnh đại diện',
+            child: CustomImage.asset(
+              AppIcons.icAccount,
+              width: 24,
+              height: 24,
+              color: AppColors.contentPPAccent,
+              semanticLabel: 'Ảnh đại diện',
+            ),
           ),
           const SizedBox(width: 12),
           Expanded(

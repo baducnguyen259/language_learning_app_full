@@ -6,55 +6,56 @@ import 'package:language_learning_app/app/common/widgets/custom_text.dart';
 class PracticeGrid extends StatelessWidget {
   const PracticeGrid({super.key});
 
-  static final List<_PracticeItem> _items = [
-    _PracticeItem(
-      title: 'Từ vựng',
-      icon: AppIcons.icDictionary,
-      backgroundColor: AppColors.backgroundPPLightAccent,
-      iconColor: AppColors.contentGreen,
-    ),
-    _PracticeItem(
-      title: 'Luyện nghe',
-      icon: AppIcons.icListen,
-      backgroundColor: AppColors.backgroundSecondaryLightBlue,
-      iconColor: AppColors.contentPPInfo,
-    ),
-    _PracticeItem(
-      title: 'Phát âm',
-      icon: AppIcons.icMicro,
-      backgroundColor: AppColors.white,
-      iconColor: AppColors.contentSecondaryOrange,
-    ),
-    _PracticeItem(
-      title: 'Ngữ pháp',
-      icon: AppIcons.icHistory,
-      backgroundColor: AppColors.white,
-      iconColor: AppColors.contentSecondaryYellow,
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
+    return GridView.count(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: _items.length,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
-        childAspectRatio: 1.55,
-      ),
-      itemBuilder: (context, index) => _buildPracticeTile(_items[index]),
+      crossAxisCount: 2,
+      crossAxisSpacing: 12,
+      mainAxisSpacing: 12,
+      childAspectRatio: 1.55,
+      children: [
+        _buildPracticeTile(
+          title: 'Từ vựng',
+          icon: AppIcons.icDictionary,
+          backgroundColor: AppColors.backgroundPPLightAccent,
+          iconColor: AppColors.contentGreen,
+        ),
+        _buildPracticeTile(
+          title: 'Luyện nghe',
+          icon: AppIcons.icListen,
+          backgroundColor: AppColors.backgroundSecondaryLightBlue,
+          iconColor: AppColors.contentPPInfo,
+        ),
+        _buildPracticeTile(
+          title: 'Phát âm',
+          icon: AppIcons.icMicro,
+          backgroundColor: AppColors.white,
+          iconColor: AppColors.contentSecondaryOrange,
+        ),
+        _buildPracticeTile(
+          title: 'Ngữ pháp',
+          icon: AppIcons.icHistory,
+          backgroundColor: AppColors.white,
+          iconColor: AppColors.contentSecondaryYellow,
+        ),
+      ],
     );
   }
 
-  Widget _buildPracticeTile(_PracticeItem item) {
+  Widget _buildPracticeTile({
+    required String title,
+    required String icon,
+    required Color backgroundColor,
+    required Color iconColor,
+    VoidCallback? onTap,
+  }) {
     return Material(
       color: AppColors.backgroundPrimary,
       borderRadius: BorderRadius.circular(14),
       child: InkWell(
-        onTap: () {},
+        onTap: onTap ?? () {},
         borderRadius: BorderRadius.circular(14),
         child: Padding(
           padding: const EdgeInsets.all(14),
@@ -63,17 +64,17 @@ class PracticeGrid extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CustomImage.asset(
-                item.icon,
+                icon,
                 width: 32,
                 height: 32,
                 padding: const EdgeInsets.all(7),
-                backgroundColor: item.backgroundColor,
+                backgroundColor: backgroundColor,
                 shape: BoxShape.circle,
-                color: item.iconColor,
-                semanticLabel: item.title,
+                color: iconColor,
+                semanticLabel: title,
               ),
               CustomText(
-                text: item.title,
+                text: title,
                 style: AppTextStyle.labelSmall,
                 color: AppColors.contentPrimary,
               ),
@@ -83,18 +84,4 @@ class PracticeGrid extends StatelessWidget {
       ),
     );
   }
-}
-
-class _PracticeItem {
-  const _PracticeItem({
-    required this.title,
-    required this.icon,
-    required this.backgroundColor,
-    required this.iconColor,
-  });
-
-  final String title;
-  final String icon;
-  final Color backgroundColor;
-  final Color iconColor;
 }
