@@ -11,7 +11,9 @@ class LearningHeader extends StatelessWidget {
     return Container(
       height: 48,
       padding: EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(color: AppColors.backgroundSecondaryLightBlue),
+      decoration: BoxDecoration(
+        color: AppColors.backgroundSecondaryLightPurple,
+      ),
       child: Row(
         children: [
           Expanded(

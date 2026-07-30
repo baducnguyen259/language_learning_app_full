@@ -20,16 +20,13 @@ class LearningView extends GetView<LearningController> {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 680),
-                  child: Column(
-                    children: [
-                      LearningHeader(),
-                      CourseSumaryCard(controller: controller),
-                      LearningFilterBar(controller: controller),
-                      ChapterList(controller: controller),
-                    ],
-                  ),
+                child: Column(
+                  children: [
+                    LearningHeader(),
+                    CourseSumaryCard(controller: controller),
+                    LearningFilterBar(controller: controller),
+                    ChapterList(controller: controller),
+                  ],
                 ),
               ),
             ),

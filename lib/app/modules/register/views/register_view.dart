@@ -18,20 +18,19 @@ class RegisterView extends GetView<RegisterController> {
   Widget build(BuildContext context) {
     return BaseScaffold(
       showAppBar: true,
-      title: 'App Language',
+      title: 'Đăng ký',
       appBarTextStyle: AppTextStyle.headingH7Bold.copyWith(
-        color: HexColor('#1C1B23'),
+        color: AppColors.contentPrimary,
       ),
-      backgroundColor: HexColor('F6F2FE'),
+      appBarBackgroundColor: Colors.transparent,
+      backgroundColor: AppColors.backgroundSecondaryLightPurple,
       body: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _buildTextAccount(),
-            const SizedBox(height: 8),
-            _buildFormRegister(),
-            const SizedBox(height: 8),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [_buildTextAccount(), _buildFormRegister()],
+          ),
         ),
       ),
     );
@@ -43,10 +42,15 @@ class RegisterView extends GetView<RegisterController> {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CustomText(text: 'Tạo tài khoản mới', textAlign: TextAlign.center),
           CustomText(
-            text: 'Bắt đầu hành trình chinh phục  ngay hôm nay.',
-            color: HexColor('#6B7280'),
+            text: 'Tạo tài khoản mới',
+            textAlign: TextAlign.center,
+            style: AppTextStyle.headingH7Bold,
+            color: AppColors.contentPrimary,
+          ),
+          CustomText(
+            text: 'Bắt đầu hành trình chinh phục ngay hôm nay.',
+            color: AppColors.contentSecondary,
             style: AppTextStyle.paragraphXSmall,
             textAlign: TextAlign.center,
           ),
@@ -65,19 +69,22 @@ class RegisterView extends GetView<RegisterController> {
             prefixWidget: CustomImage.asset(AppIcons.icAccount),
             hintText: 'Nhập họ và tên',
             labelInput: 'Họ và tên',
+            isRequired: true,
           ),
           CustomTextField(
             controller: controller.emailRegisterController,
             prefixWidget: CustomImage.asset(AppIcons.icMail),
-            labelInput: ' Email',
-            hintText: 'Nhập địa chỉ Email',
+            labelInput: 'Email',
+            hintText: 'Nhập địa chỉ email',
+            isRequired: true,
           ),
           CustomTextField(
             controller: controller.passwordRegisterController,
             prefixWidget: CustomImage.asset(AppIcons.icLock),
             labelInput: 'Mật khẩu',
             hintText: 'Tạo mật khẩu',
-            suffixWidget: CustomImage.asset(AppIcons.icEye).marginAll(10),
+            isRequired: true,
+            suffixWidget: CustomImage.asset(AppIcons.icEyeHide).marginAll(10),
           ),
           _buildPasswordRules(),
           _buildPolicyAgreement(),
@@ -108,24 +115,22 @@ class RegisterView extends GetView<RegisterController> {
             child: Text.rich(
               TextSpan(
                 style: AppTextStyle.paragraphXSmall.copyWith(
-                  color: HexColor('#4B5563'),
+                  color: AppColors.contentSecondary,
                 ),
                 children: [
                   const TextSpan(text: 'Tôi đồng ý với '),
                   TextSpan(
                     text: 'Điều khoản sử dụng',
-                    style: AppTextStyle.paragraphXSmall.copyWith(
-                      color: AppColors.contentPurple,
-                      fontWeight: FontWeight.w600,
+                    style: AppTextStyle.labelXSmall.copyWith(
+                      color: AppColors.purple100,
                     ),
                     recognizer: TapGestureRecognizer()..onTap = () {},
                   ),
                   const TextSpan(text: ' và '),
                   TextSpan(
                     text: 'Chính sách bảo mật',
-                    style: AppTextStyle.paragraphXSmall.copyWith(
-                      color: AppColors.contentPurple,
-                      fontWeight: FontWeight.w600,
+                    style: AppTextStyle.labelXSmall.copyWith(
+                      color: AppColors.purple100,
                     ),
                     recognizer: TapGestureRecognizer()..onTap = () {},
                   ),
@@ -142,7 +147,7 @@ class RegisterView extends GetView<RegisterController> {
   Widget _buildPasswordRules() {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: AppColors.backgroundPrimary,
         borderRadius: const BorderRadius.all(Radius.circular(12)),
       ),
       child: Column(
@@ -225,16 +230,15 @@ class RegisterView extends GetView<RegisterController> {
     return Center(
       child: Text.rich(
         TextSpan(
-          text: 'Bạn chưa có tài khoản?',
+          text: 'Bạn đã có tài khoản? ',
           style: AppTextStyle.labelMedSmall.copyWith(
-            color: HexColor('#514C5D'),
+            color: AppColors.contentSecondary,
           ),
           children: [
             TextSpan(
-              text: 'Đăng kí ngay',
+              text: 'Đăng nhập ngay',
               style: AppTextStyle.labelMedSmall.copyWith(
-                color: HexColor('#5B43E8'),
-                fontWeight: FontWeight.w400,
+                color: AppColors.purple100,
               ),
               recognizer: TapGestureRecognizer()
                 ..onTap = () => Get.toNamed(Routes.LOGIN),

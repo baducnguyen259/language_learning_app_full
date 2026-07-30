@@ -18,24 +18,19 @@ class PracticeView extends GetView<PracticeController> {
         bottom: false,
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 680),
-              child: Column(
-                spacing: 12,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  _buildHeader(),
-                  _buildQuickReviewCard(),
-                  CustomText(
-                    text: 'Chế độ luyện tập',
-                    style: AppTextStyle.labelMedium,
-                    color: AppColors.contentPrimary,
-                  ),
-                  _buildPracticeModeList(),
-                ],
+          child: Column(
+            spacing: 12,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildHeader(),
+              _buildQuickReviewCard(),
+              CustomText(
+                text: 'Chế độ luyện tập',
+                style: AppTextStyle.labelMedium,
+                color: AppColors.contentPrimary,
               ),
-            ),
+              _buildPracticeModeList(),
+            ],
           ),
         ),
       ),
@@ -87,21 +82,24 @@ class PracticeView extends GetView<PracticeController> {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
+        spacing: 14,
         children: [
           _buildReviewChip(),
-          const SizedBox(height: 12),
-          CustomText(
-            text: 'Từ vựng cần ôn tập',
-            style: AppTextStyle.labelLarge,
-            color: AppColors.contentPrimaryInvert,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              CustomText(
+                text: 'Từ vựng cần ôn tập',
+                style: AppTextStyle.labelLarge,
+                color: AppColors.contentPrimaryInvert,
+              ),
+              CustomText(
+                text: 'Giữ vững chuỗi học tập của bạn!',
+                style: AppTextStyle.bodyXSReg,
+                color: AppColors.contentPrimaryInvert,
+              ),
+            ],
           ),
-          const SizedBox(height: 4),
-          CustomText(
-            text: 'Giữ vững chuỗi học tập của bạn!',
-            style: AppTextStyle.bodyXSReg,
-            color: AppColors.contentPrimaryInvert,
-          ),
-          const SizedBox(height: 16),
           CustomButton(
             onPressed: () {},
             radius: 16,

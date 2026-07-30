@@ -17,10 +17,10 @@ class LoginView extends GetView<LoginController> {
   Widget build(BuildContext context) {
     return BaseScaffold(
       appBarTextStyle: AppTextStyle.headingH7Bold.copyWith(
-        color: HexColor('#1C1B23'),
+        color: AppColors.contentPrimary,
       ),
-      appBarBackgroundColor: AppColors.white1,
-      backgroundColor: HexColor('F6F2FE'),
+      appBarBackgroundColor: AppColors.backgroundPrimary,
+      backgroundColor: AppColors.backgroundSecondaryLightPurple,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -46,29 +46,16 @@ class LoginView extends GetView<LoginController> {
     return Container(
       width: Get.width,
       height: 120,
-      decoration: BoxDecoration(color: AppColors.blue5),
+      decoration: BoxDecoration(color: AppColors.backgroundPPLightAccent),
     );
   }
 
   Widget _buildAppTitle() {
-    // return Column(
-    //   children: [
-    //     CustomText(
-    //       text: 'Chào mừng bạn quay lại!',
-    //       textAlign: TextAlign.center,
-    //       color: HexColor('#1C1B23'),
-    //     ),
-    //     CustomText(
-    //       text: 'Đăng nhập để tiếp tục hành trình học của bạn.',
-    //       style: AppTextStyle.labelXSmall,
-    //       textAlign: TextAlign.center,
-    //     ),
-    //   ],
-    // );
     return CustomText(
       text: 'Chào mừng bạn quay lại!',
       textAlign: TextAlign.center,
-      color: HexColor('#1C1B23'),
+      style: AppTextStyle.headingH7Bold,
+      color: AppColors.contentPrimary,
     );
   }
 
@@ -109,7 +96,7 @@ class LoginView extends GetView<LoginController> {
                 value: controller.isSavePassword.value,
                 onChanged: (value) {},
                 side: BorderSide(color: AppColors.contentLarge, width: 1),
-                activeColor: AppColors.nvBrand500,
+                activeColor: AppColors.purple100,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(4),
                 ),
@@ -135,7 +122,7 @@ class LoginView extends GetView<LoginController> {
         CustomButton.primary(
           title: 'Đăng nhập',
           onPressed: () => Get.offAllNamed(AppRoutes.mainShell),
-          backgroundColor: AppColors.red15,
+          backgroundColor: AppColors.purple100,
         ),
       ],
     );
@@ -195,16 +182,15 @@ class LoginView extends GetView<LoginController> {
     return Center(
       child: Text.rich(
         TextSpan(
-          text: 'Bạn chưa có tài khoản?',
+          text: 'Bạn chưa có tài khoản? ',
           style: AppTextStyle.labelMedSmall.copyWith(
-            color: HexColor('#514C5D'),
+            color: AppColors.contentSecondary,
           ),
           children: [
             TextSpan(
-              text: 'Đăng kí ngay',
+              text: 'Đăng ký ngay',
               style: AppTextStyle.labelMedSmall.copyWith(
-                color: HexColor('#5B43E8'),
-                fontWeight: FontWeight.w400,
+                color: AppColors.purple100,
               ),
               recognizer: TapGestureRecognizer()
                 ..onTap = () => Get.toNamed(Routes.REGISTER),

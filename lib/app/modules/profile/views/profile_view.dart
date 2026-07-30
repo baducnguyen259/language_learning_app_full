@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:language_learning_app/app/common/values/values.dart';
 import 'package:language_learning_app/app/common/widgets/base_scaffold.dart';
 import 'package:language_learning_app/app/modules/profile/controllers/profile_controller.dart';
+import 'package:language_learning_app/app/modules/profile/widgets/profile_content.dart';
 
 class ProfileView extends GetView<ProfileController> {
   const ProfileView({super.key});
@@ -11,14 +12,7 @@ class ProfileView extends GetView<ProfileController> {
   Widget build(BuildContext context) {
     return BaseScaffold(
       backgroundColor: AppColors.backgroundSecondaryLightPurple,
-      body: Center(
-        child: Text(
-          'Cá nhân',
-          style: AppTextStyle.headingXSmall.copyWith(
-            color: AppColors.contentPrimary,
-          ),
-        ),
-      ),
+      body: const SafeArea(bottom: false, child: ProfileContent()),
     );
   }
 }

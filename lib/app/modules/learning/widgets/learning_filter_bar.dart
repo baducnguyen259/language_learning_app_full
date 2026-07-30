@@ -10,32 +10,35 @@ class LearningFilterBar extends StatelessWidget {
   static const List<String> _labels = ['Tất cả', 'Đang học', 'Đã hoàn thành'];
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => Wrap(
-        spacing: 8,
-        runSpacing: 8,
-        children: List.generate(_labels.length, (index) {
-          final isSelected = controller.selectedFilterIndex.value == index;
-          return ChoiceChip(
-            showCheckmark: false,
-            label: CustomText(
-              text: _labels[index],
-              style: AppTextStyle.labelMedXSmall,
-              color: isSelected
-                  ? AppColors.contentPrimaryInvert
-                  : AppColors.contentPrimary,
-            ),
-            selected: isSelected,
-            selectedColor: AppColors.purple100,
-            backgroundColor: AppColors.backgroundPrimary,
-            labelPadding: const EdgeInsets.symmetric(horizontal: 8),
-            onSelected: (_) => controller.changeFilter(index),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(18),
-              side: BorderSide.none,
-            ),
-          );
-        }),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Obx(
+        () => Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: List.generate(_labels.length, (index) {
+            final isSelected = controller.selectedFilterIndex.value == index;
+            return ChoiceChip(
+              showCheckmark: false,
+              label: CustomText(
+                text: _labels[index],
+                style: AppTextStyle.labelMedXSmall,
+                color: isSelected
+                    ? AppColors.contentPrimaryInvert
+                    : AppColors.contentPrimary,
+              ),
+              selected: isSelected,
+              selectedColor: AppColors.purple100,
+              backgroundColor: AppColors.backgroundPrimary,
+              labelPadding: const EdgeInsets.symmetric(horizontal: 8),
+              onSelected: (_) => controller.changeFilter(index),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18),
+                side: BorderSide.none,
+              ),
+            );
+          }),
+        ),
       ),
     );
   }

@@ -11,13 +11,13 @@ class CourseSumaryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
         color: AppColors.backgroundPrimary,
         borderRadius: BorderRadius.circular(14),
       ),
       child: Column(children: [_buildLever(), _buildProgress()]),
-    ).paddingSymmetric(horizontal: 20, vertical: 8);
+    ).paddingSymmetric(horizontal: 16, vertical: 8);
   }
 
   Widget _buildLever() {
@@ -48,7 +48,7 @@ class CourseSumaryCard extends StatelessWidget {
                 color: AppColors.contentPrimary,
               ),
             ],
-          ).paddingSymmetric(horizontal: 8, vertical: 16),
+          ).paddingSymmetric(vertical: 16),
         ),
         CustomImage.asset(
           AppIcons.icLesson,

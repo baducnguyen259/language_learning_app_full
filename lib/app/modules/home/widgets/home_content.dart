@@ -13,44 +13,28 @@ class HomeContent extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final horizontalPadding = constraints.maxWidth >= 600 ? 40.0 : 16.0;
-
-        return SingleChildScrollView(
-          padding: EdgeInsets.fromLTRB(
-            horizontalPadding,
-            12,
-            horizontalPadding,
-            24,
+    return SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const GreetingHeader(),
+          const SizedBox(height: 14),
+          LearningStreakCard(controller: controller),
+          const SizedBox(height: 18),
+          ContinueLearningCard(controller: controller),
+          const SizedBox(height: 18),
+          // DailyGoalCard(controller: controller),
+          // const SizedBox(height: 20),
+          CustomText(
+            text: 'Luyện tập',
+            style: AppTextStyle.labelMedium,
+            color: AppColors.contentPrimary,
           ),
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 680),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const GreetingHeader(),
-                  const SizedBox(height: 14),
-                  LearningStreakCard(controller: controller),
-                  const SizedBox(height: 18),
-                  ContinueLearningCard(controller: controller),
-                  const SizedBox(height: 18),
-                  // DailyGoalCard(controller: controller),
-                  // const SizedBox(height: 20),
-                  CustomText(
-                    text: 'Luyện tập',
-                    style: AppTextStyle.labelMedium,
-                    color: AppColors.contentPrimary,
-                  ),
-                  const SizedBox(height: 12),
-                  const PracticeGrid(),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
+          const SizedBox(height: 12),
+          const PracticeGrid(),
+        ],
+      ),
     );
   }
 }

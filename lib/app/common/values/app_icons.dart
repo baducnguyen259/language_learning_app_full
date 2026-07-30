@@ -11,6 +11,7 @@ abstract class AppIcons {
   static const String icDictionary = 'assets/icons/ic_dictionary.svg';
   static const String icLesson = 'assets/icons/ic_lesson.svg';
   static const String icQuiz = 'assets/icons/ic_quiz.svg';
+  static const String icBook = 'assets/icons/ic_book.svg';
   static const String icMicro = 'assets/icons/ic_micro.svg';
   static const String icListen = 'assets/icons/ic_listen.svg';
   static const String icArrowBackCircle =

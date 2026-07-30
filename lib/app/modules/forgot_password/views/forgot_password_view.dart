@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:language_learning_app/app/common/values/values.dart';
 import 'package:language_learning_app/app/common/widgets/base_scaffold.dart';
@@ -16,7 +16,10 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
   Widget build(BuildContext context) {
     return BaseScaffold(
       showAppBar: true,
+      backgroundColor: AppColors.backgroundSecondaryLightPurple,
+      appBarBackgroundColor: Colors.transparent,
       bottomNavigationBar: _buildSupportContact(),
+      bottomNavigatorBarBackgroundColor: Colors.transparent,
       body: SingleChildScrollView(
         child: Column(
           spacing: 24,
@@ -33,10 +36,13 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
           text: 'Quên mật khẩu?',
           textAlign: TextAlign.center,
           style: AppTextStyle.headingH7Bold,
+          color: AppColors.contentPrimary,
         ),
         CustomText(
-          text: 'Nhập email đã đăng ký để xác thực .',
+          text: 'Nhập email đã đăng ký để xác thực.',
           style: AppTextStyle.capXSmall,
+          color: AppColors.contentSecondary,
+          textAlign: TextAlign.center,
         ),
       ],
     );
@@ -56,14 +62,14 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
         ),
         CustomButton.primary(
           title: 'Gửi mã xác thực',
-          backgroundColor: AppColors.nvBrand500,
+          backgroundColor: AppColors.purple100,
           // onPressed: controller.sendVerificationCode,
           onPressed: () {
             Get.toNamed(Routes.RESET_PASSWORD);
           },
           showLoading: true,
           style: AppTextStyle.labelMedMedium.copyWith(
-            color: HexColor('#FFFFFF'),
+            color: AppColors.contentPrimaryInvert,
           ),
         ),
       ],
@@ -77,11 +83,11 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
         CustomText(
           text: 'Nếu cần hỗ trợ vui lòng liên hệ:',
           style: AppTextStyle.paragraphSmall,
-          color: AppColors.contentGreen,
+          color: AppColors.contentSecondary,
           textAlign: TextAlign.center,
         ),
         CustomText(
-          text: '@1900 1900',
+          text: '1900 1900',
           style: AppTextStyle.labelSmall,
           color: AppColors.red100,
         ),

@@ -10,7 +10,7 @@ class GreetingHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 56,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(12)),
         color: AppColors.backgroundSecondary,
@@ -38,8 +38,8 @@ class GreetingHeader extends StatelessWidget {
           ),
           CustomImage.asset(
             AppIcons.icBell,
-            width: 22,
-            height: 22,
+            width: 24,
+            height: 24,
             color: AppColors.contentSecondary,
             semanticLabel: 'Thông báo',
           ),

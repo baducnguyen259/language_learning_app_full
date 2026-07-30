@@ -17,6 +17,8 @@ class ResetPasswordView extends GetView<ResetPasswordController> {
   Widget build(BuildContext context) {
     return BaseScaffold(
       showAppBar: true,
+      backgroundColor: AppColors.backgroundSecondaryLightPurple,
+      appBarBackgroundColor: Colors.transparent,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,7 +42,7 @@ class ResetPasswordView extends GetView<ResetPasswordController> {
             text: 'Tạo mật khẩu mới',
             textAlign: TextAlign.center,
             style: AppTextStyle.headingXSmall,
-            color: AppColors.contentPrimaryBlack,
+            color: AppColors.contentPrimary,
           ),
           const SizedBox(height: 8),
           CustomText(
@@ -48,7 +50,7 @@ class ResetPasswordView extends GetView<ResetPasswordController> {
                 'Vui lòng tạo mật khẩu mới để hoàn tất quá trình khôi phục tài khoản.',
             textAlign: TextAlign.center,
             style: AppTextStyle.paragraphSmall,
-            color: AppColors.contentPrimaryBlack,
+            color: AppColors.contentSecondary,
           ).paddingSymmetric(horizontal: 18),
         ],
       ),
@@ -120,7 +122,7 @@ class ResetPasswordView extends GetView<ResetPasswordController> {
         CustomText(
           text: 'Mật khẩu phải:',
           style: AppTextStyle.labelMedSmall,
-          color: AppColors.contentPrimaryBlack,
+          color: AppColors.contentPrimary,
         ),
         const SizedBox(height: 6),
         _buildTextPass('Độ dài từ 9-16 ký tự'),
@@ -135,14 +137,14 @@ class ResetPasswordView extends GetView<ResetPasswordController> {
       children: [
         CustomImage.asset(
           AppIcons.icCheckOutlined,
-          color: AppColors.contentGreen,
+          color: AppColors.contentSecondaryGreen,
         ),
         const SizedBox(width: 4),
         Expanded(
           child: CustomText(
             text: text,
             style: AppTextStyle.paragraphXSmall,
-            color: AppColors.contentPrimaryBlack,
+            color: AppColors.contentPrimary,
           ),
         ),
       ],
@@ -155,13 +157,14 @@ class ResetPasswordView extends GetView<ResetPasswordController> {
         dialogType: DialogType.FORCE_ACTION,
         imageWidget: _buildSuccessIcon(),
         title: 'Đổi mật khẩu thành công!',
-        content: const Text(
-          'Bạn có thể sử dụng mật khẩu mới để\nđăng nhập vào tài khoản.',
+        content: CustomText(
+          text: 'Bạn có thể sử dụng mật khẩu mới để\nđăng nhập vào tài khoản.',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 12, height: 1.5, color: Color(0xFF5F606B)),
+          style: AppTextStyle.paragraphXSmall,
+          color: AppColors.contentSecondary,
         ),
-        primaryButtonLabel: 'Đăng nhập ngay  →',
-        primaryButtonColor: const Color(0xFF39DEA1),
+        primaryButtonLabel: 'Đăng nhập ngay →',
+        primaryButtonColor: AppColors.green100,
         primaryButtonRadius: 14,
         primaryAction: () => Get.offNamed(Routes.LOGIN),
         showCloseButton: false,
@@ -176,22 +179,26 @@ class ResetPasswordView extends GetView<ResetPasswordController> {
     return Container(
       width: 84,
       height: 84,
-      decoration: const BoxDecoration(
-        color: Color(0xFFD9FBE9),
+      decoration: BoxDecoration(
+        color: AppColors.green15,
         shape: BoxShape.circle,
       ),
       child: Center(
         child: Container(
           width: 56,
           height: 56,
-          decoration: const BoxDecoration(
-            color: Color(0xFF6BF0A6),
+          decoration: BoxDecoration(
+            color: AppColors.green75,
             shape: BoxShape.circle,
           ),
-          child: const Icon(
-            Icons.check_circle,
-            color: Color(0xFF087A4B),
-            size: 23,
+          child: Center(
+            child: CustomImage.asset(
+              AppIcons.icCheckCircleFilled,
+              width: 23,
+              height: 23,
+              color: AppColors.green158,
+              semanticLabel: 'Đổi mật khẩu thành công',
+            ),
           ),
         ),
       ),
