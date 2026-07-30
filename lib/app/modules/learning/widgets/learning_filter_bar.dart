@@ -6,8 +6,9 @@ import 'package:language_learning_app/app/modules/learning/controllers/learning_
 
 class LearningFilterBar extends StatelessWidget {
   const LearningFilterBar({super.key, required this.controller});
+
   final LearningController controller;
-  static const List<String> _labels = ['Tất cả', 'Đang học', 'Đã hoàn thành'];
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -16,29 +17,36 @@ class LearningFilterBar extends StatelessWidget {
         () => Wrap(
           spacing: 8,
           runSpacing: 8,
-          children: List.generate(_labels.length, (index) {
-            final isSelected = controller.selectedFilterIndex.value == index;
-            return ChoiceChip(
-              showCheckmark: false,
-              label: CustomText(
-                text: _labels[index],
-                style: AppTextStyle.labelMedXSmall,
-                color: isSelected
-                    ? AppColors.contentPrimaryInvert
-                    : AppColors.contentPrimary,
-              ),
-              selected: isSelected,
-              selectedColor: AppColors.purple100,
-              backgroundColor: AppColors.backgroundPrimary,
-              labelPadding: const EdgeInsets.symmetric(horizontal: 8),
-              onSelected: (_) => controller.changeFilter(index),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18),
-                side: BorderSide.none,
-              ),
-            );
-          }),
+          children: [
+            _buildFilterChip(index: 0, label: 'Tất cả'),
+            _buildFilterChip(index: 1, label: 'Đang học'),
+            _buildFilterChip(index: 2, label: 'Đã hoàn thành'),
+          ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildFilterChip({required int index, required String label}) {
+    final isSelected = controller.selectedFilterIndex.value == index;
+
+    return ChoiceChip(
+      showCheckmark: false,
+      label: CustomText(
+        text: label,
+        style: AppTextStyle.labelMedXSmall,
+        color: isSelected
+            ? AppColors.contentPrimaryInvert
+            : AppColors.contentPrimary,
+      ),
+      selected: isSelected,
+      selectedColor: AppColors.purple100,
+      backgroundColor: AppColors.backgroundPrimary,
+      labelPadding: const EdgeInsets.symmetric(horizontal: 8),
+      onSelected: (_) => controller.changeFilter(index),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(18),
+        side: BorderSide.none,
       ),
     );
   }
