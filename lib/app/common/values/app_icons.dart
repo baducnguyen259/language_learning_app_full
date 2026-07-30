@@ -14,6 +14,11 @@ abstract class AppIcons {
   static const String icBook = 'assets/icons/ic_book.svg';
   static const String icMicro = 'assets/icons/ic_micro.svg';
   static const String icListen = 'assets/icons/ic_listen.svg';
+  static const String icFavorite = 'assets/icons/ic_favorite.svg';
+  static const String icAddCircle = 'assets/icons/ic_addcircle.svg';
+  static const String icTune = 'assets/icons/ic_tune.svg';
+  static const String icBarChart = 'assets/icons/ic_bar_chart.svg';
+  static const String icVolumeUp = 'assets/icons/ic_volume_up.svg';
   static const String icArrowBackCircle =
       'assets/icons/ic_arrowBack_circle.svg';
   static const String icPhone = 'assets/icons/ic_phone.svg';

@@ -92,6 +92,6 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
           color: AppColors.red100,
         ),
       ],
-    ).paddingAll(12);
+    );
   }
 }
