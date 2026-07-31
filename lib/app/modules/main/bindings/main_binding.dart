@@ -6,7 +6,7 @@ import 'package:language_learning_app/app/modules/practice/bindings/practice_bin
 import 'package:language_learning_app/app/modules/profile/bindings/profile_binding.dart';
 import 'package:language_learning_app/app/modules/vocabulary/bindings/vocabulary_binding.dart';
 
-class MainShellBinding extends Bindings {
+class MainBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut<MainController>(() => MainController());

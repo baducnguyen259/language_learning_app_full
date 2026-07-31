@@ -4,6 +4,7 @@ import 'package:language_learning_app/app/common/values/values.dart';
 import 'package:language_learning_app/app/common/widgets/custom_image.dart';
 import 'package:language_learning_app/app/common/widgets/custom_text.dart';
 import 'package:language_learning_app/app/modules/learning/controllers/learning_controller.dart';
+import 'package:language_learning_app/app/routes/app_pages.dart';
 
 class ChapterList extends StatelessWidget {
   const ChapterList({required this.controller, super.key});
@@ -59,6 +60,7 @@ class ChapterList extends StatelessWidget {
                         AppColors.purple100,
                       ),
                     ),
+                    onTap: () => Get.toNamed(Routes.LESSON_EXERCISE),
                   ),
                 ),
                 _buildLessonTile(number: 6, title: 'Bài 6: Tạm biệt'),
@@ -136,62 +138,70 @@ class ChapterList extends StatelessWidget {
     required String title,
     String? progressLabel,
     Widget? progressIndicator,
+    VoidCallback? onTap,
   }) {
     final hasProgress = progressIndicator != null;
 
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: AppColors.backgroundPrimary,
+    return Material(
+      color: AppColors.backgroundPrimary,
+      borderRadius: BorderRadius.circular(12),
+      child: InkWell(
+        onTap: onTap,
         borderRadius: BorderRadius.circular(12),
-        border: hasProgress
-            ? Border(left: BorderSide(color: AppColors.purple100, width: 4))
-            : null,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
+        child: Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: hasProgress
+                ? Border(left: BorderSide(color: AppColors.purple100, width: 4))
+                : null,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              if (!hasProgress) ...[
-                Container(
-                  width: 28,
-                  height: 28,
-                  decoration: BoxDecoration(
-                    color: AppColors.backgroundPPLightAccent,
-                    shape: BoxShape.circle,
+              Row(
+                children: [
+                  if (!hasProgress) ...[
+                    Container(
+                      width: 28,
+                      height: 28,
+                      decoration: BoxDecoration(
+                        color: AppColors.backgroundPPLightAccent,
+                        shape: BoxShape.circle,
+                      ),
+                      alignment: Alignment.center,
+                      child: CustomText(
+                        text: '$number',
+                        style: AppTextStyle.bodyXSReg,
+                        color: AppColors.contentSecondary,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                  ],
+                  Expanded(
+                    child: CustomText(
+                      text: title,
+                      style: AppTextStyle.labelMedXSmall,
+                      color: hasProgress
+                          ? AppColors.contentPrimary
+                          : AppColors.contentSecondary,
+                    ),
                   ),
-                  alignment: Alignment.center,
-                  child: CustomText(
-                    text: '$number',
-                    style: AppTextStyle.bodyXSReg,
-                    color: AppColors.contentSecondary,
-                  ),
-                ),
-                const SizedBox(width: 12),
-              ],
-              Expanded(
-                child: CustomText(
-                  text: title,
-                  style: AppTextStyle.labelMedXSmall,
-                  color: hasProgress
-                      ? AppColors.contentPrimary
-                      : AppColors.contentSecondary,
-                ),
+                  if (progressLabel != null)
+                    CustomText(
+                      text: progressLabel,
+                      style: AppTextStyle.bodyXSSemi,
+                      color: AppColors.purple100,
+                    ),
+                ],
               ),
-              if (progressLabel != null)
-                CustomText(
-                  text: progressLabel,
-                  style: AppTextStyle.bodyXSSemi,
-                  color: AppColors.purple100,
-                ),
+              if (progressIndicator != null) ...[
+                const SizedBox(height: 8),
+                progressIndicator,
+              ],
             ],
           ),
-          if (progressIndicator != null) ...[
-            const SizedBox(height: 8),
-            progressIndicator,
-          ],
-        ],
+        ),
       ),
     );
   }
