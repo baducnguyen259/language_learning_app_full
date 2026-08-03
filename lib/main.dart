@@ -4,21 +4,12 @@ import 'package:language_learning_app/app/common/bindings/global_binding.dart';
 import 'package:language_learning_app/app/common/values/app_theme.dart';
 import 'package:language_learning_app/app/routes/app_pages.dart';
 
-/// Khởi chạy ứng dụng bằng widget gốc [LanguageLearningApp].
 void main() {
   runApp(const LanguageLearningApp());
 }
 
-/// Widget gốc cấu hình điều hướng GetX và giao diện Material 3.
-///
-/// Widget chỉ được tạo một lần tại [main]. Các màn hình tính năng nên được mở
-/// bằng route trong [Routes] để GetX áp dụng đúng binding:
-/// ```dart
-/// runApp(const LanguageLearningApp());
-/// ```
 class LanguageLearningApp extends StatelessWidget {
   const LanguageLearningApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(

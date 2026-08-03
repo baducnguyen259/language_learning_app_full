@@ -9,8 +9,8 @@ class PronunciationSegmentResultModel {
 
   factory PronunciationSegmentResultModel.fromJson(Map<String, dynamic> json) {
     return PronunciationSegmentResultModel(
-      text: _stringValue(json['text']),
-      score: _doubleValue(json['score']),
+      text: json['text'] as String,
+      score: (json['score'] as num).toDouble(),
     );
   }
 
@@ -47,15 +47,24 @@ class AnswerResultModel {
 
   factory AnswerResultModel.fromJson(Map<String, dynamic> json) {
     return AnswerResultModel(
-      questionId: _stringValue(json['questionId']),
-      isCorrect: _boolValue(json['isCorrect']),
-      score: _doubleValue(json['score']),
-      userAnswer: _stringList(json['userAnswer']),
-      correctAnswer: _stringList(json['correctAnswer']),
-      feedback: _stringValue(json['feedback']),
-      pronunciationSegments: _pronunciationSegmentList(
-        json['pronunciationSegments'],
+      questionId: json['questionId'] as String,
+      isCorrect: json['isCorrect'] as bool,
+      score: (json['score'] as num).toDouble(),
+      userAnswer: List<String>.from(
+        json['userAnswer'] as List<dynamic>? ?? const <dynamic>[],
       ),
+      correctAnswer: List<String>.from(
+        json['correctAnswer'] as List<dynamic>? ?? const <dynamic>[],
+      ),
+      feedback: json['feedback'] as String? ?? '',
+      pronunciationSegments:
+          (json['pronunciationSegments'] as List<dynamic>? ?? const <dynamic>[])
+              .map(
+                (dynamic segment) => PronunciationSegmentResultModel.fromJson(
+                  segment as Map<String, dynamic>,
+                ),
+              )
+              .toList(growable: false),
     );
   }
 
@@ -96,54 +105,4 @@ class AnswerResultModel {
       ),
     );
   }
-}
-
-List<PronunciationSegmentResultModel> _pronunciationSegmentList(Object? value) {
-  if (value is! Iterable<Object?>) {
-    return const <PronunciationSegmentResultModel>[];
-  }
-
-  return List<PronunciationSegmentResultModel>.unmodifiable(
-    value.whereType<Map>().map(
-      (Map segment) => PronunciationSegmentResultModel.fromJson(
-        Map<String, dynamic>.from(segment),
-      ),
-    ),
-  );
-}
-
-List<String> _stringList(Object? value) {
-  if (value is! Iterable<Object?>) {
-    return const <String>[];
-  }
-
-  return List<String>.unmodifiable(
-    value
-        .where((Object? item) => item != null)
-        .map((Object? item) => item.toString()),
-  );
-}
-
-String _stringValue(Object? value) => value?.toString() ?? '';
-
-double _doubleValue(Object? value) {
-  if (value is num) {
-    return value.toDouble();
-  }
-
-  return double.tryParse(value?.toString() ?? '') ?? 0;
-}
-
-bool _boolValue(Object? value) {
-  if (value is bool) {
-    return value;
-  }
-  if (value is num) {
-    return value != 0;
-  }
-
-  return switch (value?.toString().trim().toLowerCase()) {
-    'true' || '1' => true,
-    _ => false,
-  };
 }
