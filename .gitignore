@@ -1,0 +1,34 @@
+# Node.js
+**/node_modules/
+**/dist/
+**/.next/
+**/.vite/
+**/coverage/
+
+# Environment
+**/.env
+**/.env.*
+!**/.env.example
+
+# Flutter
+**/.dart_tool/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/build/
+**/android/.gradle/
+**/ios/Pods/
+
+# IDE
+**/.idea/
+**/.vscode/
+*.iml
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Operating system
+Thumbs.db
+.DS_Store

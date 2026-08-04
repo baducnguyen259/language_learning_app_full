@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">Language Learning Admin</title>
+  <rect width="64" height="64" rx="16" fill="#6c5ce7"/>
+  <path d="M17 18h20a8 8 0 0 1 8 8v20H25a8 8 0 0 0-8 4V18Z" fill="#fff" opacity=".96"/>
+  <path d="M25 23h12a3 3 0 0 1 3 3v14H25a8 8 0 0 0-4 1.1V27a4 4 0 0 1 4-4Z" fill="#6c5ce7" opacity=".22"/>
+  <path d="M26 29h9M26 34h9" stroke="#6c5ce7" stroke-width="2.5" stroke-linecap="round"/>
+</svg>
