@@ -15,10 +15,14 @@ import { QuizzesModule } from './modules/quizzes/quizzes.module';
 import { ReportsModule } from './modules/reports/reports.module';
 import { TopicsModule } from './modules/topics/topics.module';
 import { UsersModule } from './modules/users/users.module';
+import { ConfigModule } from '@nestjs/config';
 import { VocabulariesModule } from './modules/vocabularies/vocabularies.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     PrismaModule,
     AuthModule,
     UsersModule,
