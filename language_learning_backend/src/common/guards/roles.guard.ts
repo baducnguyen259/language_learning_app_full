@@ -1,8 +1,8 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { UserRole } from '../../generated/prisma/enums';
 import { Reflector } from '@nestjs/core';
-import { Observable } from 'rxjs';
 import { ROLES_KEY } from '../decorators/roles.decorator';
+import { UserRole } from '../enums/user_role.enum';
+import type { Request } from 'express';
 
 type AuthenticatedRequest = Request & {
   user?: {

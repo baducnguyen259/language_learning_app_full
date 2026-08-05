@@ -1,3 +1,18 @@
+import { Type } from 'class-transformer';
+import { IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
+
 export class LanguageQueryDto {
-  // Add filtering, searching, sorting, and pagination fields as needed.
+  @IsOptional()
+  @IsString()
+  sreach?: string;
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  page: number = 1;
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(100)
+  limit: number = 20;
+  
 }
