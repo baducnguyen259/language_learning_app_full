@@ -1,3 +1,55 @@
+import {
+  IsBoolean,
+  IsDateString,
+  IsEnum,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  MaxLength,
+  Min,
+  MinLength,
+} from 'class-validator';
+import { LessonStatus } from '../../../generated/prisma/enums';
+
 export class CreateLessonDto {
-  // Add fields after the Lesson model and validation rules are finalized.
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(2)
+  @MaxLength(200)
+  title!: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(2000)
+  description?: string;
+
+  @IsString()
+  @IsNotEmpty()
+  topicId!: string;
+
+  @IsOptional()
+  @IsEnum(LessonStatus)
+  status?: LessonStatus;
+
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  durationMinutes?: number;
+
+  @IsOptional()
+  @IsString()
+  thumbnailUrl?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  requiresPreviousLesson?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  allowReplay?: boolean;
+
+  @IsOptional()
+  @IsDateString()
+  scheduledAt?: string;
 }

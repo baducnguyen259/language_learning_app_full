@@ -1,3 +1,13 @@
+import { IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
+
 export class CreateTopicDto {
-  // Add fields after the Topic model and validation rules are finalized.
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(2)
+  @MaxLength(150)
+  name!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  levelId!: string;
 }

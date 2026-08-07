@@ -17,6 +17,12 @@ enum UserStatus {
   LOCKED
 }
 
+enum LessonStatus {
+  DRAFT
+  SCHEDULED
+  PUBLISHED
+}
+
 model User {
   id           String     @id @default(cuid())
   name         String
@@ -61,11 +67,21 @@ model Topic {
 }
 
 model Lesson {
-  id        String   @id @default(cuid())
-  title     String
-  topicId   String
-  topic     Topic    @relation(fields: [topicId], references: [id], onDelete: Cascade)
-  status    String   @default("DRAFT")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                     String       @id @default(cuid())
+  title                  String
+  description            String?
+  topicId                String
+  topic                  Topic        @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  status                 LessonStatus @default(DRAFT)
+  durationMinutes        Int?
+  thumbnailUrl           String?
+  requiresPreviousLesson Boolean      @default(false)
+  allowReplay            Boolean      @default(true)
+  scheduledAt            DateTime?
+  publishedAt            DateTime?
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @updatedAt
+
+  @@index([topicId])
+  @@index([status])
 }
