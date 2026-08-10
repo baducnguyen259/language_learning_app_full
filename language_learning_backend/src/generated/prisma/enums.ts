@@ -40,3 +40,11 @@ export const VocabularyStatus = {
 } as const
 
 export type VocabularyStatus = (typeof VocabularyStatus)[keyof typeof VocabularyStatus]
+
+
+export const CurriculumStatus = {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED'
+} as const
+
+export type CurriculumStatus = (typeof CurriculumStatus)[keyof typeof CurriculumStatus]

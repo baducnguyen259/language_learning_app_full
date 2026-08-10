@@ -226,6 +226,7 @@ export type LevelWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Level"> | Date | string
   language?: Prisma.XOR<Prisma.LanguageScalarRelationFilter, Prisma.LanguageWhereInput>
   topics?: Prisma.TopicListRelationFilter
+  curriculums?: Prisma.CurriculumListRelationFilter
 }
 
 export type LevelOrderByWithRelationInput = {
@@ -237,6 +238,7 @@ export type LevelOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   language?: Prisma.LanguageOrderByWithRelationInput
   topics?: Prisma.TopicOrderByRelationAggregateInput
+  curriculums?: Prisma.CurriculumOrderByRelationAggregateInput
 }
 
 export type LevelWhereUniqueInput = Prisma.AtLeast<{
@@ -252,6 +254,7 @@ export type LevelWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Level"> | Date | string
   language?: Prisma.XOR<Prisma.LanguageScalarRelationFilter, Prisma.LanguageWhereInput>
   topics?: Prisma.TopicListRelationFilter
+  curriculums?: Prisma.CurriculumListRelationFilter
 }, "id" | "languageId_order">
 
 export type LevelOrderByWithAggregationInput = {
@@ -288,6 +291,7 @@ export type LevelCreateInput = {
   updatedAt?: Date | string
   language: Prisma.LanguageCreateNestedOneWithoutLevelsInput
   topics?: Prisma.TopicCreateNestedManyWithoutLevelInput
+  curriculums?: Prisma.CurriculumCreateNestedManyWithoutLevelInput
 }
 
 export type LevelUncheckedCreateInput = {
@@ -298,6 +302,7 @@ export type LevelUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   topics?: Prisma.TopicUncheckedCreateNestedManyWithoutLevelInput
+  curriculums?: Prisma.CurriculumUncheckedCreateNestedManyWithoutLevelInput
 }
 
 export type LevelUpdateInput = {
@@ -308,6 +313,7 @@ export type LevelUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   language?: Prisma.LanguageUpdateOneRequiredWithoutLevelsNestedInput
   topics?: Prisma.TopicUpdateManyWithoutLevelNestedInput
+  curriculums?: Prisma.CurriculumUpdateManyWithoutLevelNestedInput
 }
 
 export type LevelUncheckedUpdateInput = {
@@ -318,6 +324,7 @@ export type LevelUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   topics?: Prisma.TopicUncheckedUpdateManyWithoutLevelNestedInput
+  curriculums?: Prisma.CurriculumUncheckedUpdateManyWithoutLevelNestedInput
 }
 
 export type LevelCreateManyInput = {
@@ -465,6 +472,20 @@ export type LevelUpdateOneRequiredWithoutTopicsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.LevelUpdateToOneWithWhereWithoutTopicsInput, Prisma.LevelUpdateWithoutTopicsInput>, Prisma.LevelUncheckedUpdateWithoutTopicsInput>
 }
 
+export type LevelCreateNestedOneWithoutCurriculumsInput = {
+  create?: Prisma.XOR<Prisma.LevelCreateWithoutCurriculumsInput, Prisma.LevelUncheckedCreateWithoutCurriculumsInput>
+  connectOrCreate?: Prisma.LevelCreateOrConnectWithoutCurriculumsInput
+  connect?: Prisma.LevelWhereUniqueInput
+}
+
+export type LevelUpdateOneRequiredWithoutCurriculumsNestedInput = {
+  create?: Prisma.XOR<Prisma.LevelCreateWithoutCurriculumsInput, Prisma.LevelUncheckedCreateWithoutCurriculumsInput>
+  connectOrCreate?: Prisma.LevelCreateOrConnectWithoutCurriculumsInput
+  upsert?: Prisma.LevelUpsertWithoutCurriculumsInput
+  connect?: Prisma.LevelWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LevelUpdateToOneWithWhereWithoutCurriculumsInput, Prisma.LevelUpdateWithoutCurriculumsInput>, Prisma.LevelUncheckedUpdateWithoutCurriculumsInput>
+}
+
 export type LevelCreateWithoutLanguageInput = {
   id?: string
   name: string
@@ -472,6 +493,7 @@ export type LevelCreateWithoutLanguageInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   topics?: Prisma.TopicCreateNestedManyWithoutLevelInput
+  curriculums?: Prisma.CurriculumCreateNestedManyWithoutLevelInput
 }
 
 export type LevelUncheckedCreateWithoutLanguageInput = {
@@ -481,6 +503,7 @@ export type LevelUncheckedCreateWithoutLanguageInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   topics?: Prisma.TopicUncheckedCreateNestedManyWithoutLevelInput
+  curriculums?: Prisma.CurriculumUncheckedCreateNestedManyWithoutLevelInput
 }
 
 export type LevelCreateOrConnectWithoutLanguageInput = {
@@ -528,6 +551,7 @@ export type LevelCreateWithoutTopicsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   language: Prisma.LanguageCreateNestedOneWithoutLevelsInput
+  curriculums?: Prisma.CurriculumCreateNestedManyWithoutLevelInput
 }
 
 export type LevelUncheckedCreateWithoutTopicsInput = {
@@ -537,6 +561,7 @@ export type LevelUncheckedCreateWithoutTopicsInput = {
   languageId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  curriculums?: Prisma.CurriculumUncheckedCreateNestedManyWithoutLevelInput
 }
 
 export type LevelCreateOrConnectWithoutTopicsInput = {
@@ -562,6 +587,7 @@ export type LevelUpdateWithoutTopicsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   language?: Prisma.LanguageUpdateOneRequiredWithoutLevelsNestedInput
+  curriculums?: Prisma.CurriculumUpdateManyWithoutLevelNestedInput
 }
 
 export type LevelUncheckedUpdateWithoutTopicsInput = {
@@ -571,6 +597,63 @@ export type LevelUncheckedUpdateWithoutTopicsInput = {
   languageId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  curriculums?: Prisma.CurriculumUncheckedUpdateManyWithoutLevelNestedInput
+}
+
+export type LevelCreateWithoutCurriculumsInput = {
+  id?: string
+  name: string
+  order: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  language: Prisma.LanguageCreateNestedOneWithoutLevelsInput
+  topics?: Prisma.TopicCreateNestedManyWithoutLevelInput
+}
+
+export type LevelUncheckedCreateWithoutCurriculumsInput = {
+  id?: string
+  name: string
+  order: number
+  languageId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  topics?: Prisma.TopicUncheckedCreateNestedManyWithoutLevelInput
+}
+
+export type LevelCreateOrConnectWithoutCurriculumsInput = {
+  where: Prisma.LevelWhereUniqueInput
+  create: Prisma.XOR<Prisma.LevelCreateWithoutCurriculumsInput, Prisma.LevelUncheckedCreateWithoutCurriculumsInput>
+}
+
+export type LevelUpsertWithoutCurriculumsInput = {
+  update: Prisma.XOR<Prisma.LevelUpdateWithoutCurriculumsInput, Prisma.LevelUncheckedUpdateWithoutCurriculumsInput>
+  create: Prisma.XOR<Prisma.LevelCreateWithoutCurriculumsInput, Prisma.LevelUncheckedCreateWithoutCurriculumsInput>
+  where?: Prisma.LevelWhereInput
+}
+
+export type LevelUpdateToOneWithWhereWithoutCurriculumsInput = {
+  where?: Prisma.LevelWhereInput
+  data: Prisma.XOR<Prisma.LevelUpdateWithoutCurriculumsInput, Prisma.LevelUncheckedUpdateWithoutCurriculumsInput>
+}
+
+export type LevelUpdateWithoutCurriculumsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  language?: Prisma.LanguageUpdateOneRequiredWithoutLevelsNestedInput
+  topics?: Prisma.TopicUpdateManyWithoutLevelNestedInput
+}
+
+export type LevelUncheckedUpdateWithoutCurriculumsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  languageId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  topics?: Prisma.TopicUncheckedUpdateManyWithoutLevelNestedInput
 }
 
 export type LevelCreateManyLanguageInput = {
@@ -588,6 +671,7 @@ export type LevelUpdateWithoutLanguageInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   topics?: Prisma.TopicUpdateManyWithoutLevelNestedInput
+  curriculums?: Prisma.CurriculumUpdateManyWithoutLevelNestedInput
 }
 
 export type LevelUncheckedUpdateWithoutLanguageInput = {
@@ -597,6 +681,7 @@ export type LevelUncheckedUpdateWithoutLanguageInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   topics?: Prisma.TopicUncheckedUpdateManyWithoutLevelNestedInput
+  curriculums?: Prisma.CurriculumUncheckedUpdateManyWithoutLevelNestedInput
 }
 
 export type LevelUncheckedUpdateManyWithoutLanguageInput = {
@@ -614,10 +699,12 @@ export type LevelUncheckedUpdateManyWithoutLanguageInput = {
 
 export type LevelCountOutputType = {
   topics: number
+  curriculums: number
 }
 
 export type LevelCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   topics?: boolean | LevelCountOutputTypeCountTopicsArgs
+  curriculums?: boolean | LevelCountOutputTypeCountCurriculumsArgs
 }
 
 /**
@@ -637,6 +724,13 @@ export type LevelCountOutputTypeCountTopicsArgs<ExtArgs extends runtime.Types.Ex
   where?: Prisma.TopicWhereInput
 }
 
+/**
+ * LevelCountOutputType without action
+ */
+export type LevelCountOutputTypeCountCurriculumsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CurriculumWhereInput
+}
+
 
 export type LevelSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -647,6 +741,7 @@ export type LevelSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   updatedAt?: boolean
   language?: boolean | Prisma.LanguageDefaultArgs<ExtArgs>
   topics?: boolean | Prisma.Level$topicsArgs<ExtArgs>
+  curriculums?: boolean | Prisma.Level$curriculumsArgs<ExtArgs>
   _count?: boolean | Prisma.LevelCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["level"]>
 
@@ -683,6 +778,7 @@ export type LevelOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
 export type LevelInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   language?: boolean | Prisma.LanguageDefaultArgs<ExtArgs>
   topics?: boolean | Prisma.Level$topicsArgs<ExtArgs>
+  curriculums?: boolean | Prisma.Level$curriculumsArgs<ExtArgs>
   _count?: boolean | Prisma.LevelCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type LevelIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -697,6 +793,7 @@ export type $LevelPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   objects: {
     language: Prisma.$LanguagePayload<ExtArgs>
     topics: Prisma.$TopicPayload<ExtArgs>[]
+    curriculums: Prisma.$CurriculumPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1101,6 +1198,7 @@ export interface Prisma__LevelClient<T, Null = never, ExtArgs extends runtime.Ty
   readonly [Symbol.toStringTag]: "PrismaPromise"
   language<T extends Prisma.LanguageDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LanguageDefaultArgs<ExtArgs>>): Prisma.Prisma__LanguageClient<runtime.Types.Result.GetResult<Prisma.$LanguagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   topics<T extends Prisma.Level$topicsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Level$topicsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  curriculums<T extends Prisma.Level$curriculumsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Level$curriculumsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CurriculumPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1558,6 +1656,30 @@ export type Level$topicsArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   distinct?: Prisma.TopicScalarFieldEnum | Prisma.TopicScalarFieldEnum[]
+}
+
+/**
+ * Level.curriculums
+ */
+export type Level$curriculumsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Curriculum
+   */
+  select?: Prisma.CurriculumSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Curriculum
+   */
+  omit?: Prisma.CurriculumOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CurriculumInclude<ExtArgs> | null
+  where?: Prisma.CurriculumWhereInput
+  orderBy?: Prisma.CurriculumOrderByWithRelationInput | Prisma.CurriculumOrderByWithRelationInput[]
+  cursor?: Prisma.CurriculumWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CurriculumScalarFieldEnum | Prisma.CurriculumScalarFieldEnum[]
 }
 
 /**

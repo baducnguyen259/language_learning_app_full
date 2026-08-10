@@ -71,3 +71,13 @@ export type Lesson = Prisma.LessonModel
  * 
  */
 export type Vocabulary = Prisma.VocabularyModel
+/**
+ * Model Curriculum
+ * 
+ */
+export type Curriculum = Prisma.CurriculumModel
+/**
+ * Model Chapter
+ * 
+ */
+export type Chapter = Prisma.ChapterModel

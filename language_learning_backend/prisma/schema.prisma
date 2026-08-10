@@ -28,6 +28,11 @@ enum VocabularyStatus {
   ACTIVE
 }
 
+enum CurriculumStatus {
+  DRAFT
+  PUBLISHED
+}
+
 model User {
   id           String     @id @default(cuid())
   name         String
@@ -49,14 +54,15 @@ model Language {
 }
 
 model Level {
-  id         String   @id @default(cuid())
-  name       String
-  order      Int
-  languageId String
-  language   Language @relation(fields: [languageId], references: [id], onDelete: Cascade)
-  topics     Topic[]
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id          String       @id @default(cuid())
+  name        String
+  order       Int
+  languageId  String
+  language    Language     @relation(fields: [languageId], references: [id], onDelete: Cascade)
+  topics      Topic[]
+  curriculums Curriculum[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 
   @@unique([languageId, order])
 }
@@ -77,6 +83,9 @@ model Lesson {
   description            String?
   topicId                String
   topic                  Topic        @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  chapterId              String?
+  chapter                Chapter?     @relation(fields: [chapterId], references: [id], onDelete: SetNull)
+  orderInChapter         Int?
   status                 LessonStatus @default(DRAFT)
   durationMinutes        Int?
   thumbnailUrl           String?
@@ -88,7 +97,9 @@ model Lesson {
   updatedAt              DateTime     @updatedAt
   vocabularies           Vocabulary[]
 
+  @@unique([chapterId, orderInChapter])
   @@index([topicId])
+  @@index([chapterId])
   @@index([status])
 }
 
@@ -109,4 +120,36 @@ model Vocabulary {
   @@unique([lessonId, term])
   @@index([lessonId])
   @@index([status])
+}
+
+model Curriculum {
+  id          String           @id @default(cuid())
+  title       String
+  description String?
+  status      CurriculumStatus @default(DRAFT)
+  levelId     String
+  level       Level            @relation(fields: [levelId], references: [id], onDelete: Cascade)
+  chapters    Chapter[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@unique([levelId, title])
+  @@index([levelId])
+  @@index([status])
+}
+
+model Chapter {
+  id           String     @id @default(cuid())
+  title        String
+  description  String?
+  order        Int
+  curriculumId String
+  curriculum   Curriculum @relation(fields: [curriculumId], references: [id], onDelete: Cascade)
+  lessons      Lesson[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@unique([curriculumId, order])
+  @@unique([curriculumId, title])
+  @@index([curriculumId])
 }

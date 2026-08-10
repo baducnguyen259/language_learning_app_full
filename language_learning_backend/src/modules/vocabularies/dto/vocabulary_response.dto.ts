@@ -85,3 +85,8 @@ export class VocabularyResponseDto {
   @ApiProperty({ example: '2026-08-10T10:00:00.000Z', format: 'date-time' })
   updatedAt!: Date;
 }
+
+export class BulkDeleteVocabularyResponseDto {
+  @ApiProperty({ example: 2 })
+  deletedCount!: number;
+}

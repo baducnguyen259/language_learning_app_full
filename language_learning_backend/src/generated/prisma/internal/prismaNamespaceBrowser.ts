@@ -56,7 +56,9 @@ export const ModelName = {
   Level: 'Level',
   Topic: 'Topic',
   Lesson: 'Lesson',
-  Vocabulary: 'Vocabulary'
+  Vocabulary: 'Vocabulary',
+  Curriculum: 'Curriculum',
+  Chapter: 'Chapter'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -128,6 +130,8 @@ export const LessonScalarFieldEnum = {
   title: 'title',
   description: 'description',
   topicId: 'topicId',
+  chapterId: 'chapterId',
+  orderInChapter: 'orderInChapter',
   status: 'status',
   durationMinutes: 'durationMinutes',
   thumbnailUrl: 'thumbnailUrl',
@@ -157,6 +161,32 @@ export const VocabularyScalarFieldEnum = {
 } as const
 
 export type VocabularyScalarFieldEnum = (typeof VocabularyScalarFieldEnum)[keyof typeof VocabularyScalarFieldEnum]
+
+
+export const CurriculumScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  status: 'status',
+  levelId: 'levelId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CurriculumScalarFieldEnum = (typeof CurriculumScalarFieldEnum)[keyof typeof CurriculumScalarFieldEnum]
+
+
+export const ChapterScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  order: 'order',
+  curriculumId: 'curriculumId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ChapterScalarFieldEnum = (typeof ChapterScalarFieldEnum)[keyof typeof ChapterScalarFieldEnum]
 
 
 export const SortOrder = {
