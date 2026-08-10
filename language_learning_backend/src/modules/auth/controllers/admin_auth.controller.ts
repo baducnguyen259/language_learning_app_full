@@ -1,27 +1,59 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
-import { AuthService } from '../auth.service';
-import { LoginDto } from '../dto/login.dto';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
+import { ApiErrorResponseDto } from '../../../common/dto/api_response.dto';
+import { ApiOkEnvelope } from '../../../common/decorators/api_response.decorator';
 import { CurrentUser } from '../../../common/decorators/current_user.decorator';
-import type { AuthenticatedUser } from '../interfaces/jwt_payload.interface';
 import { JwtAuthGuard } from '../../../common/guards/jwt_auth.guard';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AuthService } from '../auth.service';
+import type { AuthenticatedUser } from '../interfaces/jwt_payload.interface';
+import {
+  AdminLoginResponseDto,
+  CurrentAdminResponseDto,
+} from '../dto/auth_response.dto';
+import { LoginDto } from '../dto/login.dto';
 
 @ApiTags('Admin Auth')
 @Controller('admin/auth')
 export class AdminAuthController {
   constructor(private readonly authService: AuthService) {}
+
   @Post('login')
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Đăng nhập quản trị viên',
+  })
+  @ApiOkEnvelope(AdminLoginResponseDto)
+  @ApiUnauthorizedResponse({
+    description: 'Email hoặc mật khẩu không đúng',
+    type: ApiErrorResponseDto,
   })
   login(@Body() dto: LoginDto) {
     return this.authService.adminLogin(dto);
   }
+
   @Get('me')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('access-token')
   @ApiOperation({
     summary: 'Lấy thông tin admin đang đăng nhập',
+  })
+  @ApiOkEnvelope(CurrentAdminResponseDto)
+  @ApiUnauthorizedResponse({
+    description: 'Thiếu access token hoặc token không hợp lệ',
+    type: ApiErrorResponseDto,
   })
   getMe(@CurrentUser() user: AuthenticatedUser): AuthenticatedUser {
     return user;

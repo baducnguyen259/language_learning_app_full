@@ -12,6 +12,12 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import {
+  ApiAdminErrorResponses,
+  ApiNotFoundErrorResponse,
+  ApiOkEnvelope,
+  ApiPaginatedEnvelope,
+} from '../../../common/decorators/api_response.decorator';
 import { CurrentUser } from '../../../common/decorators/current_user.decorator';
 import { Roles } from '../../../common/decorators/roles.decorator';
 import { UserRole } from '../../../common/enums/user_role.enum';
@@ -21,10 +27,12 @@ import type { AuthenticatedUser } from '../../auth/interfaces/jwt_payload.interf
 import { UpdateUserDto } from '../dto/update_user.dto';
 import { UpdateUserStatusDto } from '../dto/update_user_status.dto';
 import { UserQueryDto } from '../dto/user_query.dto';
+import { UserResponseDto } from '../dto/user_response.dto';
 import { UsersService } from '../users.service';
 
 @ApiTags('Admin Users')
 @ApiBearerAuth('access-token')
+@ApiAdminErrorResponses()
 @Controller('admin/users')
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles(UserRole.ADMIN)
@@ -33,18 +41,23 @@ export class AdminUsersController {
 
   @Get()
   @ApiOperation({ summary: 'Lấy danh sách người dùng' })
+  @ApiPaginatedEnvelope(UserResponseDto)
   findAll(@Query() query: UserQueryDto) {
     return this.usersService.findAllForAdmin(query);
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Lấy chi tiết người dùng' })
+  @ApiOkEnvelope(UserResponseDto)
+  @ApiNotFoundErrorResponse()
   findOne(@Param('id') id: string) {
     return this.usersService.findOneForAdmin(id);
   }
 
   @Patch(':id')
   @ApiOperation({ summary: 'Cập nhật người dùng' })
+  @ApiOkEnvelope(UserResponseDto)
+  @ApiNotFoundErrorResponse()
   update(
     @Param('id') id: string,
     @Body() dto: UpdateUserDto,
@@ -55,6 +68,8 @@ export class AdminUsersController {
 
   @Patch(':id/status')
   @ApiOperation({ summary: 'Khóa hoặc mở khóa người dùng' })
+  @ApiOkEnvelope(UserResponseDto)
+  @ApiNotFoundErrorResponse()
   updateStatus(
     @Param('id') id: string,
     @Body() dto: UpdateUserStatusDto,
