@@ -55,7 +55,8 @@ export const ModelName = {
   Language: 'Language',
   Level: 'Level',
   Topic: 'Topic',
-  Lesson: 'Lesson'
+  Lesson: 'Lesson',
+  Vocabulary: 'Vocabulary'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -139,6 +140,23 @@ export const LessonScalarFieldEnum = {
 } as const
 
 export type LessonScalarFieldEnum = (typeof LessonScalarFieldEnum)[keyof typeof LessonScalarFieldEnum]
+
+
+export const VocabularyScalarFieldEnum = {
+  id: 'id',
+  term: 'term',
+  pronunciation: 'pronunciation',
+  meaning: 'meaning',
+  wordType: 'wordType',
+  imageUrl: 'imageUrl',
+  audioUrl: 'audioUrl',
+  status: 'status',
+  lessonId: 'lessonId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VocabularyScalarFieldEnum = (typeof VocabularyScalarFieldEnum)[keyof typeof VocabularyScalarFieldEnum]
 
 
 export const SortOrder = {

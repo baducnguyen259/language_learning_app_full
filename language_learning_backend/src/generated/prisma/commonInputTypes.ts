@@ -253,6 +253,23 @@ export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
 }
 
+export type EnumVocabularyStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.VocabularyStatus | Prisma.EnumVocabularyStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.VocabularyStatus[] | Prisma.ListEnumVocabularyStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.VocabularyStatus[] | Prisma.ListEnumVocabularyStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumVocabularyStatusFilter<$PrismaModel> | $Enums.VocabularyStatus
+}
+
+export type EnumVocabularyStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.VocabularyStatus | Prisma.EnumVocabularyStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.VocabularyStatus[] | Prisma.ListEnumVocabularyStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.VocabularyStatus[] | Prisma.ListEnumVocabularyStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumVocabularyStatusWithAggregatesFilter<$PrismaModel> | $Enums.VocabularyStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumVocabularyStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumVocabularyStatusFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -503,6 +520,23 @@ export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
   _max?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumVocabularyStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.VocabularyStatus | Prisma.EnumVocabularyStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.VocabularyStatus[] | Prisma.ListEnumVocabularyStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.VocabularyStatus[] | Prisma.ListEnumVocabularyStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumVocabularyStatusFilter<$PrismaModel> | $Enums.VocabularyStatus
+}
+
+export type NestedEnumVocabularyStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.VocabularyStatus | Prisma.EnumVocabularyStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.VocabularyStatus[] | Prisma.ListEnumVocabularyStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.VocabularyStatus[] | Prisma.ListEnumVocabularyStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumVocabularyStatusWithAggregatesFilter<$PrismaModel> | $Enums.VocabularyStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumVocabularyStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumVocabularyStatusFilter<$PrismaModel>
 }
 
 

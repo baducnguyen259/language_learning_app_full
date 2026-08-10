@@ -66,3 +66,8 @@ export type Topic = Prisma.TopicModel
  * 
  */
 export type Lesson = Prisma.LessonModel
+/**
+ * Model Vocabulary
+ * 
+ */
+export type Vocabulary = Prisma.VocabularyModel

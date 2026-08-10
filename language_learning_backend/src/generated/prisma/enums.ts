@@ -32,3 +32,11 @@ export const LessonStatus = {
 } as const
 
 export type LessonStatus = (typeof LessonStatus)[keyof typeof LessonStatus]
+
+
+export const VocabularyStatus = {
+  DRAFT: 'DRAFT',
+  ACTIVE: 'ACTIVE'
+} as const
+
+export type VocabularyStatus = (typeof VocabularyStatus)[keyof typeof VocabularyStatus]

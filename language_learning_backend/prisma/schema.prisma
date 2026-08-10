@@ -23,6 +23,11 @@ enum LessonStatus {
   PUBLISHED
 }
 
+enum VocabularyStatus {
+  DRAFT
+  ACTIVE
+}
+
 model User {
   id           String     @id @default(cuid())
   name         String
@@ -81,7 +86,27 @@ model Lesson {
   publishedAt            DateTime?
   createdAt              DateTime     @default(now())
   updatedAt              DateTime     @updatedAt
+  vocabularies           Vocabulary[]
 
   @@index([topicId])
+  @@index([status])
+}
+
+model Vocabulary {
+  id            String           @id @default(cuid())
+  term          String
+  pronunciation String?
+  meaning       String
+  wordType      String?
+  imageUrl      String?
+  audioUrl      String?
+  status        VocabularyStatus @default(DRAFT)
+  lessonId      String
+  lesson        Lesson           @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  @@unique([lessonId, term])
+  @@index([lessonId])
   @@index([status])
 }
