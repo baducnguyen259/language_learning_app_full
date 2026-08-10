@@ -16,7 +16,7 @@ export class LanguagesService {
     const page = query.page;
     const limit = query.limit;
     const skip = (page - 1) * limit;
-    const search = query.sreach?.trim();
+    const search = query.search?.trim();
     const where: Prisma.LanguageWhereInput = search
       ? {
           OR: [

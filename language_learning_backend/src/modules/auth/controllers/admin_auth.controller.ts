@@ -4,16 +4,25 @@ import { LoginDto } from '../dto/login.dto';
 import { CurrentUser } from '../../../common/decorators/current_user.decorator';
 import type { AuthenticatedUser } from '../interfaces/jwt_payload.interface';
 import { JwtAuthGuard } from '../../../common/guards/jwt_auth.guard';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Admin Auth')
 @Controller('admin/auth')
 export class AdminAuthController {
   constructor(private readonly authService: AuthService) {}
   @Post('login')
+  @ApiOperation({
+    summary: 'Đăng nhập quản trị viên',
+  })
   login(@Body() dto: LoginDto) {
     return this.authService.adminLogin(dto);
   }
   @Get('me')
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('access-token')
+  @ApiOperation({
+    summary: 'Lấy thông tin admin đang đăng nhập',
+  })
   getMe(@CurrentUser() user: AuthenticatedUser): AuthenticatedUser {
     return user;
   }

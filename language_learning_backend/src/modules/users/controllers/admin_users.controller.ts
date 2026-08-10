@@ -7,6 +7,11 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CurrentUser } from '../../../common/decorators/current_user.decorator';
 import { Roles } from '../../../common/decorators/roles.decorator';
 import { UserRole } from '../../../common/enums/user_role.enum';
@@ -18,6 +23,8 @@ import { UpdateUserStatusDto } from '../dto/update_user_status.dto';
 import { UserQueryDto } from '../dto/user_query.dto';
 import { UsersService } from '../users.service';
 
+@ApiTags('Admin Users')
+@ApiBearerAuth('access-token')
 @Controller('admin/users')
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles(UserRole.ADMIN)
@@ -25,16 +32,19 @@ export class AdminUsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
+  @ApiOperation({ summary: 'Lấy danh sách người dùng' })
   findAll(@Query() query: UserQueryDto) {
     return this.usersService.findAllForAdmin(query);
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Lấy chi tiết người dùng' })
   findOne(@Param('id') id: string) {
     return this.usersService.findOneForAdmin(id);
   }
 
   @Patch(':id')
+  @ApiOperation({ summary: 'Cập nhật người dùng' })
   update(
     @Param('id') id: string,
     @Body() dto: UpdateUserDto,
@@ -44,6 +54,7 @@ export class AdminUsersController {
   }
 
   @Patch(':id/status')
+  @ApiOperation({ summary: 'Khóa hoặc mở khóa người dùng' })
   updateStatus(
     @Param('id') id: string,
     @Body() dto: UpdateUserStatusDto,

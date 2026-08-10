@@ -13,17 +13,16 @@ export interface ApiSuccessResponse<T> {
   path: string;
   timestamp: string;
 }
-
 @Injectable()
-export class ResponseInterceptor<T>
-  implements NestInterceptor<T, ApiSuccessResponse<T>>
-{
+export class ResponseInterceptor<T> implements NestInterceptor<
+  T,
+  ApiSuccessResponse<T>
+> {
   intercept(
     context: ExecutionContext,
     next: CallHandler<T>,
   ): Observable<ApiSuccessResponse<T>> {
     const request = context.switchToHttp().getRequest<Request>();
-
     return next.handle().pipe(
       map((data) => ({
         success: true as const,
