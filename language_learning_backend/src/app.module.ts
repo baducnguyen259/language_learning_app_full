@@ -20,6 +20,7 @@ import { VocabulariesModule } from './modules/vocabularies/vocabularies.module';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { HttpExceptionFilter } from './common/filters/http_exception.filter';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
+import { CurriculumsModule } from './modules/curriculums/curriculums.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { ResponseInterceptor } from './common/interceptors/response.interceptor'
     UsersModule,
     LanguagesModule,
     LevelsModule,
+    CurriculumsModule,
     TopicsModule,
     LessonsModule,
     VocabulariesModule,
