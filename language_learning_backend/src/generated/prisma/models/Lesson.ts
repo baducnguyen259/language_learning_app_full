@@ -303,6 +303,8 @@ export type LessonWhereInput = {
   topic?: Prisma.XOR<Prisma.TopicScalarRelationFilter, Prisma.TopicWhereInput>
   chapter?: Prisma.XOR<Prisma.ChapterNullableScalarRelationFilter, Prisma.ChapterWhereInput> | null
   vocabularies?: Prisma.VocabularyListRelationFilter
+  grammars?: Prisma.GrammarListRelationFilter
+  quiz?: Prisma.XOR<Prisma.QuizNullableScalarRelationFilter, Prisma.QuizWhereInput> | null
 }
 
 export type LessonOrderByWithRelationInput = {
@@ -324,6 +326,8 @@ export type LessonOrderByWithRelationInput = {
   topic?: Prisma.TopicOrderByWithRelationInput
   chapter?: Prisma.ChapterOrderByWithRelationInput
   vocabularies?: Prisma.VocabularyOrderByRelationAggregateInput
+  grammars?: Prisma.GrammarOrderByRelationAggregateInput
+  quiz?: Prisma.QuizOrderByWithRelationInput
 }
 
 export type LessonWhereUniqueInput = Prisma.AtLeast<{
@@ -349,6 +353,8 @@ export type LessonWhereUniqueInput = Prisma.AtLeast<{
   topic?: Prisma.XOR<Prisma.TopicScalarRelationFilter, Prisma.TopicWhereInput>
   chapter?: Prisma.XOR<Prisma.ChapterNullableScalarRelationFilter, Prisma.ChapterWhereInput> | null
   vocabularies?: Prisma.VocabularyListRelationFilter
+  grammars?: Prisma.GrammarListRelationFilter
+  quiz?: Prisma.XOR<Prisma.QuizNullableScalarRelationFilter, Prisma.QuizWhereInput> | null
 }, "id" | "chapterId_orderInChapter">
 
 export type LessonOrderByWithAggregationInput = {
@@ -412,6 +418,8 @@ export type LessonCreateInput = {
   topic: Prisma.TopicCreateNestedOneWithoutLessonsInput
   chapter?: Prisma.ChapterCreateNestedOneWithoutLessonsInput
   vocabularies?: Prisma.VocabularyCreateNestedManyWithoutLessonInput
+  grammars?: Prisma.GrammarCreateNestedManyWithoutLessonInput
+  quiz?: Prisma.QuizCreateNestedOneWithoutLessonInput
 }
 
 export type LessonUncheckedCreateInput = {
@@ -431,6 +439,8 @@ export type LessonUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   vocabularies?: Prisma.VocabularyUncheckedCreateNestedManyWithoutLessonInput
+  grammars?: Prisma.GrammarUncheckedCreateNestedManyWithoutLessonInput
+  quiz?: Prisma.QuizUncheckedCreateNestedOneWithoutLessonInput
 }
 
 export type LessonUpdateInput = {
@@ -450,6 +460,8 @@ export type LessonUpdateInput = {
   topic?: Prisma.TopicUpdateOneRequiredWithoutLessonsNestedInput
   chapter?: Prisma.ChapterUpdateOneWithoutLessonsNestedInput
   vocabularies?: Prisma.VocabularyUpdateManyWithoutLessonNestedInput
+  grammars?: Prisma.GrammarUpdateManyWithoutLessonNestedInput
+  quiz?: Prisma.QuizUpdateOneWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateInput = {
@@ -469,6 +481,8 @@ export type LessonUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   vocabularies?: Prisma.VocabularyUncheckedUpdateManyWithoutLessonNestedInput
+  grammars?: Prisma.GrammarUncheckedUpdateManyWithoutLessonNestedInput
+  quiz?: Prisma.QuizUncheckedUpdateOneWithoutLessonNestedInput
 }
 
 export type LessonCreateManyInput = {
@@ -687,6 +701,34 @@ export type LessonUpdateOneRequiredWithoutVocabulariesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.LessonUpdateToOneWithWhereWithoutVocabulariesInput, Prisma.LessonUpdateWithoutVocabulariesInput>, Prisma.LessonUncheckedUpdateWithoutVocabulariesInput>
 }
 
+export type LessonCreateNestedOneWithoutGrammarsInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutGrammarsInput, Prisma.LessonUncheckedCreateWithoutGrammarsInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutGrammarsInput
+  connect?: Prisma.LessonWhereUniqueInput
+}
+
+export type LessonUpdateOneRequiredWithoutGrammarsNestedInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutGrammarsInput, Prisma.LessonUncheckedCreateWithoutGrammarsInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutGrammarsInput
+  upsert?: Prisma.LessonUpsertWithoutGrammarsInput
+  connect?: Prisma.LessonWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LessonUpdateToOneWithWhereWithoutGrammarsInput, Prisma.LessonUpdateWithoutGrammarsInput>, Prisma.LessonUncheckedUpdateWithoutGrammarsInput>
+}
+
+export type LessonCreateNestedOneWithoutQuizInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutQuizInput, Prisma.LessonUncheckedCreateWithoutQuizInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutQuizInput
+  connect?: Prisma.LessonWhereUniqueInput
+}
+
+export type LessonUpdateOneRequiredWithoutQuizNestedInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutQuizInput, Prisma.LessonUncheckedCreateWithoutQuizInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutQuizInput
+  upsert?: Prisma.LessonUpsertWithoutQuizInput
+  connect?: Prisma.LessonWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LessonUpdateToOneWithWhereWithoutQuizInput, Prisma.LessonUpdateWithoutQuizInput>, Prisma.LessonUncheckedUpdateWithoutQuizInput>
+}
+
 export type LessonCreateNestedManyWithoutChapterInput = {
   create?: Prisma.XOR<Prisma.LessonCreateWithoutChapterInput, Prisma.LessonUncheckedCreateWithoutChapterInput> | Prisma.LessonCreateWithoutChapterInput[] | Prisma.LessonUncheckedCreateWithoutChapterInput[]
   connectOrCreate?: Prisma.LessonCreateOrConnectWithoutChapterInput | Prisma.LessonCreateOrConnectWithoutChapterInput[]
@@ -745,6 +787,8 @@ export type LessonCreateWithoutTopicInput = {
   updatedAt?: Date | string
   chapter?: Prisma.ChapterCreateNestedOneWithoutLessonsInput
   vocabularies?: Prisma.VocabularyCreateNestedManyWithoutLessonInput
+  grammars?: Prisma.GrammarCreateNestedManyWithoutLessonInput
+  quiz?: Prisma.QuizCreateNestedOneWithoutLessonInput
 }
 
 export type LessonUncheckedCreateWithoutTopicInput = {
@@ -763,6 +807,8 @@ export type LessonUncheckedCreateWithoutTopicInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   vocabularies?: Prisma.VocabularyUncheckedCreateNestedManyWithoutLessonInput
+  grammars?: Prisma.GrammarUncheckedCreateNestedManyWithoutLessonInput
+  quiz?: Prisma.QuizUncheckedCreateNestedOneWithoutLessonInput
 }
 
 export type LessonCreateOrConnectWithoutTopicInput = {
@@ -828,6 +874,8 @@ export type LessonCreateWithoutVocabulariesInput = {
   updatedAt?: Date | string
   topic: Prisma.TopicCreateNestedOneWithoutLessonsInput
   chapter?: Prisma.ChapterCreateNestedOneWithoutLessonsInput
+  grammars?: Prisma.GrammarCreateNestedManyWithoutLessonInput
+  quiz?: Prisma.QuizCreateNestedOneWithoutLessonInput
 }
 
 export type LessonUncheckedCreateWithoutVocabulariesInput = {
@@ -846,6 +894,8 @@ export type LessonUncheckedCreateWithoutVocabulariesInput = {
   publishedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  grammars?: Prisma.GrammarUncheckedCreateNestedManyWithoutLessonInput
+  quiz?: Prisma.QuizUncheckedCreateNestedOneWithoutLessonInput
 }
 
 export type LessonCreateOrConnectWithoutVocabulariesInput = {
@@ -880,6 +930,8 @@ export type LessonUpdateWithoutVocabulariesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   topic?: Prisma.TopicUpdateOneRequiredWithoutLessonsNestedInput
   chapter?: Prisma.ChapterUpdateOneWithoutLessonsNestedInput
+  grammars?: Prisma.GrammarUpdateManyWithoutLessonNestedInput
+  quiz?: Prisma.QuizUpdateOneWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutVocabulariesInput = {
@@ -898,6 +950,200 @@ export type LessonUncheckedUpdateWithoutVocabulariesInput = {
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  grammars?: Prisma.GrammarUncheckedUpdateManyWithoutLessonNestedInput
+  quiz?: Prisma.QuizUncheckedUpdateOneWithoutLessonNestedInput
+}
+
+export type LessonCreateWithoutGrammarsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  orderInChapter?: number | null
+  status?: $Enums.LessonStatus
+  durationMinutes?: number | null
+  thumbnailUrl?: string | null
+  requiresPreviousLesson?: boolean
+  allowReplay?: boolean
+  scheduledAt?: Date | string | null
+  publishedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  topic: Prisma.TopicCreateNestedOneWithoutLessonsInput
+  chapter?: Prisma.ChapterCreateNestedOneWithoutLessonsInput
+  vocabularies?: Prisma.VocabularyCreateNestedManyWithoutLessonInput
+  quiz?: Prisma.QuizCreateNestedOneWithoutLessonInput
+}
+
+export type LessonUncheckedCreateWithoutGrammarsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  topicId: string
+  chapterId?: string | null
+  orderInChapter?: number | null
+  status?: $Enums.LessonStatus
+  durationMinutes?: number | null
+  thumbnailUrl?: string | null
+  requiresPreviousLesson?: boolean
+  allowReplay?: boolean
+  scheduledAt?: Date | string | null
+  publishedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  vocabularies?: Prisma.VocabularyUncheckedCreateNestedManyWithoutLessonInput
+  quiz?: Prisma.QuizUncheckedCreateNestedOneWithoutLessonInput
+}
+
+export type LessonCreateOrConnectWithoutGrammarsInput = {
+  where: Prisma.LessonWhereUniqueInput
+  create: Prisma.XOR<Prisma.LessonCreateWithoutGrammarsInput, Prisma.LessonUncheckedCreateWithoutGrammarsInput>
+}
+
+export type LessonUpsertWithoutGrammarsInput = {
+  update: Prisma.XOR<Prisma.LessonUpdateWithoutGrammarsInput, Prisma.LessonUncheckedUpdateWithoutGrammarsInput>
+  create: Prisma.XOR<Prisma.LessonCreateWithoutGrammarsInput, Prisma.LessonUncheckedCreateWithoutGrammarsInput>
+  where?: Prisma.LessonWhereInput
+}
+
+export type LessonUpdateToOneWithWhereWithoutGrammarsInput = {
+  where?: Prisma.LessonWhereInput
+  data: Prisma.XOR<Prisma.LessonUpdateWithoutGrammarsInput, Prisma.LessonUncheckedUpdateWithoutGrammarsInput>
+}
+
+export type LessonUpdateWithoutGrammarsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orderInChapter?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiresPreviousLesson?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowReplay?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  topic?: Prisma.TopicUpdateOneRequiredWithoutLessonsNestedInput
+  chapter?: Prisma.ChapterUpdateOneWithoutLessonsNestedInput
+  vocabularies?: Prisma.VocabularyUpdateManyWithoutLessonNestedInput
+  quiz?: Prisma.QuizUpdateOneWithoutLessonNestedInput
+}
+
+export type LessonUncheckedUpdateWithoutGrammarsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  topicId?: Prisma.StringFieldUpdateOperationsInput | string
+  chapterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orderInChapter?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiresPreviousLesson?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowReplay?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  vocabularies?: Prisma.VocabularyUncheckedUpdateManyWithoutLessonNestedInput
+  quiz?: Prisma.QuizUncheckedUpdateOneWithoutLessonNestedInput
+}
+
+export type LessonCreateWithoutQuizInput = {
+  id?: string
+  title: string
+  description?: string | null
+  orderInChapter?: number | null
+  status?: $Enums.LessonStatus
+  durationMinutes?: number | null
+  thumbnailUrl?: string | null
+  requiresPreviousLesson?: boolean
+  allowReplay?: boolean
+  scheduledAt?: Date | string | null
+  publishedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  topic: Prisma.TopicCreateNestedOneWithoutLessonsInput
+  chapter?: Prisma.ChapterCreateNestedOneWithoutLessonsInput
+  vocabularies?: Prisma.VocabularyCreateNestedManyWithoutLessonInput
+  grammars?: Prisma.GrammarCreateNestedManyWithoutLessonInput
+}
+
+export type LessonUncheckedCreateWithoutQuizInput = {
+  id?: string
+  title: string
+  description?: string | null
+  topicId: string
+  chapterId?: string | null
+  orderInChapter?: number | null
+  status?: $Enums.LessonStatus
+  durationMinutes?: number | null
+  thumbnailUrl?: string | null
+  requiresPreviousLesson?: boolean
+  allowReplay?: boolean
+  scheduledAt?: Date | string | null
+  publishedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  vocabularies?: Prisma.VocabularyUncheckedCreateNestedManyWithoutLessonInput
+  grammars?: Prisma.GrammarUncheckedCreateNestedManyWithoutLessonInput
+}
+
+export type LessonCreateOrConnectWithoutQuizInput = {
+  where: Prisma.LessonWhereUniqueInput
+  create: Prisma.XOR<Prisma.LessonCreateWithoutQuizInput, Prisma.LessonUncheckedCreateWithoutQuizInput>
+}
+
+export type LessonUpsertWithoutQuizInput = {
+  update: Prisma.XOR<Prisma.LessonUpdateWithoutQuizInput, Prisma.LessonUncheckedUpdateWithoutQuizInput>
+  create: Prisma.XOR<Prisma.LessonCreateWithoutQuizInput, Prisma.LessonUncheckedCreateWithoutQuizInput>
+  where?: Prisma.LessonWhereInput
+}
+
+export type LessonUpdateToOneWithWhereWithoutQuizInput = {
+  where?: Prisma.LessonWhereInput
+  data: Prisma.XOR<Prisma.LessonUpdateWithoutQuizInput, Prisma.LessonUncheckedUpdateWithoutQuizInput>
+}
+
+export type LessonUpdateWithoutQuizInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orderInChapter?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiresPreviousLesson?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowReplay?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  topic?: Prisma.TopicUpdateOneRequiredWithoutLessonsNestedInput
+  chapter?: Prisma.ChapterUpdateOneWithoutLessonsNestedInput
+  vocabularies?: Prisma.VocabularyUpdateManyWithoutLessonNestedInput
+  grammars?: Prisma.GrammarUpdateManyWithoutLessonNestedInput
+}
+
+export type LessonUncheckedUpdateWithoutQuizInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  topicId?: Prisma.StringFieldUpdateOperationsInput | string
+  chapterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orderInChapter?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiresPreviousLesson?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowReplay?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  vocabularies?: Prisma.VocabularyUncheckedUpdateManyWithoutLessonNestedInput
+  grammars?: Prisma.GrammarUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonCreateWithoutChapterInput = {
@@ -916,6 +1162,8 @@ export type LessonCreateWithoutChapterInput = {
   updatedAt?: Date | string
   topic: Prisma.TopicCreateNestedOneWithoutLessonsInput
   vocabularies?: Prisma.VocabularyCreateNestedManyWithoutLessonInput
+  grammars?: Prisma.GrammarCreateNestedManyWithoutLessonInput
+  quiz?: Prisma.QuizCreateNestedOneWithoutLessonInput
 }
 
 export type LessonUncheckedCreateWithoutChapterInput = {
@@ -934,6 +1182,8 @@ export type LessonUncheckedCreateWithoutChapterInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   vocabularies?: Prisma.VocabularyUncheckedCreateNestedManyWithoutLessonInput
+  grammars?: Prisma.GrammarUncheckedCreateNestedManyWithoutLessonInput
+  quiz?: Prisma.QuizUncheckedCreateNestedOneWithoutLessonInput
 }
 
 export type LessonCreateOrConnectWithoutChapterInput = {
@@ -995,6 +1245,8 @@ export type LessonUpdateWithoutTopicInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   chapter?: Prisma.ChapterUpdateOneWithoutLessonsNestedInput
   vocabularies?: Prisma.VocabularyUpdateManyWithoutLessonNestedInput
+  grammars?: Prisma.GrammarUpdateManyWithoutLessonNestedInput
+  quiz?: Prisma.QuizUpdateOneWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutTopicInput = {
@@ -1013,6 +1265,8 @@ export type LessonUncheckedUpdateWithoutTopicInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   vocabularies?: Prisma.VocabularyUncheckedUpdateManyWithoutLessonNestedInput
+  grammars?: Prisma.GrammarUncheckedUpdateManyWithoutLessonNestedInput
+  quiz?: Prisma.QuizUncheckedUpdateOneWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateManyWithoutTopicInput = {
@@ -1065,6 +1319,8 @@ export type LessonUpdateWithoutChapterInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   topic?: Prisma.TopicUpdateOneRequiredWithoutLessonsNestedInput
   vocabularies?: Prisma.VocabularyUpdateManyWithoutLessonNestedInput
+  grammars?: Prisma.GrammarUpdateManyWithoutLessonNestedInput
+  quiz?: Prisma.QuizUpdateOneWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutChapterInput = {
@@ -1083,6 +1339,8 @@ export type LessonUncheckedUpdateWithoutChapterInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   vocabularies?: Prisma.VocabularyUncheckedUpdateManyWithoutLessonNestedInput
+  grammars?: Prisma.GrammarUncheckedUpdateManyWithoutLessonNestedInput
+  quiz?: Prisma.QuizUncheckedUpdateOneWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateManyWithoutChapterInput = {
@@ -1109,10 +1367,12 @@ export type LessonUncheckedUpdateManyWithoutChapterInput = {
 
 export type LessonCountOutputType = {
   vocabularies: number
+  grammars: number
 }
 
 export type LessonCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   vocabularies?: boolean | LessonCountOutputTypeCountVocabulariesArgs
+  grammars?: boolean | LessonCountOutputTypeCountGrammarsArgs
 }
 
 /**
@@ -1130,6 +1390,13 @@ export type LessonCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exten
  */
 export type LessonCountOutputTypeCountVocabulariesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.VocabularyWhereInput
+}
+
+/**
+ * LessonCountOutputType without action
+ */
+export type LessonCountOutputTypeCountGrammarsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.GrammarWhereInput
 }
 
 
@@ -1152,6 +1419,8 @@ export type LessonSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   topic?: boolean | Prisma.TopicDefaultArgs<ExtArgs>
   chapter?: boolean | Prisma.Lesson$chapterArgs<ExtArgs>
   vocabularies?: boolean | Prisma.Lesson$vocabulariesArgs<ExtArgs>
+  grammars?: boolean | Prisma.Lesson$grammarsArgs<ExtArgs>
+  quiz?: boolean | Prisma.Lesson$quizArgs<ExtArgs>
   _count?: boolean | Prisma.LessonCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["lesson"]>
 
@@ -1218,6 +1487,8 @@ export type LessonInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   topic?: boolean | Prisma.TopicDefaultArgs<ExtArgs>
   chapter?: boolean | Prisma.Lesson$chapterArgs<ExtArgs>
   vocabularies?: boolean | Prisma.Lesson$vocabulariesArgs<ExtArgs>
+  grammars?: boolean | Prisma.Lesson$grammarsArgs<ExtArgs>
+  quiz?: boolean | Prisma.Lesson$quizArgs<ExtArgs>
   _count?: boolean | Prisma.LessonCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type LessonIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1235,6 +1506,8 @@ export type $LessonPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     topic: Prisma.$TopicPayload<ExtArgs>
     chapter: Prisma.$ChapterPayload<ExtArgs> | null
     vocabularies: Prisma.$VocabularyPayload<ExtArgs>[]
+    grammars: Prisma.$GrammarPayload<ExtArgs>[]
+    quiz: Prisma.$QuizPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1649,6 +1922,8 @@ export interface Prisma__LessonClient<T, Null = never, ExtArgs extends runtime.T
   topic<T extends Prisma.TopicDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TopicDefaultArgs<ExtArgs>>): Prisma.Prisma__TopicClient<runtime.Types.Result.GetResult<Prisma.$TopicPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   chapter<T extends Prisma.Lesson$chapterArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$chapterArgs<ExtArgs>>): Prisma.Prisma__ChapterClient<runtime.Types.Result.GetResult<Prisma.$ChapterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   vocabularies<T extends Prisma.Lesson$vocabulariesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$vocabulariesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VocabularyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  grammars<T extends Prisma.Lesson$grammarsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$grammarsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GrammarPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  quiz<T extends Prisma.Lesson$quizArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$quizArgs<ExtArgs>>): Prisma.Prisma__QuizClient<runtime.Types.Result.GetResult<Prisma.$QuizPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2134,6 +2409,49 @@ export type Lesson$vocabulariesArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.VocabularyScalarFieldEnum | Prisma.VocabularyScalarFieldEnum[]
+}
+
+/**
+ * Lesson.grammars
+ */
+export type Lesson$grammarsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Grammar
+   */
+  select?: Prisma.GrammarSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Grammar
+   */
+  omit?: Prisma.GrammarOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GrammarInclude<ExtArgs> | null
+  where?: Prisma.GrammarWhereInput
+  orderBy?: Prisma.GrammarOrderByWithRelationInput | Prisma.GrammarOrderByWithRelationInput[]
+  cursor?: Prisma.GrammarWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.GrammarScalarFieldEnum | Prisma.GrammarScalarFieldEnum[]
+}
+
+/**
+ * Lesson.quiz
+ */
+export type Lesson$quizArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Quiz
+   */
+  select?: Prisma.QuizSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Quiz
+   */
+  omit?: Prisma.QuizOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.QuizInclude<ExtArgs> | null
+  where?: Prisma.QuizWhereInput
 }
 
 /**

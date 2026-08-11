@@ -48,3 +48,30 @@ export const CurriculumStatus = {
 } as const
 
 export type CurriculumStatus = (typeof CurriculumStatus)[keyof typeof CurriculumStatus]
+
+
+export const GrammarStatus = {
+  DRAFT: 'DRAFT',
+  ACTIVE: 'ACTIVE'
+} as const
+
+export type GrammarStatus = (typeof GrammarStatus)[keyof typeof GrammarStatus]
+
+
+export const QuizStatus = {
+  DRAFT: 'DRAFT',
+  ACTIVE: 'ACTIVE'
+} as const
+
+export type QuizStatus = (typeof QuizStatus)[keyof typeof QuizStatus]
+
+
+export const QuizQuestionType = {
+  matching: 'matching',
+  sentenceOrder: 'sentenceOrder',
+  missingWord: 'missingWord',
+  listeningInput: 'listeningInput',
+  pronunciation: 'pronunciation'
+} as const
+
+export type QuizQuestionType = (typeof QuizQuestionType)[keyof typeof QuizQuestionType]

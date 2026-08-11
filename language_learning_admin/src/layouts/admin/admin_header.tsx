@@ -1,13 +1,16 @@
 import MenuIcon from '@mui/icons-material/Menu'
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined'
-import { AppBar, Avatar, Badge, Box, IconButton, Stack, Toolbar, Typography } from '@mui/material'
-import { useLocation } from 'react-router'
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined'
+import { AppBar, Avatar, Badge, Box, Button, IconButton, Stack, Toolbar, Tooltip, Typography } from '@mui/material'
+import { useLocation, useNavigate } from 'react-router'
 
 import { ADMIN_SIDEBAR_WIDTH } from '@/layouts/admin/admin_sidebar'
 import { SearchInput } from '@/components/forms/search_input'
+import { queryClient } from '@/lib/query_client'
 
 export function AdminHeader() {
   const { pathname } = useLocation()
+  const navigate = useNavigate()
   const currentPage = pathname.startsWith('/curriculums')
     ? 'Lộ trình'
     : pathname.startsWith('/settings')
@@ -25,6 +28,13 @@ export function AdminHeader() {
       : pathname === '/dashboard'
           ? 'Tổng quan'
           : 'Quản trị'
+
+  function handleLogout() {
+    localStorage.removeItem('access_token')
+    localStorage.removeItem('admin_user')
+    queryClient.clear()
+    navigate('/login', { replace: true })
+  }
 
   return (
     <AppBar
@@ -61,6 +71,27 @@ export function AdminHeader() {
           <Badge color="error" variant="dot"><NotificationsNoneOutlinedIcon /></Badge>
         </IconButton>
         <Avatar sx={{ width: 35, height: 35, bgcolor: '#d9c5ad', color: '#514334', fontSize: 13 }}>AD</Avatar>
+        <Button
+          color="error"
+          onClick={handleLogout}
+          size="small"
+          startIcon={<LogoutOutlinedIcon />}
+          variant="outlined"
+          sx={{ display: { xs: 'none', sm: 'inline-flex' }, minHeight: 36, whiteSpace: 'nowrap' }}
+        >
+          Đăng xuất
+        </Button>
+        <Tooltip title="Đăng xuất">
+          <IconButton
+            aria-label="Đăng xuất"
+            color="error"
+            onClick={handleLogout}
+            size="small"
+            sx={{ display: { xs: 'inline-flex', sm: 'none' } }}
+          >
+            <LogoutOutlinedIcon />
+          </IconButton>
+        </Tooltip>
       </Toolbar>
     </AppBar>
   )

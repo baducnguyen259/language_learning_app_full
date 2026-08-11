@@ -27,6 +27,8 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { ErrorView } from "@/components/feedback/error_view";
 import { LoadingView } from "@/components/feedback/loading_view";
 import type { CurriculumFilters as ApiCurriculumFilters } from "../types/curriculum.types";
+import { getLanguages } from "@/features/languages";
+import { getLevels } from "@/features/levels/api/level_api";
 
 type CurriculumFormFilters = {
   keyword: string;
@@ -46,6 +48,30 @@ export function CurriculumListPage() {
   const [filters, setFilters] = useState(initialFilters);
   const [appliedFilters, setAppliedFilters] = useState(initialFilters);
   const [page, setPage] = useState(1);
+  const languagesQuery = useQuery({
+    queryKey: ["admin-languages", "curriculum-filter"],
+    queryFn: () =>
+      getLanguages({
+        page: 1,
+        limit: 100,
+      }),
+  });
+
+  const selectedLanguageId =
+    filters.language === "all" ? undefined : filters.language;
+
+  const levelsQuery = useQuery({
+    queryKey: ["admin-levels", "curriculum-filter", selectedLanguageId],
+    queryFn: () =>
+      getLevels({
+        languageId: selectedLanguageId,
+        page: 1,
+        limit: 100,
+      }),
+  });
+
+  const languages = languagesQuery.data?.items ?? [];
+  const levels = levelsQuery.data?.items ?? [];
 
   const status =
     appliedFilters.status === "published"
@@ -56,11 +82,15 @@ export function CurriculumListPage() {
 
   const queryFilters: ApiCurriculumFilters = {
     search: appliedFilters.keyword.trim() || undefined,
+
+    languageId:
+      appliedFilters.language === "all" ? undefined : appliedFilters.language,
+
+    levelId: appliedFilters.level === "all" ? undefined : appliedFilters.level,
     status,
     page,
     limit: 10,
   };
-
   const curriculumsQuery = useQuery({
     queryKey: ["admin-curriculums", queryFilters],
     queryFn: () => getCurriculums(queryFilters),
@@ -140,12 +170,29 @@ export function CurriculumListPage() {
             <FilterLabel>Ngôn ngữ</FilterLabel>
             <FilterSelect
               value={filters.language}
-              onChange={(value) => updateFilter("language", value)}
+              onChange={(value) => {
+                setFilters((current) => ({
+                  ...current,
+                  language: value,
+                  level: "all",
+                }));
+              }}
             >
               <MenuItem value="all">Tất cả ngôn ngữ</MenuItem>
-              <MenuItem value="korean">Tiếng Hàn</MenuItem>
-              <MenuItem value="english">Tiếng Anh</MenuItem>
-              <MenuItem value="japanese">Tiếng Nhật</MenuItem>
+
+              {languagesQuery.isPending && (
+                <MenuItem disabled>Đang tải ngôn ngữ...</MenuItem>
+              )}
+
+              {languagesQuery.isError && (
+                <MenuItem disabled>Không thể tải ngôn ngữ</MenuItem>
+              )}
+
+              {languages.map((language) => (
+                <MenuItem key={language.id} value={language.id}>
+                  {language.name}
+                </MenuItem>
+              ))}
             </FilterSelect>
           </Grid>
           <Grid size={{ xs: 12, sm: 6, lg: 2.2 }}>
@@ -155,19 +202,33 @@ export function CurriculumListPage() {
               onChange={(value) => updateFilter("level", value)}
             >
               <MenuItem value="all">Tất cả trình độ</MenuItem>
-              <MenuItem value="beginner">Sơ cấp</MenuItem>
-              <MenuItem value="intermediate">Trung cấp</MenuItem>
-              <MenuItem value="advanced">Cao cấp</MenuItem>
+
+              {levelsQuery.isPending && (
+                <MenuItem disabled>Đang tải trình độ...</MenuItem>
+              )}
+
+              {levelsQuery.isError && (
+                <MenuItem disabled>Không thể tải trình độ</MenuItem>
+              )}
+
+              {levels.map((level) => (
+                <MenuItem key={level.id} value={level.id}>
+                  {level.name}
+                </MenuItem>
+              ))}
             </FilterSelect>
           </Grid>
           <Grid size={{ xs: 12, sm: 6, lg: 2.2 }}>
             <FilterLabel>Trạng thái</FilterLabel>
+
             <FilterSelect
               value={filters.status}
               onChange={(value) => updateFilter("status", value)}
             >
               <MenuItem value="all">Tất cả trạng thái</MenuItem>
+
               <MenuItem value="published">Đã xuất bản</MenuItem>
+
               <MenuItem value="draft">Bản nháp</MenuItem>
             </FilterSelect>
           </Grid>

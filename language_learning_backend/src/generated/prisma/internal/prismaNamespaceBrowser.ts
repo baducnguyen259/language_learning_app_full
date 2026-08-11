@@ -57,6 +57,10 @@ export const ModelName = {
   Topic: 'Topic',
   Lesson: 'Lesson',
   Vocabulary: 'Vocabulary',
+  Grammar: 'Grammar',
+  Quiz: 'Quiz',
+  QuizQuestion: 'QuizQuestion',
+  QuizOption: 'QuizOption',
   Curriculum: 'Curriculum',
   Chapter: 'Chapter'
 } as const
@@ -161,6 +165,71 @@ export const VocabularyScalarFieldEnum = {
 } as const
 
 export type VocabularyScalarFieldEnum = (typeof VocabularyScalarFieldEnum)[keyof typeof VocabularyScalarFieldEnum]
+
+
+export const GrammarScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  pattern: 'pattern',
+  explanation: 'explanation',
+  example: 'example',
+  exampleMeaning: 'exampleMeaning',
+  note: 'note',
+  order: 'order',
+  status: 'status',
+  lessonId: 'lessonId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GrammarScalarFieldEnum = (typeof GrammarScalarFieldEnum)[keyof typeof GrammarScalarFieldEnum]
+
+
+export const QuizScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  status: 'status',
+  lessonId: 'lessonId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type QuizScalarFieldEnum = (typeof QuizScalarFieldEnum)[keyof typeof QuizScalarFieldEnum]
+
+
+export const QuizQuestionScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  order: 'order',
+  instruction: 'instruction',
+  prompt: 'prompt',
+  koreanText: 'koreanText',
+  romanization: 'romanization',
+  translation: 'translation',
+  audioUrl: 'audioUrl',
+  initialAnswer: 'initialAnswer',
+  correctAnswer: 'correctAnswer',
+  quizId: 'quizId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type QuizQuestionScalarFieldEnum = (typeof QuizQuestionScalarFieldEnum)[keyof typeof QuizQuestionScalarFieldEnum]
+
+
+export const QuizOptionScalarFieldEnum = {
+  id: 'id',
+  optionKey: 'optionKey',
+  text: 'text',
+  pairId: 'pairId',
+  order: 'order',
+  questionId: 'questionId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type QuizOptionScalarFieldEnum = (typeof QuizOptionScalarFieldEnum)[keyof typeof QuizOptionScalarFieldEnum]
 
 
 export const CurriculumScalarFieldEnum = {

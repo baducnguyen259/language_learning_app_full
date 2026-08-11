@@ -1,8 +1,8 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
 }
-
 datasource db {
   provider = "postgresql"
 }
@@ -31,6 +31,24 @@ enum VocabularyStatus {
 enum CurriculumStatus {
   DRAFT
   PUBLISHED
+}
+
+enum GrammarStatus {
+  DRAFT
+  ACTIVE
+}
+
+enum QuizStatus {
+  DRAFT
+  ACTIVE
+}
+
+enum QuizQuestionType {
+  matching
+  sentenceOrder
+  missingWord
+  listeningInput
+  pronunciation
 }
 
 model User {
@@ -96,6 +114,8 @@ model Lesson {
   createdAt              DateTime     @default(now())
   updatedAt              DateTime     @updatedAt
   vocabularies           Vocabulary[]
+  grammars               Grammar[]
+  quiz                   Quiz?
 
   @@unique([chapterId, orderInChapter])
   @@index([topicId])
@@ -120,6 +140,80 @@ model Vocabulary {
   @@unique([lessonId, term])
   @@index([lessonId])
   @@index([status])
+}
+
+model Grammar {
+  id             String        @id @default(cuid())
+  title          String
+  pattern        String
+  explanation    String
+  example        String?
+  exampleMeaning String?
+  note           String?
+  order          Int
+  status         GrammarStatus @default(DRAFT)
+  lessonId       String
+  lesson         Lesson        @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@unique([lessonId, title])
+  @@unique([lessonId, order])
+  @@index([lessonId])
+  @@index([status])
+}
+
+model Quiz {
+  id          String       @id @default(cuid())
+  title       String
+  description String?
+  status      QuizStatus   @default(DRAFT)
+  lessonId    String       @unique
+  lesson      Lesson       @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  questions   QuizQuestion[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([status])
+}
+
+model QuizQuestion {
+  id            String           @id @default(cuid())
+  type          QuizQuestionType
+  order         Int
+  instruction   String
+  prompt        String?
+  koreanText    String?
+  romanization  String?
+  translation   String?
+  audioUrl      String?
+  initialAnswer String[]         @default([])
+  correctAnswer String[]
+  quizId        String
+  quiz          Quiz             @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  options       QuizOption[]
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  @@unique([quizId, order])
+  @@index([quizId])
+  @@index([type])
+}
+
+model QuizOption {
+  id         String       @id @default(cuid())
+  optionKey  String
+  text       String
+  pairId     String?
+  order      Int
+  questionId String
+  question   QuizQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+
+  @@unique([questionId, optionKey])
+  @@unique([questionId, order])
+  @@index([questionId])
 }
 
 model Curriculum {

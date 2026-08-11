@@ -48,6 +48,26 @@ export type Lesson = Prisma.LessonModel
  */
 export type Vocabulary = Prisma.VocabularyModel
 /**
+ * Model Grammar
+ * 
+ */
+export type Grammar = Prisma.GrammarModel
+/**
+ * Model Quiz
+ * 
+ */
+export type Quiz = Prisma.QuizModel
+/**
+ * Model QuizQuestion
+ * 
+ */
+export type QuizQuestion = Prisma.QuizQuestionModel
+/**
+ * Model QuizOption
+ * 
+ */
+export type QuizOption = Prisma.QuizOptionModel
+/**
  * Model Curriculum
  * 
  */
