@@ -19,16 +19,18 @@ import { CurrentUser } from '../../../common/decorators/current_user.decorator';
 import { JwtAuthGuard } from '../../../common/guards/jwt_auth.guard';
 import { AuthService } from '../auth.service';
 import type { AuthenticatedUser } from '../interfaces/jwt_payload.interface';
+import { AdminAuthService } from '../services/admin_auth.service';
+import { AdminLoginDto } from '../dto/admin/admin_login.dto';
 import {
   AdminLoginResponseDto,
   CurrentAdminResponseDto,
 } from '../dto/auth_response.dto';
-import { LoginDto } from '../dto/login.dto';
 
 @ApiTags('Admin Auth')
 @Controller('admin/auth')
 export class AdminAuthController {
-  constructor(private readonly authService: AuthService) {}
+  adminAuthService: any;
+  constructor(private readonly authService: AdminAuthService) {}
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
@@ -40,8 +42,8 @@ export class AdminAuthController {
     description: 'Email hoặc mật khẩu không đúng',
     type: ApiErrorResponseDto,
   })
-  login(@Body() dto: LoginDto) {
-    return this.authService.adminLogin(dto);
+  login(@Body() dto: AdminLoginDto) {
+    return this.adminAuthService.login(dto);
   }
 
   @Get('me')

@@ -58,6 +58,31 @@ export function ApiCreatedEnvelope<TModel>(model: Type<TModel>) {
   );
 }
 
+export function ApiArrayEnvelope<TModel>(model: Type<TModel>) {
+  return applyDecorators(
+    ApiExtraModels(ApiSuccessResponseDto, model),
+    ApiOkResponse({
+      schema: {
+        allOf: [
+          {
+            $ref: getSchemaPath(ApiSuccessResponseDto),
+          },
+          {
+            properties: {
+              data: {
+                type: 'array',
+                items: {
+                  $ref: getSchemaPath(model),
+                },
+              },
+            },
+          },
+        ],
+      },
+    }),
+  );
+}
+
 export function ApiPaginatedEnvelope<TModel>(model: Type<TModel>) {
   return applyDecorators(
     ApiExtraModels(ApiSuccessResponseDto, PaginationMetaDto, model),
