@@ -160,7 +160,8 @@ class LoginView extends GetView<LoginController> {
           backgroundColor: AppColors.colorNeutralN01,
           foregroundColor: AppColors.colorNeutralN11,
           radius: 14,
-          onPressed: () {},
+          showLoading: true,
+          onPressed: controller.signInWithGoogle,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

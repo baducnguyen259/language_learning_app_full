@@ -20,7 +20,7 @@ export class AdminAuthService {
       where: { email },
     });
 
-    if (!admin) {
+    if (!admin || !admin.passwordHash) {
       throw new UnauthorizedException('Email hoặc mật khẩu không chính xác');
     }
 

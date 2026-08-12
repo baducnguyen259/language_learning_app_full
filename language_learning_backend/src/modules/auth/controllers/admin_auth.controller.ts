@@ -13,24 +13,26 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { ApiErrorResponseDto } from '../../../common/dto/api_response.dto';
+
 import { ApiOkEnvelope } from '../../../common/decorators/api_response.decorator';
 import { CurrentUser } from '../../../common/decorators/current_user.decorator';
+import { ApiErrorResponseDto } from '../../../common/dto/api_response.dto';
 import { JwtAuthGuard } from '../../../common/guards/jwt_auth.guard';
-import { AuthService } from '../auth.service';
-import type { AuthenticatedUser } from '../interfaces/jwt_payload.interface';
-import { AdminAuthService } from '../services/admin_auth.service';
-import { AdminLoginDto } from '../dto/admin/admin_login.dto';
 import {
   AdminLoginResponseDto,
   CurrentAdminResponseDto,
-} from '../dto/auth_response.dto';
+} from '../dto/admin/admin_auth_response.dto';
+import { AdminLoginDto } from '../dto/admin/admin_login.dto';
+import type { AuthenticatedUser } from '../interfaces/jwt_payload.interface';
+import { AdminAuthService } from '../services/admin_auth.service';
+import { RolesGuard } from '../../../common/guards/roles.guard';
+import { Roles } from '../../../common/decorators/roles.decorator';
+import { UserRole } from '../../../generated/prisma/enums';
 
 @ApiTags('Admin Auth')
 @Controller('admin/auth')
 export class AdminAuthController {
-  adminAuthService: any;
-  constructor(private readonly authService: AdminAuthService) {}
+  constructor(private readonly adminAuthService: AdminAuthService) {}
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
@@ -47,7 +49,8 @@ export class AdminAuthController {
   }
 
   @Get('me')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
   @ApiBearerAuth('access-token')
   @ApiOperation({
     summary: 'Lấy thông tin admin đang đăng nhập',

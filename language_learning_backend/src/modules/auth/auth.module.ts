@@ -1,11 +1,14 @@
 import { Module } from '@nestjs/common';
-import type { StringValue } from 'ms';
-import { JwtModule } from '@nestjs/jwt';
-import { AdminAuthController } from './controllers/admin_auth.controller';
-import { AuthService } from './auth.service';
 import { ConfigService } from '@nestjs/config';
-import { JwtStrategy } from './strategies/jwt.strategy';
+import { JwtModule } from '@nestjs/jwt';
+import type { StringValue } from 'ms';
+
+import { AdminAuthController } from './controllers/admin_auth.controller';
+import { UserAuthController } from './controllers/user_auth.controller';
 import { AdminAuthService } from './services/admin_auth.service';
+import { UserAuthService } from './services/user_auth.service';
+import { JwtStrategy } from './strategies/jwt.strategy';
+import { GoogleAuthService } from './services/google_auth.service';
 
 @Module({
   imports: [
@@ -23,8 +26,13 @@ import { AdminAuthService } from './services/admin_auth.service';
       }),
     }),
   ],
-  controllers: [AdminAuthController],
-  providers: [AuthService, JwtStrategy, AdminAuthService],
-  exports: [AdminAuthService, JwtModule],
+  controllers: [AdminAuthController, UserAuthController],
+  providers: [
+    AdminAuthService,
+    UserAuthService,
+    JwtStrategy,
+    GoogleAuthService,
+  ],
+  exports: [AdminAuthService, UserAuthService, JwtModule, GoogleAuthService],
 })
 export class AuthModule {}

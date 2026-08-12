@@ -3,41 +3,27 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { QuizQuestionType, QuizStatus } from '../../../generated/prisma/enums';
 
 class QuizLanguageResponseDto {
-  @ApiProperty({
-    example: 'cm123language',
-  })
+  @ApiProperty({ example: 'cm123language' })
   id!: string;
 
-  @ApiProperty({
-    example: 'Tiếng Hàn',
-  })
+  @ApiProperty({ example: 'Tiếng Hàn' })
   name!: string;
 
-  @ApiProperty({
-    example: 'ko',
-  })
+  @ApiProperty({ example: 'ko' })
   code!: string;
 }
 
 class QuizLevelResponseDto {
-  @ApiProperty({
-    example: 'cm123level',
-  })
+  @ApiProperty({ example: 'cm123level' })
   id!: string;
 
-  @ApiProperty({
-    example: 'Sơ cấp 1',
-  })
+  @ApiProperty({ example: 'Sơ cấp 1' })
   name!: string;
 
-  @ApiProperty({
-    example: 1,
-  })
+  @ApiProperty({ example: 1 })
   order!: number;
 
-  @ApiProperty({
-    type: QuizLanguageResponseDto,
-  })
+  @ApiProperty({ type: QuizLanguageResponseDto })
   language!: QuizLanguageResponseDto;
 }
 
@@ -333,31 +319,21 @@ export class PublicQuizQuestionResponseDto {
 }
 
 export class PronunciationSegmentResponseDto {
-  @ApiProperty({
-    example: '안녕하세요',
-  })
+  @ApiProperty({ example: '안녕하세요' })
   text!: string;
 
-  @ApiProperty({
-    example: 0.92,
-  })
+  @ApiProperty({ example: 0.92 })
   score!: number;
 }
 
 export class QuizAnswerResultResponseDto {
-  @ApiProperty({
-    example: 'cm123question',
-  })
+  @ApiProperty({ example: 'cm123question' })
   questionId!: string;
 
-  @ApiProperty({
-    example: true,
-  })
+  @ApiProperty({ example: true })
   isCorrect!: boolean;
 
-  @ApiProperty({
-    example: 1,
-  })
+  @ApiProperty({ example: 1 })
   score!: number;
 
   @ApiProperty({
@@ -372,9 +348,7 @@ export class QuizAnswerResultResponseDto {
   })
   correctAnswer!: string[];
 
-  @ApiProperty({
-    example: 'Chính xác!',
-  })
+  @ApiProperty({ example: 'Chính xác!' })
   feedback!: string;
 
   @ApiProperty({

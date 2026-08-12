@@ -1,4 +1,4 @@
-package com.example.language_learning_app
+package com.baduc.languagelearning
 
 import io.flutter.embedding.android.FlutterActivity
 
