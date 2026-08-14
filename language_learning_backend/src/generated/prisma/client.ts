@@ -109,3 +109,13 @@ export type LessonProgress = Prisma.LessonProgressModel
  * 
  */
 export type UserQuestionProgress = Prisma.UserQuestionProgressModel
+/**
+ * Model UserLearningProfile
+ * 
+ */
+export type UserLearningProfile = Prisma.UserLearningProfileModel
+/**
+ * Model StudySession
+ * 
+ */
+export type StudySession = Prisma.StudySessionModel

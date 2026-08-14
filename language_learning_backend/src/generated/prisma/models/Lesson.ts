@@ -306,6 +306,7 @@ export type LessonWhereInput = {
   grammars?: Prisma.GrammarListRelationFilter
   quiz?: Prisma.XOR<Prisma.QuizNullableScalarRelationFilter, Prisma.QuizWhereInput> | null
   progressRecords?: Prisma.LessonProgressListRelationFilter
+  studySessions?: Prisma.StudySessionListRelationFilter
 }
 
 export type LessonOrderByWithRelationInput = {
@@ -330,6 +331,7 @@ export type LessonOrderByWithRelationInput = {
   grammars?: Prisma.GrammarOrderByRelationAggregateInput
   quiz?: Prisma.QuizOrderByWithRelationInput
   progressRecords?: Prisma.LessonProgressOrderByRelationAggregateInput
+  studySessions?: Prisma.StudySessionOrderByRelationAggregateInput
 }
 
 export type LessonWhereUniqueInput = Prisma.AtLeast<{
@@ -358,6 +360,7 @@ export type LessonWhereUniqueInput = Prisma.AtLeast<{
   grammars?: Prisma.GrammarListRelationFilter
   quiz?: Prisma.XOR<Prisma.QuizNullableScalarRelationFilter, Prisma.QuizWhereInput> | null
   progressRecords?: Prisma.LessonProgressListRelationFilter
+  studySessions?: Prisma.StudySessionListRelationFilter
 }, "id" | "chapterId_orderInChapter">
 
 export type LessonOrderByWithAggregationInput = {
@@ -424,6 +427,7 @@ export type LessonCreateInput = {
   grammars?: Prisma.GrammarCreateNestedManyWithoutLessonInput
   quiz?: Prisma.QuizCreateNestedOneWithoutLessonInput
   progressRecords?: Prisma.LessonProgressCreateNestedManyWithoutLessonInput
+  studySessions?: Prisma.StudySessionCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateInput = {
@@ -446,6 +450,7 @@ export type LessonUncheckedCreateInput = {
   grammars?: Prisma.GrammarUncheckedCreateNestedManyWithoutLessonInput
   quiz?: Prisma.QuizUncheckedCreateNestedOneWithoutLessonInput
   progressRecords?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutLessonInput
+  studySessions?: Prisma.StudySessionUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUpdateInput = {
@@ -468,6 +473,7 @@ export type LessonUpdateInput = {
   grammars?: Prisma.GrammarUpdateManyWithoutLessonNestedInput
   quiz?: Prisma.QuizUpdateOneWithoutLessonNestedInput
   progressRecords?: Prisma.LessonProgressUpdateManyWithoutLessonNestedInput
+  studySessions?: Prisma.StudySessionUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateInput = {
@@ -490,6 +496,7 @@ export type LessonUncheckedUpdateInput = {
   grammars?: Prisma.GrammarUncheckedUpdateManyWithoutLessonNestedInput
   quiz?: Prisma.QuizUncheckedUpdateOneWithoutLessonNestedInput
   progressRecords?: Prisma.LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
+  studySessions?: Prisma.StudySessionUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonCreateManyInput = {
@@ -788,6 +795,20 @@ export type LessonUpdateOneRequiredWithoutProgressRecordsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.LessonUpdateToOneWithWhereWithoutProgressRecordsInput, Prisma.LessonUpdateWithoutProgressRecordsInput>, Prisma.LessonUncheckedUpdateWithoutProgressRecordsInput>
 }
 
+export type LessonCreateNestedOneWithoutStudySessionsInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutStudySessionsInput, Prisma.LessonUncheckedCreateWithoutStudySessionsInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutStudySessionsInput
+  connect?: Prisma.LessonWhereUniqueInput
+}
+
+export type LessonUpdateOneRequiredWithoutStudySessionsNestedInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutStudySessionsInput, Prisma.LessonUncheckedCreateWithoutStudySessionsInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutStudySessionsInput
+  upsert?: Prisma.LessonUpsertWithoutStudySessionsInput
+  connect?: Prisma.LessonWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LessonUpdateToOneWithWhereWithoutStudySessionsInput, Prisma.LessonUpdateWithoutStudySessionsInput>, Prisma.LessonUncheckedUpdateWithoutStudySessionsInput>
+}
+
 export type LessonCreateWithoutTopicInput = {
   id?: string
   title: string
@@ -807,6 +828,7 @@ export type LessonCreateWithoutTopicInput = {
   grammars?: Prisma.GrammarCreateNestedManyWithoutLessonInput
   quiz?: Prisma.QuizCreateNestedOneWithoutLessonInput
   progressRecords?: Prisma.LessonProgressCreateNestedManyWithoutLessonInput
+  studySessions?: Prisma.StudySessionCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateWithoutTopicInput = {
@@ -828,6 +850,7 @@ export type LessonUncheckedCreateWithoutTopicInput = {
   grammars?: Prisma.GrammarUncheckedCreateNestedManyWithoutLessonInput
   quiz?: Prisma.QuizUncheckedCreateNestedOneWithoutLessonInput
   progressRecords?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutLessonInput
+  studySessions?: Prisma.StudySessionUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonCreateOrConnectWithoutTopicInput = {
@@ -896,6 +919,7 @@ export type LessonCreateWithoutVocabulariesInput = {
   grammars?: Prisma.GrammarCreateNestedManyWithoutLessonInput
   quiz?: Prisma.QuizCreateNestedOneWithoutLessonInput
   progressRecords?: Prisma.LessonProgressCreateNestedManyWithoutLessonInput
+  studySessions?: Prisma.StudySessionCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateWithoutVocabulariesInput = {
@@ -917,6 +941,7 @@ export type LessonUncheckedCreateWithoutVocabulariesInput = {
   grammars?: Prisma.GrammarUncheckedCreateNestedManyWithoutLessonInput
   quiz?: Prisma.QuizUncheckedCreateNestedOneWithoutLessonInput
   progressRecords?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutLessonInput
+  studySessions?: Prisma.StudySessionUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonCreateOrConnectWithoutVocabulariesInput = {
@@ -954,6 +979,7 @@ export type LessonUpdateWithoutVocabulariesInput = {
   grammars?: Prisma.GrammarUpdateManyWithoutLessonNestedInput
   quiz?: Prisma.QuizUpdateOneWithoutLessonNestedInput
   progressRecords?: Prisma.LessonProgressUpdateManyWithoutLessonNestedInput
+  studySessions?: Prisma.StudySessionUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutVocabulariesInput = {
@@ -975,6 +1001,7 @@ export type LessonUncheckedUpdateWithoutVocabulariesInput = {
   grammars?: Prisma.GrammarUncheckedUpdateManyWithoutLessonNestedInput
   quiz?: Prisma.QuizUncheckedUpdateOneWithoutLessonNestedInput
   progressRecords?: Prisma.LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
+  studySessions?: Prisma.StudySessionUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonCreateWithoutGrammarsInput = {
@@ -996,6 +1023,7 @@ export type LessonCreateWithoutGrammarsInput = {
   vocabularies?: Prisma.VocabularyCreateNestedManyWithoutLessonInput
   quiz?: Prisma.QuizCreateNestedOneWithoutLessonInput
   progressRecords?: Prisma.LessonProgressCreateNestedManyWithoutLessonInput
+  studySessions?: Prisma.StudySessionCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateWithoutGrammarsInput = {
@@ -1017,6 +1045,7 @@ export type LessonUncheckedCreateWithoutGrammarsInput = {
   vocabularies?: Prisma.VocabularyUncheckedCreateNestedManyWithoutLessonInput
   quiz?: Prisma.QuizUncheckedCreateNestedOneWithoutLessonInput
   progressRecords?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutLessonInput
+  studySessions?: Prisma.StudySessionUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonCreateOrConnectWithoutGrammarsInput = {
@@ -1054,6 +1083,7 @@ export type LessonUpdateWithoutGrammarsInput = {
   vocabularies?: Prisma.VocabularyUpdateManyWithoutLessonNestedInput
   quiz?: Prisma.QuizUpdateOneWithoutLessonNestedInput
   progressRecords?: Prisma.LessonProgressUpdateManyWithoutLessonNestedInput
+  studySessions?: Prisma.StudySessionUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutGrammarsInput = {
@@ -1075,6 +1105,7 @@ export type LessonUncheckedUpdateWithoutGrammarsInput = {
   vocabularies?: Prisma.VocabularyUncheckedUpdateManyWithoutLessonNestedInput
   quiz?: Prisma.QuizUncheckedUpdateOneWithoutLessonNestedInput
   progressRecords?: Prisma.LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
+  studySessions?: Prisma.StudySessionUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonCreateWithoutQuizInput = {
@@ -1096,6 +1127,7 @@ export type LessonCreateWithoutQuizInput = {
   vocabularies?: Prisma.VocabularyCreateNestedManyWithoutLessonInput
   grammars?: Prisma.GrammarCreateNestedManyWithoutLessonInput
   progressRecords?: Prisma.LessonProgressCreateNestedManyWithoutLessonInput
+  studySessions?: Prisma.StudySessionCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateWithoutQuizInput = {
@@ -1117,6 +1149,7 @@ export type LessonUncheckedCreateWithoutQuizInput = {
   vocabularies?: Prisma.VocabularyUncheckedCreateNestedManyWithoutLessonInput
   grammars?: Prisma.GrammarUncheckedCreateNestedManyWithoutLessonInput
   progressRecords?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutLessonInput
+  studySessions?: Prisma.StudySessionUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonCreateOrConnectWithoutQuizInput = {
@@ -1154,6 +1187,7 @@ export type LessonUpdateWithoutQuizInput = {
   vocabularies?: Prisma.VocabularyUpdateManyWithoutLessonNestedInput
   grammars?: Prisma.GrammarUpdateManyWithoutLessonNestedInput
   progressRecords?: Prisma.LessonProgressUpdateManyWithoutLessonNestedInput
+  studySessions?: Prisma.StudySessionUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutQuizInput = {
@@ -1175,6 +1209,7 @@ export type LessonUncheckedUpdateWithoutQuizInput = {
   vocabularies?: Prisma.VocabularyUncheckedUpdateManyWithoutLessonNestedInput
   grammars?: Prisma.GrammarUncheckedUpdateManyWithoutLessonNestedInput
   progressRecords?: Prisma.LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
+  studySessions?: Prisma.StudySessionUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonCreateWithoutChapterInput = {
@@ -1196,6 +1231,7 @@ export type LessonCreateWithoutChapterInput = {
   grammars?: Prisma.GrammarCreateNestedManyWithoutLessonInput
   quiz?: Prisma.QuizCreateNestedOneWithoutLessonInput
   progressRecords?: Prisma.LessonProgressCreateNestedManyWithoutLessonInput
+  studySessions?: Prisma.StudySessionCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateWithoutChapterInput = {
@@ -1217,6 +1253,7 @@ export type LessonUncheckedCreateWithoutChapterInput = {
   grammars?: Prisma.GrammarUncheckedCreateNestedManyWithoutLessonInput
   quiz?: Prisma.QuizUncheckedCreateNestedOneWithoutLessonInput
   progressRecords?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutLessonInput
+  studySessions?: Prisma.StudySessionUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonCreateOrConnectWithoutChapterInput = {
@@ -1264,6 +1301,7 @@ export type LessonCreateWithoutProgressRecordsInput = {
   vocabularies?: Prisma.VocabularyCreateNestedManyWithoutLessonInput
   grammars?: Prisma.GrammarCreateNestedManyWithoutLessonInput
   quiz?: Prisma.QuizCreateNestedOneWithoutLessonInput
+  studySessions?: Prisma.StudySessionCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateWithoutProgressRecordsInput = {
@@ -1285,6 +1323,7 @@ export type LessonUncheckedCreateWithoutProgressRecordsInput = {
   vocabularies?: Prisma.VocabularyUncheckedCreateNestedManyWithoutLessonInput
   grammars?: Prisma.GrammarUncheckedCreateNestedManyWithoutLessonInput
   quiz?: Prisma.QuizUncheckedCreateNestedOneWithoutLessonInput
+  studySessions?: Prisma.StudySessionUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonCreateOrConnectWithoutProgressRecordsInput = {
@@ -1322,6 +1361,7 @@ export type LessonUpdateWithoutProgressRecordsInput = {
   vocabularies?: Prisma.VocabularyUpdateManyWithoutLessonNestedInput
   grammars?: Prisma.GrammarUpdateManyWithoutLessonNestedInput
   quiz?: Prisma.QuizUpdateOneWithoutLessonNestedInput
+  studySessions?: Prisma.StudySessionUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutProgressRecordsInput = {
@@ -1343,6 +1383,111 @@ export type LessonUncheckedUpdateWithoutProgressRecordsInput = {
   vocabularies?: Prisma.VocabularyUncheckedUpdateManyWithoutLessonNestedInput
   grammars?: Prisma.GrammarUncheckedUpdateManyWithoutLessonNestedInput
   quiz?: Prisma.QuizUncheckedUpdateOneWithoutLessonNestedInput
+  studySessions?: Prisma.StudySessionUncheckedUpdateManyWithoutLessonNestedInput
+}
+
+export type LessonCreateWithoutStudySessionsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  orderInChapter?: number | null
+  status?: $Enums.LessonStatus
+  durationMinutes?: number | null
+  thumbnailUrl?: string | null
+  requiresPreviousLesson?: boolean
+  allowReplay?: boolean
+  scheduledAt?: Date | string | null
+  publishedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  topic: Prisma.TopicCreateNestedOneWithoutLessonsInput
+  chapter?: Prisma.ChapterCreateNestedOneWithoutLessonsInput
+  vocabularies?: Prisma.VocabularyCreateNestedManyWithoutLessonInput
+  grammars?: Prisma.GrammarCreateNestedManyWithoutLessonInput
+  quiz?: Prisma.QuizCreateNestedOneWithoutLessonInput
+  progressRecords?: Prisma.LessonProgressCreateNestedManyWithoutLessonInput
+}
+
+export type LessonUncheckedCreateWithoutStudySessionsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  topicId: string
+  chapterId?: string | null
+  orderInChapter?: number | null
+  status?: $Enums.LessonStatus
+  durationMinutes?: number | null
+  thumbnailUrl?: string | null
+  requiresPreviousLesson?: boolean
+  allowReplay?: boolean
+  scheduledAt?: Date | string | null
+  publishedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  vocabularies?: Prisma.VocabularyUncheckedCreateNestedManyWithoutLessonInput
+  grammars?: Prisma.GrammarUncheckedCreateNestedManyWithoutLessonInput
+  quiz?: Prisma.QuizUncheckedCreateNestedOneWithoutLessonInput
+  progressRecords?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutLessonInput
+}
+
+export type LessonCreateOrConnectWithoutStudySessionsInput = {
+  where: Prisma.LessonWhereUniqueInput
+  create: Prisma.XOR<Prisma.LessonCreateWithoutStudySessionsInput, Prisma.LessonUncheckedCreateWithoutStudySessionsInput>
+}
+
+export type LessonUpsertWithoutStudySessionsInput = {
+  update: Prisma.XOR<Prisma.LessonUpdateWithoutStudySessionsInput, Prisma.LessonUncheckedUpdateWithoutStudySessionsInput>
+  create: Prisma.XOR<Prisma.LessonCreateWithoutStudySessionsInput, Prisma.LessonUncheckedCreateWithoutStudySessionsInput>
+  where?: Prisma.LessonWhereInput
+}
+
+export type LessonUpdateToOneWithWhereWithoutStudySessionsInput = {
+  where?: Prisma.LessonWhereInput
+  data: Prisma.XOR<Prisma.LessonUpdateWithoutStudySessionsInput, Prisma.LessonUncheckedUpdateWithoutStudySessionsInput>
+}
+
+export type LessonUpdateWithoutStudySessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orderInChapter?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiresPreviousLesson?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowReplay?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  topic?: Prisma.TopicUpdateOneRequiredWithoutLessonsNestedInput
+  chapter?: Prisma.ChapterUpdateOneWithoutLessonsNestedInput
+  vocabularies?: Prisma.VocabularyUpdateManyWithoutLessonNestedInput
+  grammars?: Prisma.GrammarUpdateManyWithoutLessonNestedInput
+  quiz?: Prisma.QuizUpdateOneWithoutLessonNestedInput
+  progressRecords?: Prisma.LessonProgressUpdateManyWithoutLessonNestedInput
+}
+
+export type LessonUncheckedUpdateWithoutStudySessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  topicId?: Prisma.StringFieldUpdateOperationsInput | string
+  chapterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orderInChapter?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumLessonStatusFieldUpdateOperationsInput | $Enums.LessonStatus
+  durationMinutes?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  thumbnailUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiresPreviousLesson?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowReplay?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  scheduledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  vocabularies?: Prisma.VocabularyUncheckedUpdateManyWithoutLessonNestedInput
+  grammars?: Prisma.GrammarUncheckedUpdateManyWithoutLessonNestedInput
+  quiz?: Prisma.QuizUncheckedUpdateOneWithoutLessonNestedInput
+  progressRecords?: Prisma.LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonCreateManyTopicInput = {
@@ -1381,6 +1526,7 @@ export type LessonUpdateWithoutTopicInput = {
   grammars?: Prisma.GrammarUpdateManyWithoutLessonNestedInput
   quiz?: Prisma.QuizUpdateOneWithoutLessonNestedInput
   progressRecords?: Prisma.LessonProgressUpdateManyWithoutLessonNestedInput
+  studySessions?: Prisma.StudySessionUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutTopicInput = {
@@ -1402,6 +1548,7 @@ export type LessonUncheckedUpdateWithoutTopicInput = {
   grammars?: Prisma.GrammarUncheckedUpdateManyWithoutLessonNestedInput
   quiz?: Prisma.QuizUncheckedUpdateOneWithoutLessonNestedInput
   progressRecords?: Prisma.LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
+  studySessions?: Prisma.StudySessionUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateManyWithoutTopicInput = {
@@ -1457,6 +1604,7 @@ export type LessonUpdateWithoutChapterInput = {
   grammars?: Prisma.GrammarUpdateManyWithoutLessonNestedInput
   quiz?: Prisma.QuizUpdateOneWithoutLessonNestedInput
   progressRecords?: Prisma.LessonProgressUpdateManyWithoutLessonNestedInput
+  studySessions?: Prisma.StudySessionUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutChapterInput = {
@@ -1478,6 +1626,7 @@ export type LessonUncheckedUpdateWithoutChapterInput = {
   grammars?: Prisma.GrammarUncheckedUpdateManyWithoutLessonNestedInput
   quiz?: Prisma.QuizUncheckedUpdateOneWithoutLessonNestedInput
   progressRecords?: Prisma.LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
+  studySessions?: Prisma.StudySessionUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateManyWithoutChapterInput = {
@@ -1506,12 +1655,14 @@ export type LessonCountOutputType = {
   vocabularies: number
   grammars: number
   progressRecords: number
+  studySessions: number
 }
 
 export type LessonCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   vocabularies?: boolean | LessonCountOutputTypeCountVocabulariesArgs
   grammars?: boolean | LessonCountOutputTypeCountGrammarsArgs
   progressRecords?: boolean | LessonCountOutputTypeCountProgressRecordsArgs
+  studySessions?: boolean | LessonCountOutputTypeCountStudySessionsArgs
 }
 
 /**
@@ -1545,6 +1696,13 @@ export type LessonCountOutputTypeCountProgressRecordsArgs<ExtArgs extends runtim
   where?: Prisma.LessonProgressWhereInput
 }
 
+/**
+ * LessonCountOutputType without action
+ */
+export type LessonCountOutputTypeCountStudySessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.StudySessionWhereInput
+}
+
 
 export type LessonSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1568,6 +1726,7 @@ export type LessonSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   grammars?: boolean | Prisma.Lesson$grammarsArgs<ExtArgs>
   quiz?: boolean | Prisma.Lesson$quizArgs<ExtArgs>
   progressRecords?: boolean | Prisma.Lesson$progressRecordsArgs<ExtArgs>
+  studySessions?: boolean | Prisma.Lesson$studySessionsArgs<ExtArgs>
   _count?: boolean | Prisma.LessonCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["lesson"]>
 
@@ -1637,6 +1796,7 @@ export type LessonInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   grammars?: boolean | Prisma.Lesson$grammarsArgs<ExtArgs>
   quiz?: boolean | Prisma.Lesson$quizArgs<ExtArgs>
   progressRecords?: boolean | Prisma.Lesson$progressRecordsArgs<ExtArgs>
+  studySessions?: boolean | Prisma.Lesson$studySessionsArgs<ExtArgs>
   _count?: boolean | Prisma.LessonCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type LessonIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1657,6 +1817,7 @@ export type $LessonPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     grammars: Prisma.$GrammarPayload<ExtArgs>[]
     quiz: Prisma.$QuizPayload<ExtArgs> | null
     progressRecords: Prisma.$LessonProgressPayload<ExtArgs>[]
+    studySessions: Prisma.$StudySessionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2074,6 +2235,7 @@ export interface Prisma__LessonClient<T, Null = never, ExtArgs extends runtime.T
   grammars<T extends Prisma.Lesson$grammarsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$grammarsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GrammarPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   quiz<T extends Prisma.Lesson$quizArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$quizArgs<ExtArgs>>): Prisma.Prisma__QuizClient<runtime.Types.Result.GetResult<Prisma.$QuizPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   progressRecords<T extends Prisma.Lesson$progressRecordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$progressRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LessonProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  studySessions<T extends Prisma.Lesson$studySessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$studySessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StudySessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2626,6 +2788,30 @@ export type Lesson$progressRecordsArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.LessonProgressScalarFieldEnum | Prisma.LessonProgressScalarFieldEnum[]
+}
+
+/**
+ * Lesson.studySessions
+ */
+export type Lesson$studySessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StudySession
+   */
+  select?: Prisma.StudySessionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the StudySession
+   */
+  omit?: Prisma.StudySessionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StudySessionInclude<ExtArgs> | null
+  where?: Prisma.StudySessionWhereInput
+  orderBy?: Prisma.StudySessionOrderByWithRelationInput | Prisma.StudySessionOrderByWithRelationInput[]
+  cursor?: Prisma.StudySessionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.StudySessionScalarFieldEnum | Prisma.StudySessionScalarFieldEnum[]
 }
 
 /**
