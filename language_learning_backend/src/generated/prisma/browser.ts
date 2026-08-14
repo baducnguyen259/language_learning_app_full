@@ -77,3 +77,13 @@ export type Curriculum = Prisma.CurriculumModel
  * 
  */
 export type Chapter = Prisma.ChapterModel
+/**
+ * Model LessonProgress
+ * 
+ */
+export type LessonProgress = Prisma.LessonProgressModel
+/**
+ * Model UserQuestionProgress
+ * 
+ */
+export type UserQuestionProgress = Prisma.UserQuestionProgressModel

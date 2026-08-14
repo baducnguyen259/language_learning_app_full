@@ -7,6 +7,8 @@ import {
 
 import { PrismaService } from '../../database/prisma.service';
 import {
+  CurriculumStatus,
+  LessonStatus,
   QuizQuestionType,
   QuizStatus,
   type Prisma,
@@ -59,17 +61,9 @@ export class QuizzesService {
       ...(search
         ? {
             OR: [
-              {
-                title: { contains: search, mode: 'insensitive' },
-              },
-              {
-                description: { contains: search, mode: 'insensitive' },
-              },
-              {
-                lesson: {
-                  title: { contains: search, mode: 'insensitive' },
-                },
-              },
+              { title: { contains: search, mode: 'insensitive' } },
+              { description: { contains: search, mode: 'insensitive' } },
+              { lesson: { title: { contains: search, mode: 'insensitive' } } },
             ],
           }
         : {}),
@@ -341,6 +335,12 @@ export class QuizzesService {
       where: {
         lessonId,
         status: QuizStatus.ACTIVE,
+        lesson: {
+          status: LessonStatus.PUBLISHED,
+          chapter: {
+            curriculum: { status: CurriculumStatus.PUBLISHED },
+          },
+        },
       },
       select: {
         questions: {
@@ -409,22 +409,20 @@ export class QuizzesService {
     const question = await this.prisma.quizQuestion.findFirst({
       where: {
         id: questionId,
-
         quiz: {
           status: QuizStatus.ACTIVE,
+          lesson: {
+            status: LessonStatus.PUBLISHED,
+            chapter: { curriculum: { status: CurriculumStatus.PUBLISHED } },
+          },
         },
       },
-      select: {
-        id: true,
-        type: true,
-        correctAnswer: true,
-      },
+      select: { id: true, type: true, correctAnswer: true },
     });
 
     if (!question) {
       throw new NotFoundException('Không tìm thấy câu hỏi đang hoạt động');
     }
-
     if (question.type === QuizQuestionType.pronunciation) {
       throw new BadRequestException(
         'Câu phát âm cần sử dụng API chấm phát âm riêng',
@@ -432,9 +430,7 @@ export class QuizzesService {
     }
 
     const userAnswer = this.normalizeRequiredAnswers(dto.userAnswer);
-
     const normalizedUserAnswer = this.normalizeAnswersForComparison(userAnswer);
-
     const normalizedCorrectAnswer = this.normalizeAnswersForComparison(
       question.correctAnswer,
     );
@@ -481,12 +477,10 @@ export class QuizzesService {
       throw new ConflictException('Bài học này đã có bài kiểm tra');
     }
   }
-
   private async ensureQuizCanBeActivated(quizId: string): Promise<void> {
     const questionCount = await this.prisma.quizQuestion.count({
       where: { quizId },
     });
-
     if (questionCount === 0) {
       throw new BadRequestException(
         'Quiz phải có ít nhất một câu hỏi trước khi kích hoạt',
@@ -558,24 +552,20 @@ export class QuizzesService {
         }
         pairCounts.set(pairId, (pairCounts.get(pairId) ?? 0) + 1);
       }
-
       const hasInvalidPair = [...pairCounts.values()].some(
         (count) => count !== 2,
       );
-
       if (hasInvalidPair) {
         throw new BadRequestException(
           'Mỗi pairId của câu matching phải xuất hiện đúng hai lần',
         );
       }
     }
-
     if (type === QuizQuestionType.missingWord && options.length !== 4) {
       throw new BadRequestException(
         'Câu hỏi missingWord hiện cần đúng 4 lựa chọn',
       );
     }
-
     if (type === QuizQuestionType.sentenceOrder && options.length === 0) {
       throw new BadRequestException('Câu hỏi sentenceOrder phải có lựa chọn');
     }
@@ -614,11 +604,7 @@ export class QuizzesService {
       where: { id: quizId },
       select: {
         status: true,
-        _count: {
-          select: {
-            questions: true,
-          },
-        },
+        _count: { select: { questions: true } },
       },
     });
 
@@ -664,11 +650,7 @@ export class QuizzesService {
                   name: true,
                   order: true,
                   language: {
-                    select: {
-                      id: true,
-                      name: true,
-                      code: true,
-                    },
+                    select: { id: true, name: true, code: true },
                   },
                 },
               },
@@ -678,13 +660,7 @@ export class QuizzesService {
       },
       questions: {
         orderBy: { order: 'asc' as const },
-        include: {
-          options: {
-            orderBy: {
-              order: 'asc' as const,
-            },
-          },
-        },
+        include: { options: { orderBy: { order: 'asc' as const } } },
       },
     } as const;
   }

@@ -16,23 +16,18 @@ class LoginBinding extends Bindings {
           baseUrl: AppConfig.apiBaseUrl,
           connectTimeout: const Duration(seconds: 15),
           receiveTimeout: const Duration(seconds: 15),
-          headers: const <String, String>{
-            'Content-Type': 'application/json',
-          },
+          headers: const <String, String>{'Content-Type': 'application/json'},
         ),
       ),
     );
     Get.lazyPut<AuthTokenStorage>(() => const AuthTokenStorage());
     Get.lazyPut<GoogleAuthProvider>(
-      () => GoogleAuthProvider(
-        dio: Get.find<Dio>(),
-        googleSignIn: GoogleSignIn.instance,
-      ),
+      () => GoogleAuthProvider(Get.find<Dio>(), GoogleSignIn.instance),
     );
     Get.lazyPut<UserAuthService>(
       () => UserAuthService(
-        googleAuthProvider: Get.find<GoogleAuthProvider>(),
-        tokenStorage: Get.find<AuthTokenStorage>(),
+        Get.find<GoogleAuthProvider>(),
+        Get.find<AuthTokenStorage>(),
       ),
     );
     Get.lazyPut<LoginController>(

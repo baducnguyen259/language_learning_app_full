@@ -3,11 +3,7 @@ import 'package:language_learning_app/app/data/providers/google_auth_provider.da
 import 'package:language_learning_app/app/data/services/auth_token_storage.dart';
 
 final class UserAuthService {
-  const UserAuthService({
-    required GoogleAuthProvider googleAuthProvider,
-    required AuthTokenStorage tokenStorage,
-  }) : _googleAuthProvider = googleAuthProvider,
-       _tokenStorage = tokenStorage;
+  const UserAuthService(this._googleAuthProvider, this._tokenStorage);
 
   final GoogleAuthProvider _googleAuthProvider;
   final AuthTokenStorage _tokenStorage;

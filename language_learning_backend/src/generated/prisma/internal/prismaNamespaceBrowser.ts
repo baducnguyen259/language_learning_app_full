@@ -62,7 +62,9 @@ export const ModelName = {
   QuizQuestion: 'QuizQuestion',
   QuizOption: 'QuizOption',
   Curriculum: 'Curriculum',
-  Chapter: 'Chapter'
+  Chapter: 'Chapter',
+  LessonProgress: 'LessonProgress',
+  UserQuestionProgress: 'UserQuestionProgress'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -258,6 +260,39 @@ export const ChapterScalarFieldEnum = {
 } as const
 
 export type ChapterScalarFieldEnum = (typeof ChapterScalarFieldEnum)[keyof typeof ChapterScalarFieldEnum]
+
+
+export const LessonProgressScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  lessonId: 'lessonId',
+  status: 'status',
+  progressPercent: 'progressPercent',
+  totalQuestions: 'totalQuestions',
+  answeredQuestions: 'answeredQuestions',
+  correctAnswers: 'correctAnswers',
+  startedAt: 'startedAt',
+  lastStudiedAt: 'lastStudiedAt',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LessonProgressScalarFieldEnum = (typeof LessonProgressScalarFieldEnum)[keyof typeof LessonProgressScalarFieldEnum]
+
+
+export const UserQuestionProgressScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  questionId: 'questionId',
+  userAnswer: 'userAnswer',
+  isCorrect: 'isCorrect',
+  attempts: 'attempts',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserQuestionProgressScalarFieldEnum = (typeof UserQuestionProgressScalarFieldEnum)[keyof typeof UserQuestionProgressScalarFieldEnum]
 
 
 export const SortOrder = {

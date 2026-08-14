@@ -6,14 +6,27 @@ import {
   HttpStatus,
   Param,
   Post,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiForbiddenResponse,
+  ApiOperation,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 
 import {
   ApiArrayEnvelope,
   ApiNotFoundErrorResponse,
   ApiOkEnvelope,
 } from '../../../common/decorators/api_response.decorator';
+import { Roles } from '../../../common/decorators/roles.decorator';
+import { ApiErrorResponseDto } from '../../../common/dto/api_response.dto';
+import { UserRole } from '../../../common/enums/user_role.enum';
+import { JwtAuthGuard } from '../../../common/guards/jwt_auth.guard';
+import { RolesGuard } from '../../../common/guards/roles.guard';
 import {
   PublicQuizQuestionResponseDto,
   QuizAnswerResultResponseDto,
@@ -22,7 +35,18 @@ import { SubmitQuizAnswerDto } from '../dto/submit_quiz_answer.dto';
 import { QuizzesService } from '../quizzes.service';
 
 @ApiTags('Quizzes')
+@ApiBearerAuth('access-token')
+@ApiUnauthorizedResponse({
+  description: 'Thiếu access token hoặc token không hợp lệ',
+  type: ApiErrorResponseDto,
+})
+@ApiForbiddenResponse({
+  description: 'Tài khoản không có quyền người học',
+  type: ApiErrorResponseDto,
+})
 @Controller('quizzes')
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(UserRole.USER)
 export class QuizzesController {
   constructor(private readonly quizzesService: QuizzesService) {}
 
@@ -42,6 +66,10 @@ export class QuizzesController {
   })
   @ApiOkEnvelope(QuizAnswerResultResponseDto)
   @ApiNotFoundErrorResponse()
+  @ApiBadRequestResponse({
+    description: 'Đáp án không hợp lệ hoặc đây là câu hỏi phát âm',
+    type: ApiErrorResponseDto,
+  })
   submitAnswer(
     @Param('questionId') questionId: string,
     @Body() dto: SubmitQuizAnswerDto,

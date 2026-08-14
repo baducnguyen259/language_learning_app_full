@@ -12,6 +12,7 @@ import { CreateCurriculumDto } from './dto/create_curriculum.dto';
 import { CurriculumQueryDto } from './dto/curriculum_query.dto';
 import { UpdateChapterDto } from './dto/update_chapter.dto';
 import { UpdateCurriculumDto } from './dto/update_curriculum.dto';
+import { AppCurriculumQueryDto } from './dto/app_curriculum_query.dto';
 
 const curriculumInclude = {
   level: {
@@ -53,6 +54,71 @@ const curriculumInclude = {
   },
 } satisfies Prisma.CurriculumInclude;
 
+const appCurriculumSelect = {
+  id: true,
+  title: true,
+  description: true,
+  levelId: true,
+  level: {
+    select: {
+      id: true,
+      name: true,
+      order: true,
+      language: {
+        select: {
+          id: true,
+          name: true,
+          code: true,
+        },
+      },
+    },
+  },
+  chapters: {
+    where: {
+      lessons: {
+        some: {
+          status: LessonStatus.PUBLISHED,
+        },
+      },
+    },
+    orderBy: {
+      order: 'asc',
+    },
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      order: true,
+      lessons: {
+        where: {
+          status: LessonStatus.PUBLISHED,
+        },
+        orderBy: {
+          orderInChapter: 'asc',
+        },
+        select: {
+          id: true,
+          title: true,
+          description: true,
+          topicId: true,
+          chapterId: true,
+          orderInChapter: true,
+          durationMinutes: true,
+          thumbnailUrl: true,
+          requiresPreviousLesson: true,
+          allowReplay: true,
+          topic: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      },
+    },
+  },
+} satisfies Prisma.CurriculumSelect;
+
 type CurriculumWithRelations = Prisma.CurriculumGetPayload<{
   include: typeof curriculumInclude;
 }>;
@@ -60,6 +126,44 @@ type CurriculumWithRelations = Prisma.CurriculumGetPayload<{
 @Injectable()
 export class CurriculumsService {
   constructor(private readonly prisma: PrismaService) {}
+
+  async findAllForApp(query: AppCurriculumQueryDto) {
+    const languageCode = query.languageCode?.trim().toLowerCase();
+
+    return this.prisma.curriculum.findMany({
+      where: {
+        status: CurriculumStatus.PUBLISHED,
+        ...(query.levelId ? { levelId: query.levelId } : {}),
+        ...(languageCode
+          ? {
+              level: {
+                language: {
+                  code: {
+                    equals: languageCode,
+                    mode: 'insensitive',
+                  },
+                },
+              },
+            }
+          : {}),
+      },
+      orderBy: [{ level: { order: 'asc' } }, { title: 'asc' }],
+      select: appCurriculumSelect,
+    });
+  }
+
+  async findOneForApp(id: string) {
+    const curriculum = await this.prisma.curriculum.findFirst({
+      where: { id, status: CurriculumStatus.PUBLISHED },
+      select: appCurriculumSelect,
+    });
+
+    if (!curriculum) {
+      throw new NotFoundException('Không tìm thấy lộ trình đang được xuất bản');
+    }
+
+    return curriculum;
+  }
 
   async findAllForAdmin(query: CurriculumQueryDto) {
     const page = query.page;
@@ -173,11 +277,7 @@ export class CurriculumsService {
   async remove(id: string) {
     const curriculum = await this.prisma.curriculum.findUnique({
       where: { id },
-      include: {
-        _count: {
-          select: { chapters: true },
-        },
-      },
+      include: { _count: { select: { chapters: true } } },
     });
 
     if (!curriculum) {

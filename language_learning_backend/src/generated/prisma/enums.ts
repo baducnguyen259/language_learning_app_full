@@ -75,3 +75,11 @@ export const QuizQuestionType = {
 } as const
 
 export type QuizQuestionType = (typeof QuizQuestionType)[keyof typeof QuizQuestionType]
+
+
+export const LessonProgressStatus = {
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED'
+} as const
+
+export type LessonProgressStatus = (typeof LessonProgressStatus)[keyof typeof LessonProgressStatus]

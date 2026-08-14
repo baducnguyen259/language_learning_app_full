@@ -25,10 +25,7 @@ class AuthUserModel {
 }
 
 class AuthSessionModel {
-  const AuthSessionModel({
-    required this.accessToken,
-    required this.user,
-  });
+  const AuthSessionModel({required this.accessToken, required this.user});
 
   final String accessToken;
   final AuthUserModel user;

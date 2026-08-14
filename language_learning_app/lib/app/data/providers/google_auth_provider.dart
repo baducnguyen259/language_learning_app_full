@@ -4,11 +4,7 @@ import 'package:language_learning_app/app/common/values/app_config.dart';
 import 'package:language_learning_app/app/data/models/auth_session_model.dart';
 
 final class GoogleAuthProvider {
-  GoogleAuthProvider({
-    required Dio dio,
-    required GoogleSignIn googleSignIn,
-  }) : _dio = dio,
-       _googleSignIn = googleSignIn;
+  GoogleAuthProvider(this._dio, this._googleSignIn);
 
   final Dio _dio;
   final GoogleSignIn _googleSignIn;
@@ -16,7 +12,6 @@ final class GoogleAuthProvider {
 
   Future<AuthSessionModel> signIn() async {
     await _ensureInitialized();
-
     final account = await _googleSignIn.authenticate();
     final idToken = account.authentication.idToken;
 

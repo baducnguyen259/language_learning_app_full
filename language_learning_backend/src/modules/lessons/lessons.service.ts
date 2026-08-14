@@ -4,15 +4,126 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import type { Prisma } from '../../generated/prisma/client';
-import { LessonStatus } from '../../generated/prisma/enums';
+import {
+  CurriculumStatus,
+  GrammarStatus,
+  LessonStatus,
+  QuizStatus,
+  VocabularyStatus,
+} from '../../generated/prisma/enums';
 import { PrismaService } from '../../database/prisma.service';
 import { CreateLessonDto } from './dto/create_lesson.dto';
 import { LessonQueryDto } from './dto/lesson_query.dto';
 import { UpdateLessonDto } from './dto/update_lesson.dto';
 
+const appLessonDetailSelect = {
+  id: true,
+  title: true,
+  description: true,
+  topicId: true,
+  chapterId: true,
+  orderInChapter: true,
+  durationMinutes: true,
+  thumbnailUrl: true,
+  requiresPreviousLesson: true,
+  allowReplay: true,
+  topic: {
+    select: {
+      id: true,
+      name: true,
+      level: {
+        select: {
+          id: true,
+          name: true,
+          order: true,
+          language: {
+            select: {
+              id: true,
+              name: true,
+              code: true,
+            },
+          },
+        },
+      },
+    },
+  },
+  chapter: {
+    select: {
+      id: true,
+      title: true,
+      order: true,
+      curriculumId: true,
+    },
+  },
+  vocabularies: {
+    where: { status: VocabularyStatus.ACTIVE },
+    orderBy: { createdAt: 'asc' },
+    select: {
+      id: true,
+      term: true,
+      pronunciation: true,
+      meaning: true,
+      wordType: true,
+      imageUrl: true,
+      audioUrl: true,
+    },
+  },
+  grammars: {
+    where: { status: GrammarStatus.ACTIVE },
+    orderBy: { order: 'asc' },
+    select: {
+      id: true,
+      title: true,
+      pattern: true,
+      explanation: true,
+      example: true,
+      exampleMeaning: true,
+      note: true,
+      order: true,
+    },
+  },
+  quiz: {
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      status: true,
+    },
+  },
+} satisfies Prisma.LessonSelect;
 @Injectable()
 export class LessonsService {
   constructor(private readonly prisma: PrismaService) {}
+
+  async findOneForApp(id: string) {
+    const lesson = await this.prisma.lesson.findFirst({
+      where: {
+        id,
+        status: LessonStatus.PUBLISHED,
+        chapter: {
+          curriculum: { status: CurriculumStatus.PUBLISHED },
+        },
+      },
+      select: appLessonDetailSelect,
+    });
+
+    if (!lesson) {
+      throw new NotFoundException('Không tìm thấy bài học đang được xuất bản');
+    }
+    const { quiz, ...lessonData } = lesson;
+
+    return {
+      ...lessonData,
+      quiz:
+        quiz?.status === QuizStatus.ACTIVE
+          ? {
+              id: quiz.id,
+              title: quiz.title,
+              description: quiz.description,
+            }
+          : null,
+    };
+  }
 
   async findAllForAdmin(query: LessonQueryDto) {
     const page = query.page;
@@ -21,54 +132,22 @@ export class LessonsService {
     const search = query.search?.trim();
 
     const topicWhere: Prisma.TopicWhereInput = {
-      ...(query.levelId
-        ? {
-            levelId: query.levelId,
-          }
-        : {}),
-      ...(query.languageId
-        ? {
-            level: {
-              languageId: query.languageId,
-            },
-          }
-        : {}),
+      ...(query.levelId ? { levelId: query.levelId } : {}),
+      ...(query.languageId ? { level: { languageId: query.languageId } } : {}),
     };
 
     const hasTopicFilter =
       query.levelId !== undefined || query.languageId !== undefined;
 
     const where: Prisma.LessonWhereInput = {
-      ...(query.topicId
-        ? {
-            topicId: query.topicId,
-          }
-        : {}),
-      ...(hasTopicFilter
-        ? {
-            topic: topicWhere,
-          }
-        : {}),
-      ...(query.status
-        ? {
-            status: query.status,
-          }
-        : {}),
+      ...(query.topicId ? { topicId: query.topicId } : {}),
+      ...(hasTopicFilter ? { topic: topicWhere } : {}),
+      ...(query.status ? { status: query.status } : {}),
       ...(search
         ? {
             OR: [
-              {
-                title: {
-                  contains: search,
-                  mode: 'insensitive',
-                },
-              },
-              {
-                description: {
-                  contains: search,
-                  mode: 'insensitive',
-                },
-              },
+              { title: { contains: search, mode: 'insensitive' } },
+              { description: { contains: search, mode: 'insensitive' } },
             ],
           }
         : {}),
@@ -79,9 +158,7 @@ export class LessonsService {
         where,
         skip,
         take: limit,
-        orderBy: {
-          updatedAt: 'desc',
-        },
+        orderBy: { updatedAt: 'desc' },
         include: {
           topic: {
             include: {
@@ -100,9 +177,7 @@ export class LessonsService {
           },
         },
       }),
-      this.prisma.lesson.count({
-        where,
-      }),
+      this.prisma.lesson.count({ where }),
     ]);
 
     return {
@@ -118,9 +193,7 @@ export class LessonsService {
 
   async findOneForAdmin(id: string) {
     const lesson = await this.prisma.lesson.findUnique({
-      where: {
-        id,
-      },
+      where: { id },
       include: {
         topic: {
           include: {
@@ -143,26 +216,19 @@ export class LessonsService {
     if (!lesson) {
       throw new NotFoundException('Không tìm thấy bài học');
     }
-
     return lesson;
   }
 
   async create(dto: CreateLessonDto) {
     const topic = await this.prisma.topic.findUnique({
-      where: {
-        id: dto.topicId,
-      },
-      select: {
-        id: true,
-      },
+      where: { id: dto.topicId },
+      select: { id: true },
     });
 
     if (!topic) {
       throw new NotFoundException('Không tìm thấy chủ đề');
     }
-
     const status = dto.status ?? LessonStatus.DRAFT;
-
     if (status === LessonStatus.SCHEDULED && !dto.scheduledAt) {
       throw new BadRequestException('Bài học hẹn giờ phải có scheduledAt');
     }
@@ -172,7 +238,6 @@ export class LessonsService {
         'scheduledAt chỉ được sử dụng khi trạng thái là SCHEDULED',
       );
     }
-
     const publishedAt = status === LessonStatus.PUBLISHED ? new Date() : null;
 
     return this.prisma.lesson.create({
@@ -210,30 +275,20 @@ export class LessonsService {
 
   async update(id: string, dto: UpdateLessonDto) {
     const currentLesson = await this.prisma.lesson.findUnique({
-      where: {
-        id,
-      },
+      where: { id },
     });
-
     if (!currentLesson) {
       throw new NotFoundException('Không tìm thấy bài học');
     }
-
     if (dto.topicId !== undefined) {
       const topic = await this.prisma.topic.findUnique({
-        where: {
-          id: dto.topicId,
-        },
-        select: {
-          id: true,
-        },
+        where: { id: dto.topicId },
+        select: { id: true },
       });
-
       if (!topic) {
         throw new NotFoundException('Không tìm thấy chủ đề');
       }
     }
-
     const targetStatus = dto.status ?? currentLesson.status;
 
     let scheduledAt = currentLesson.scheduledAt;
@@ -245,33 +300,26 @@ export class LessonsService {
           'scheduledAt chỉ được sử dụng khi trạng thái là SCHEDULED',
         );
       }
-
       scheduledAt = new Date(dto.scheduledAt);
     }
-
     if (targetStatus === LessonStatus.SCHEDULED && !scheduledAt) {
       throw new BadRequestException('Bài học hẹn giờ phải có scheduledAt');
     }
-
     if (dto.status !== undefined && targetStatus !== LessonStatus.SCHEDULED) {
       scheduledAt = null;
     }
-
     if (
       dto.status === LessonStatus.PUBLISHED &&
       currentLesson.status !== LessonStatus.PUBLISHED
     ) {
       publishedAt = new Date();
     }
-
     if (dto.status !== undefined && dto.status !== LessonStatus.PUBLISHED) {
       publishedAt = null;
     }
 
     return this.prisma.lesson.update({
-      where: {
-        id,
-      },
+      where: { id },
       data: {
         title: dto.title?.trim(),
         description:
@@ -312,22 +360,14 @@ export class LessonsService {
 
   async remove(id: string) {
     const lesson = await this.prisma.lesson.findUnique({
-      where: {
-        id,
-      },
-      select: {
-        id: true,
-      },
+      where: { id },
+      select: { id: true },
     });
-
     if (!lesson) {
       throw new NotFoundException('Không tìm thấy bài học');
     }
-
     return this.prisma.lesson.delete({
-      where: {
-        id,
-      },
+      where: { id },
     });
   }
 }
