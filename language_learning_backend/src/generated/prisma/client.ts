@@ -70,6 +70,16 @@ export type Lesson = Prisma.LessonModel
  */
 export type Vocabulary = Prisma.VocabularyModel
 /**
+ * Model VocabularyFavorite
+ * 
+ */
+export type VocabularyFavorite = Prisma.VocabularyFavoriteModel
+/**
+ * Model UserVocabularyProgress
+ * 
+ */
+export type UserVocabularyProgress = Prisma.UserVocabularyProgressModel
+/**
  * Model Grammar
  * 
  */

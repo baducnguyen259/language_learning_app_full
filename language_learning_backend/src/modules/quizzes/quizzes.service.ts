@@ -11,6 +11,7 @@ import {
   LessonStatus,
   QuizQuestionType,
   QuizStatus,
+  VocabularyStatus,
   type Prisma,
 } from '../../generated/prisma/client';
 import { CreateQuizDto } from './dto/create_quiz.dto';
@@ -23,6 +24,34 @@ import {
 } from './dto/create_quiz_question.dto';
 import { SubmitQuizAnswerDto } from './dto/submit_quiz_answer.dto';
 import { ProgressService } from '../progress/progress.service';
+import {
+  PRACTICE_QUESTION_TYPES,
+  PracticeQuestionQueryDto,
+} from './dto/practice_question_query.dto';
+
+const practiceQuestionSelect = {
+  id: true,
+  type: true,
+  instruction: true,
+  prompt: true,
+  koreanText: true,
+  romanization: true,
+  translation: true,
+  audioUrl: true,
+  initialAnswer: true,
+  options: {
+    orderBy: { order: 'asc' },
+    select: { optionKey: true, text: true, pairId: true },
+  },
+} satisfies Prisma.QuizQuestionSelect;
+
+const practiceOverviewTypes = [
+  QuizQuestionType.listeningInput,
+  QuizQuestionType.pronunciation,
+  QuizQuestionType.matching,
+  QuizQuestionType.sentenceOrder,
+  QuizQuestionType.missingWord,
+] as const;
 
 @Injectable()
 export class QuizzesService {
@@ -83,7 +112,6 @@ export class QuizzesService {
       }),
       this.prisma.quiz.count({ where }),
     ]);
-
     return {
       items,
       meta: {
@@ -100,7 +128,6 @@ export class QuizzesService {
       where: { id },
       include: this.getQuizInclude(),
     });
-
     if (!quiz) {
       throw new NotFoundException('Không tìm thấy bài kiểm tra');
     }
@@ -110,7 +137,6 @@ export class QuizzesService {
   async create(dto: CreateQuizDto) {
     await this.ensureLessonExists(dto.lessonId);
     await this.ensureLessonDoesNotHaveQuiz(dto.lessonId);
-
     if (dto.status === QuizStatus.ACTIVE) {
       throw new BadRequestException(
         'Hãy tạo Quiz ở trạng thái DRAFT và thêm câu hỏi trước khi kích hoạt',
@@ -162,7 +188,6 @@ export class QuizzesService {
 
   async remove(id: string) {
     await this.findOneForAdmin(id);
-
     return this.prisma.quiz.delete({
       where: { id },
       include: this.getQuizInclude(),
@@ -173,23 +198,17 @@ export class QuizzesService {
       where: { id },
       include: { options: { orderBy: { order: 'asc' } } },
     });
-
     if (!question) {
       throw new NotFoundException('Không tìm thấy câu hỏi');
     }
-
     return question;
   }
 
   async createQuestion(quizId: string, dto: CreateQuizQuestionDto) {
     await this.ensureQuizExists(quizId);
-
     await this.ensureQuestionOrderIsUnique(quizId, dto.order);
-
     const options = dto.options ?? [];
-
     this.validateQuestionOptions(dto.type, options);
-
     return this.prisma.quizQuestion.create({
       data: {
         type: dto.type,
@@ -251,34 +270,27 @@ export class QuizzesService {
         order: dto.order,
         instruction:
           dto.instruction !== undefined ? dto.instruction.trim() : undefined,
-
         prompt:
           dto.prompt !== undefined ? dto.prompt.trim() || null : undefined,
-
         koreanText:
           dto.koreanText !== undefined
             ? dto.koreanText.trim() || null
             : undefined,
-
         romanization:
           dto.romanization !== undefined
             ? dto.romanization.trim() || null
             : undefined,
-
         translation:
           dto.translation !== undefined
             ? dto.translation.trim() || null
             : undefined,
-
         audioUrl:
           dto.audioUrl !== undefined ? dto.audioUrl.trim() || null : undefined,
-
         initialAnswer:
           dto.initialAnswer !== undefined
             ? this.normalizeAnswers(dto.initialAnswer)
             : undefined,
         correctAnswer,
-
         options:
           dto.options !== undefined
             ? {
@@ -323,14 +335,9 @@ export class QuizzesService {
             translation: true,
             audioUrl: true,
             initialAnswer: true,
-
             options: {
               orderBy: { order: 'asc' },
-              select: {
-                optionKey: true,
-                text: true,
-                pairId: true,
-              },
+              select: { optionKey: true, text: true, pairId: true },
             },
           },
         },
@@ -341,7 +348,6 @@ export class QuizzesService {
       return [];
     }
     const totalQuestions = quiz.questions.length;
-
     return quiz.questions.map((question, index) => {
       const hideListeningAnswer =
         question.type === QuizQuestionType.listeningInput;
@@ -365,6 +371,156 @@ export class QuizzesService {
         initialAnswer: question.initialAnswer,
       };
     });
+  }
+
+  async getPracticeOverview(userId: string) {
+    const publishedLessonWhere: Prisma.LessonWhereInput = {
+      status: LessonStatus.PUBLISHED,
+      chapter: { curriculum: { status: CurriculumStatus.PUBLISHED } },
+      progressRecords: { some: { userId } },
+    };
+
+    const questionWhere: Prisma.QuizQuestionWhereInput = {
+      quiz: {
+        status: QuizStatus.ACTIVE,
+        lesson: publishedLessonWhere,
+      },
+    };
+
+    const [totalVocabularyAvailable, ...questionCounts] = await Promise.all([
+      this.prisma.userVocabularyProgress.count({
+        where: {
+          userId,
+          vocabulary: {
+            status: VocabularyStatus.ACTIVE,
+            lesson: {
+              status: LessonStatus.PUBLISHED,
+              chapter: { curriculum: { status: CurriculumStatus.PUBLISHED } },
+            },
+          },
+        },
+      }),
+
+      ...practiceOverviewTypes.map((type) =>
+        this.prisma.quizQuestion.count({
+          where: { ...questionWhere, type },
+        }),
+      ),
+    ]);
+    const supportedTypes = new Set<QuizQuestionType>(PRACTICE_QUESTION_TYPES);
+    const modes = practiceOverviewTypes.map((type, index) => {
+      const availableQuestions = questionCounts[index] ?? 0;
+      return {
+        type,
+        availableQuestions,
+        isAvailable: supportedTypes.has(type) && availableQuestions > 0,
+      };
+    });
+    return {
+      quickReviewCount: Math.min(12, totalVocabularyAvailable),
+      totalVocabularyAvailable,
+      modes,
+    };
+  }
+
+  async findPracticeQuestions(userId: string, query: PracticeQuestionQueryDto) {
+    const where: Prisma.QuizQuestionWhereInput = {
+      type: query.type,
+      quiz: {
+        status: QuizStatus.ACTIVE,
+        lesson: {
+          status: LessonStatus.PUBLISHED,
+          chapter: { curriculum: { status: CurriculumStatus.PUBLISHED } },
+          progressRecords: { some: { userId } },
+          ...(query.languageId
+            ? { topic: { level: { languageId: query.languageId } } }
+            : {}),
+        },
+      },
+    };
+
+    const [
+      incorrectQuestions,
+      unansweredQuestions,
+      correctQuestions,
+      totalAvailable,
+    ] = await this.prisma.$transaction([
+      this.prisma.quizQuestion.findMany({
+        where: {
+          ...where,
+          userProgressRecords: {
+            some: { userId, isCorrect: false },
+          },
+        },
+        take: query.limit,
+        orderBy: { updatedAt: 'asc' },
+        select: practiceQuestionSelect,
+      }),
+
+      this.prisma.quizQuestion.findMany({
+        where: {
+          ...where,
+          userProgressRecords: { none: { userId } },
+        },
+        take: query.limit,
+        orderBy: { createdAt: 'asc' },
+        select: practiceQuestionSelect,
+      }),
+
+      this.prisma.quizQuestion.findMany({
+        where: {
+          ...where,
+          userProgressRecords: {
+            some: { userId, isCorrect: true },
+          },
+        },
+        take: query.limit,
+        orderBy: { updatedAt: 'asc' },
+        select: practiceQuestionSelect,
+      }),
+
+      this.prisma.quizQuestion.count({ where }),
+    ]);
+
+    const questions = [
+      ...incorrectQuestions,
+      ...unansweredQuestions,
+      ...correctQuestions,
+    ].slice(0, query.limit);
+
+    const totalQuestions = questions.length;
+
+    const items = questions.map((question, index) => {
+      const hideListeningAnswer =
+        question.type === QuizQuestionType.listeningInput;
+
+      return {
+        id: question.id,
+        type: question.type,
+        questionNumber: index + 1,
+        totalQuestions,
+        instruction: question.instruction,
+        prompt: question.prompt ?? '',
+        koreanText: hideListeningAnswer ? '' : (question.koreanText ?? ''),
+        romanization: hideListeningAnswer ? '' : (question.romanization ?? ''),
+        translation: hideListeningAnswer ? '' : (question.translation ?? ''),
+        audioUrl: question.audioUrl ?? '',
+        options: question.options.map((option) => ({
+          id: option.optionKey,
+          text: option.text,
+          pairId: option.pairId,
+          isMatched: question.initialAnswer.includes(option.optionKey),
+        })),
+        initialAnswer: question.initialAnswer,
+      };
+    });
+
+    return {
+      type: query.type,
+      items,
+      totalAvailable,
+      limit: query.limit,
+    };
   }
 
   async submitAnswer(
@@ -564,17 +720,14 @@ export class QuizzesService {
     if (normalizedAnswers.some((answer) => !answer)) {
       throw new BadRequestException('Đáp án không được là chuỗi rỗng');
     }
-
     return normalizedAnswers;
   }
 
   private normalizeRequiredAnswers(answers: string[]): string[] {
     const normalizedAnswers = this.normalizeAnswers(answers);
-
     if (normalizedAnswers.length === 0) {
       throw new BadRequestException('Câu hỏi phải có ít nhất một đáp án đúng');
     }
-
     return normalizedAnswers;
   }
 
@@ -603,13 +756,11 @@ export class QuizzesService {
     if (first.length !== second.length) {
       return false;
     }
-
     for (let index = 0; index < first.length; index++) {
       if (first[index] !== second[index]) {
         return false;
       }
     }
-
     return true;
   }
 

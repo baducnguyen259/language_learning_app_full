@@ -324,6 +324,17 @@ export class PronunciationSegmentResponseDto {
 
   @ApiProperty({ example: 0.92 })
   score!: number;
+}
+
+export class QuizAnswerResultResponseDto {
+  @ApiProperty({ example: 'cm123question' })
+  questionId!: string;
+
+  @ApiProperty({ example: true })
+  isCorrect!: boolean;
+
+  @ApiProperty({ example: 1 })
+  score!: number;
 
   @ApiProperty({
     example: 10,
@@ -336,17 +347,6 @@ export class PronunciationSegmentResponseDto {
     description: 'Tổng XP hiện tại của người học',
   })
   totalExperience!: number;
-}
-
-export class QuizAnswerResultResponseDto {
-  @ApiProperty({ example: 'cm123question' })
-  questionId!: string;
-
-  @ApiProperty({ example: true })
-  isCorrect!: boolean;
-
-  @ApiProperty({ example: 1 })
-  score!: number;
 
   @ApiProperty({
     type: [String],
@@ -368,4 +368,66 @@ export class QuizAnswerResultResponseDto {
     example: [],
   })
   pronunciationSegments!: PronunciationSegmentResponseDto[];
+}
+export class PracticeQuestionQueueResponseDto {
+  @ApiProperty({
+    enum: QuizQuestionType,
+    example: QuizQuestionType.matching,
+  })
+  type!: QuizQuestionType;
+
+  @ApiProperty({
+    type: PublicQuizQuestionResponseDto,
+    isArray: true,
+  })
+  items!: PublicQuizQuestionResponseDto[];
+
+  @ApiProperty({
+    example: 25,
+    description: 'Tổng số câu hỏi có thể luyện tập',
+  })
+  totalAvailable!: number;
+
+  @ApiProperty({
+    example: 10,
+    description: 'Số câu hỏi tối đa được yêu cầu',
+  })
+  limit!: number;
+}
+export class PracticeModeOverviewResponseDto {
+  @ApiProperty({
+    enum: QuizQuestionType,
+    example: QuizQuestionType.listeningInput,
+  })
+  type!: QuizQuestionType;
+
+  @ApiProperty({
+    example: 15,
+  })
+  availableQuestions!: number;
+
+  @ApiProperty({
+    example: true,
+  })
+  isAvailable!: boolean;
+}
+
+export class PracticeOverviewResponseDto {
+  @ApiProperty({
+    example: 12,
+    description: 'Số từ được đưa vào phiên ôn nhanh',
+  })
+  quickReviewCount!: number;
+
+  @ApiProperty({
+    example: 45,
+    description: 'Tổng số từ có thể ôn tập',
+  })
+  totalVocabularyAvailable!: number;
+
+  @ApiProperty({
+    type: PracticeModeOverviewResponseDto,
+    isArray: true,
+  })
+  modes!: PracticeModeOverviewResponseDto[];
 }

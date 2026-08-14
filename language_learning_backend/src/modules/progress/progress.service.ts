@@ -11,6 +11,8 @@ import {
   LessonProgressStatus,
   LessonStatus,
   QuizStatus,
+  VocabularyLearningStatus,
+  VocabularyStatus,
 } from '../../generated/prisma/enums';
 import { ProgressQueryDto } from './dto/progress_query.dto';
 import { FinishStudySessionDto } from './dto/finish_study_session.dto';
@@ -70,16 +72,21 @@ export class ProgressService {
     const lesson = await this.findAvailableLesson(lessonId);
     const now = new Date();
 
-    const progress = await this.prisma.lessonProgress.upsert({
-      where: { userId_lessonId: { userId, lessonId } },
-      create: {
-        userId,
-        lessonId,
-        totalQuestions: lesson.totalQuestions,
-        lastStudiedAt: now,
-      },
-      update: { totalQuestions: lesson.totalQuestions, lastStudiedAt: now },
-      include: progressInclude,
+    const progress = await this.prisma.$transaction(async (transaction) => {
+      await this.ensureVocabularyProgresses(transaction, userId, lessonId);
+      return transaction.lessonProgress.upsert({
+        where: {
+          userId_lessonId: { userId, lessonId },
+        },
+        create: {
+          userId,
+          lessonId,
+          totalQuestions: lesson.totalQuestions,
+          lastStudiedAt: now,
+        },
+        update: { totalQuestions: lesson.totalQuestions, lastStudiedAt: now },
+        include: progressInclude,
+      });
     });
 
     return this.toResponse(progress);
@@ -362,22 +369,25 @@ export class ProgressService {
 
   async startStudySession(userId: string, lessonId: string) {
     const lesson = await this.findAvailableLesson(lessonId);
-    const activeSession = await this.prisma.studySession.findFirst({
-      where: { userId, endedAt: null },
-      orderBy: { startedAt: 'desc' },
-      select: studySessionSelect,
-    });
-    if (activeSession) {
-      if (activeSession.lessonId === lessonId) {
-        return activeSession;
-      }
-      throw new ConflictException(
-        'Bạn đang có một phiên học khác chưa kết thúc',
-      );
-    }
     const now = new Date();
 
     return this.prisma.$transaction(async (transaction) => {
+      const activeSession = await transaction.studySession.findFirst({
+        where: { userId, endedAt: null },
+        orderBy: { startedAt: 'desc' },
+        select: studySessionSelect,
+      });
+
+      if (activeSession) {
+        if (activeSession.lessonId === lessonId) {
+          await this.ensureVocabularyProgresses(transaction, userId, lessonId);
+          return activeSession;
+        }
+        throw new ConflictException(
+          'Bạn đang có một phiên học khác chưa kết thúc',
+        );
+      }
+
       await transaction.userLearningProfile.upsert({
         where: { userId },
         create: { userId },
@@ -392,10 +402,18 @@ export class ProgressService {
           totalQuestions: lesson.totalQuestions,
           lastStudiedAt: now,
         },
-        update: { totalQuestions: lesson.totalQuestions, lastStudiedAt: now },
+        update: {
+          totalQuestions: lesson.totalQuestions,
+          lastStudiedAt: now,
+        },
       });
+      await this.ensureVocabularyProgresses(transaction, userId, lessonId);
       return transaction.studySession.create({
-        data: { userId, lessonId, startedAt: now },
+        data: {
+          userId,
+          lessonId,
+          startedAt: now,
+        },
         select: studySessionSelect,
       });
     });
@@ -426,7 +444,27 @@ export class ProgressService {
       select: studySessionSelect,
     });
   }
-
+  private async ensureVocabularyProgresses(
+    transaction: Prisma.TransactionClient,
+    userId: string,
+    lessonId: string,
+  ): Promise<void> {
+    const vocabularies = await transaction.vocabulary.findMany({
+      where: { lessonId, status: VocabularyStatus.ACTIVE },
+      select: { id: true },
+    });
+    if (vocabularies.length === 0) {
+      return;
+    }
+    await transaction.userVocabularyProgress.createMany({
+      data: vocabularies.map((vocabulary) => ({
+        userId,
+        vocabularyId: vocabulary.id,
+        status: VocabularyLearningStatus.LEARNING,
+      })),
+      skipDuplicates: true,
+    });
+  }
   private async findAvailableLesson(lessonId: string) {
     const lesson = await this.prisma.lesson.findFirst({
       where: {

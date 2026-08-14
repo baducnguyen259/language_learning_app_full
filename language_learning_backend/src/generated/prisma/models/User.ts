@@ -226,6 +226,8 @@ export type UserWhereInput = {
   questionProgresses?: Prisma.UserQuestionProgressListRelationFilter
   learningProfile?: Prisma.XOR<Prisma.UserLearningProfileNullableScalarRelationFilter, Prisma.UserLearningProfileWhereInput> | null
   studySessions?: Prisma.StudySessionListRelationFilter
+  vocabularyFavorites?: Prisma.VocabularyFavoriteListRelationFilter
+  vocabularyProgresses?: Prisma.UserVocabularyProgressListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -243,6 +245,8 @@ export type UserOrderByWithRelationInput = {
   questionProgresses?: Prisma.UserQuestionProgressOrderByRelationAggregateInput
   learningProfile?: Prisma.UserLearningProfileOrderByWithRelationInput
   studySessions?: Prisma.StudySessionOrderByRelationAggregateInput
+  vocabularyFavorites?: Prisma.VocabularyFavoriteOrderByRelationAggregateInput
+  vocabularyProgresses?: Prisma.UserVocabularyProgressOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -263,6 +267,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   questionProgresses?: Prisma.UserQuestionProgressListRelationFilter
   learningProfile?: Prisma.XOR<Prisma.UserLearningProfileNullableScalarRelationFilter, Prisma.UserLearningProfileWhereInput> | null
   studySessions?: Prisma.StudySessionListRelationFilter
+  vocabularyFavorites?: Prisma.VocabularyFavoriteListRelationFilter
+  vocabularyProgresses?: Prisma.UserVocabularyProgressListRelationFilter
 }, "id" | "email" | "googleId">
 
 export type UserOrderByWithAggregationInput = {
@@ -312,6 +318,8 @@ export type UserCreateInput = {
   questionProgresses?: Prisma.UserQuestionProgressCreateNestedManyWithoutUserInput
   learningProfile?: Prisma.UserLearningProfileCreateNestedOneWithoutUserInput
   studySessions?: Prisma.StudySessionCreateNestedManyWithoutUserInput
+  vocabularyFavorites?: Prisma.VocabularyFavoriteCreateNestedManyWithoutUserInput
+  vocabularyProgresses?: Prisma.UserVocabularyProgressCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -329,6 +337,8 @@ export type UserUncheckedCreateInput = {
   questionProgresses?: Prisma.UserQuestionProgressUncheckedCreateNestedManyWithoutUserInput
   learningProfile?: Prisma.UserLearningProfileUncheckedCreateNestedOneWithoutUserInput
   studySessions?: Prisma.StudySessionUncheckedCreateNestedManyWithoutUserInput
+  vocabularyFavorites?: Prisma.VocabularyFavoriteUncheckedCreateNestedManyWithoutUserInput
+  vocabularyProgresses?: Prisma.UserVocabularyProgressUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -346,6 +356,8 @@ export type UserUpdateInput = {
   questionProgresses?: Prisma.UserQuestionProgressUpdateManyWithoutUserNestedInput
   learningProfile?: Prisma.UserLearningProfileUpdateOneWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUpdateManyWithoutUserNestedInput
+  vocabularyFavorites?: Prisma.VocabularyFavoriteUpdateManyWithoutUserNestedInput
+  vocabularyProgresses?: Prisma.UserVocabularyProgressUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -363,6 +375,8 @@ export type UserUncheckedUpdateInput = {
   questionProgresses?: Prisma.UserQuestionProgressUncheckedUpdateManyWithoutUserNestedInput
   learningProfile?: Prisma.UserLearningProfileUncheckedUpdateOneWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUncheckedUpdateManyWithoutUserNestedInput
+  vocabularyFavorites?: Prisma.VocabularyFavoriteUncheckedUpdateManyWithoutUserNestedInput
+  vocabularyProgresses?: Prisma.UserVocabularyProgressUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -468,6 +482,34 @@ export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
 
+export type UserCreateNestedOneWithoutVocabularyFavoritesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutVocabularyFavoritesInput, Prisma.UserUncheckedCreateWithoutVocabularyFavoritesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVocabularyFavoritesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutVocabularyFavoritesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutVocabularyFavoritesInput, Prisma.UserUncheckedCreateWithoutVocabularyFavoritesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVocabularyFavoritesInput
+  upsert?: Prisma.UserUpsertWithoutVocabularyFavoritesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutVocabularyFavoritesInput, Prisma.UserUpdateWithoutVocabularyFavoritesInput>, Prisma.UserUncheckedUpdateWithoutVocabularyFavoritesInput>
+}
+
+export type UserCreateNestedOneWithoutVocabularyProgressesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutVocabularyProgressesInput, Prisma.UserUncheckedCreateWithoutVocabularyProgressesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVocabularyProgressesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutVocabularyProgressesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutVocabularyProgressesInput, Prisma.UserUncheckedCreateWithoutVocabularyProgressesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVocabularyProgressesInput
+  upsert?: Prisma.UserUpsertWithoutVocabularyProgressesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutVocabularyProgressesInput, Prisma.UserUpdateWithoutVocabularyProgressesInput>, Prisma.UserUncheckedUpdateWithoutVocabularyProgressesInput>
+}
+
 export type UserCreateNestedOneWithoutLessonProgressesInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutLessonProgressesInput, Prisma.UserUncheckedCreateWithoutLessonProgressesInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutLessonProgressesInput
@@ -524,6 +566,182 @@ export type UserUpdateOneRequiredWithoutStudySessionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutStudySessionsInput, Prisma.UserUpdateWithoutStudySessionsInput>, Prisma.UserUncheckedUpdateWithoutStudySessionsInput>
 }
 
+export type UserCreateWithoutVocabularyFavoritesInput = {
+  id?: string
+  name: string
+  email: string
+  passwordHash?: string | null
+  googleId?: string | null
+  avatarUrl?: string | null
+  role?: $Enums.UserRole
+  status?: $Enums.UserStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lessonProgresses?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
+  questionProgresses?: Prisma.UserQuestionProgressCreateNestedManyWithoutUserInput
+  learningProfile?: Prisma.UserLearningProfileCreateNestedOneWithoutUserInput
+  studySessions?: Prisma.StudySessionCreateNestedManyWithoutUserInput
+  vocabularyProgresses?: Prisma.UserVocabularyProgressCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutVocabularyFavoritesInput = {
+  id?: string
+  name: string
+  email: string
+  passwordHash?: string | null
+  googleId?: string | null
+  avatarUrl?: string | null
+  role?: $Enums.UserRole
+  status?: $Enums.UserStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lessonProgresses?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
+  questionProgresses?: Prisma.UserQuestionProgressUncheckedCreateNestedManyWithoutUserInput
+  learningProfile?: Prisma.UserLearningProfileUncheckedCreateNestedOneWithoutUserInput
+  studySessions?: Prisma.StudySessionUncheckedCreateNestedManyWithoutUserInput
+  vocabularyProgresses?: Prisma.UserVocabularyProgressUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutVocabularyFavoritesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutVocabularyFavoritesInput, Prisma.UserUncheckedCreateWithoutVocabularyFavoritesInput>
+}
+
+export type UserUpsertWithoutVocabularyFavoritesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutVocabularyFavoritesInput, Prisma.UserUncheckedUpdateWithoutVocabularyFavoritesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutVocabularyFavoritesInput, Prisma.UserUncheckedCreateWithoutVocabularyFavoritesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutVocabularyFavoritesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutVocabularyFavoritesInput, Prisma.UserUncheckedUpdateWithoutVocabularyFavoritesInput>
+}
+
+export type UserUpdateWithoutVocabularyFavoritesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lessonProgresses?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
+  questionProgresses?: Prisma.UserQuestionProgressUpdateManyWithoutUserNestedInput
+  learningProfile?: Prisma.UserLearningProfileUpdateOneWithoutUserNestedInput
+  studySessions?: Prisma.StudySessionUpdateManyWithoutUserNestedInput
+  vocabularyProgresses?: Prisma.UserVocabularyProgressUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutVocabularyFavoritesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lessonProgresses?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
+  questionProgresses?: Prisma.UserQuestionProgressUncheckedUpdateManyWithoutUserNestedInput
+  learningProfile?: Prisma.UserLearningProfileUncheckedUpdateOneWithoutUserNestedInput
+  studySessions?: Prisma.StudySessionUncheckedUpdateManyWithoutUserNestedInput
+  vocabularyProgresses?: Prisma.UserVocabularyProgressUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutVocabularyProgressesInput = {
+  id?: string
+  name: string
+  email: string
+  passwordHash?: string | null
+  googleId?: string | null
+  avatarUrl?: string | null
+  role?: $Enums.UserRole
+  status?: $Enums.UserStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lessonProgresses?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
+  questionProgresses?: Prisma.UserQuestionProgressCreateNestedManyWithoutUserInput
+  learningProfile?: Prisma.UserLearningProfileCreateNestedOneWithoutUserInput
+  studySessions?: Prisma.StudySessionCreateNestedManyWithoutUserInput
+  vocabularyFavorites?: Prisma.VocabularyFavoriteCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutVocabularyProgressesInput = {
+  id?: string
+  name: string
+  email: string
+  passwordHash?: string | null
+  googleId?: string | null
+  avatarUrl?: string | null
+  role?: $Enums.UserRole
+  status?: $Enums.UserStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lessonProgresses?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
+  questionProgresses?: Prisma.UserQuestionProgressUncheckedCreateNestedManyWithoutUserInput
+  learningProfile?: Prisma.UserLearningProfileUncheckedCreateNestedOneWithoutUserInput
+  studySessions?: Prisma.StudySessionUncheckedCreateNestedManyWithoutUserInput
+  vocabularyFavorites?: Prisma.VocabularyFavoriteUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutVocabularyProgressesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutVocabularyProgressesInput, Prisma.UserUncheckedCreateWithoutVocabularyProgressesInput>
+}
+
+export type UserUpsertWithoutVocabularyProgressesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutVocabularyProgressesInput, Prisma.UserUncheckedUpdateWithoutVocabularyProgressesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutVocabularyProgressesInput, Prisma.UserUncheckedCreateWithoutVocabularyProgressesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutVocabularyProgressesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutVocabularyProgressesInput, Prisma.UserUncheckedUpdateWithoutVocabularyProgressesInput>
+}
+
+export type UserUpdateWithoutVocabularyProgressesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lessonProgresses?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
+  questionProgresses?: Prisma.UserQuestionProgressUpdateManyWithoutUserNestedInput
+  learningProfile?: Prisma.UserLearningProfileUpdateOneWithoutUserNestedInput
+  studySessions?: Prisma.StudySessionUpdateManyWithoutUserNestedInput
+  vocabularyFavorites?: Prisma.VocabularyFavoriteUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutVocabularyProgressesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lessonProgresses?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
+  questionProgresses?: Prisma.UserQuestionProgressUncheckedUpdateManyWithoutUserNestedInput
+  learningProfile?: Prisma.UserLearningProfileUncheckedUpdateOneWithoutUserNestedInput
+  studySessions?: Prisma.StudySessionUncheckedUpdateManyWithoutUserNestedInput
+  vocabularyFavorites?: Prisma.VocabularyFavoriteUncheckedUpdateManyWithoutUserNestedInput
+}
+
 export type UserCreateWithoutLessonProgressesInput = {
   id?: string
   name: string
@@ -538,6 +756,8 @@ export type UserCreateWithoutLessonProgressesInput = {
   questionProgresses?: Prisma.UserQuestionProgressCreateNestedManyWithoutUserInput
   learningProfile?: Prisma.UserLearningProfileCreateNestedOneWithoutUserInput
   studySessions?: Prisma.StudySessionCreateNestedManyWithoutUserInput
+  vocabularyFavorites?: Prisma.VocabularyFavoriteCreateNestedManyWithoutUserInput
+  vocabularyProgresses?: Prisma.UserVocabularyProgressCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutLessonProgressesInput = {
@@ -554,6 +774,8 @@ export type UserUncheckedCreateWithoutLessonProgressesInput = {
   questionProgresses?: Prisma.UserQuestionProgressUncheckedCreateNestedManyWithoutUserInput
   learningProfile?: Prisma.UserLearningProfileUncheckedCreateNestedOneWithoutUserInput
   studySessions?: Prisma.StudySessionUncheckedCreateNestedManyWithoutUserInput
+  vocabularyFavorites?: Prisma.VocabularyFavoriteUncheckedCreateNestedManyWithoutUserInput
+  vocabularyProgresses?: Prisma.UserVocabularyProgressUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutLessonProgressesInput = {
@@ -586,6 +808,8 @@ export type UserUpdateWithoutLessonProgressesInput = {
   questionProgresses?: Prisma.UserQuestionProgressUpdateManyWithoutUserNestedInput
   learningProfile?: Prisma.UserLearningProfileUpdateOneWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUpdateManyWithoutUserNestedInput
+  vocabularyFavorites?: Prisma.VocabularyFavoriteUpdateManyWithoutUserNestedInput
+  vocabularyProgresses?: Prisma.UserVocabularyProgressUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLessonProgressesInput = {
@@ -602,6 +826,8 @@ export type UserUncheckedUpdateWithoutLessonProgressesInput = {
   questionProgresses?: Prisma.UserQuestionProgressUncheckedUpdateManyWithoutUserNestedInput
   learningProfile?: Prisma.UserLearningProfileUncheckedUpdateOneWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUncheckedUpdateManyWithoutUserNestedInput
+  vocabularyFavorites?: Prisma.VocabularyFavoriteUncheckedUpdateManyWithoutUserNestedInput
+  vocabularyProgresses?: Prisma.UserVocabularyProgressUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutQuestionProgressesInput = {
@@ -618,6 +844,8 @@ export type UserCreateWithoutQuestionProgressesInput = {
   lessonProgresses?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
   learningProfile?: Prisma.UserLearningProfileCreateNestedOneWithoutUserInput
   studySessions?: Prisma.StudySessionCreateNestedManyWithoutUserInput
+  vocabularyFavorites?: Prisma.VocabularyFavoriteCreateNestedManyWithoutUserInput
+  vocabularyProgresses?: Prisma.UserVocabularyProgressCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutQuestionProgressesInput = {
@@ -634,6 +862,8 @@ export type UserUncheckedCreateWithoutQuestionProgressesInput = {
   lessonProgresses?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
   learningProfile?: Prisma.UserLearningProfileUncheckedCreateNestedOneWithoutUserInput
   studySessions?: Prisma.StudySessionUncheckedCreateNestedManyWithoutUserInput
+  vocabularyFavorites?: Prisma.VocabularyFavoriteUncheckedCreateNestedManyWithoutUserInput
+  vocabularyProgresses?: Prisma.UserVocabularyProgressUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutQuestionProgressesInput = {
@@ -666,6 +896,8 @@ export type UserUpdateWithoutQuestionProgressesInput = {
   lessonProgresses?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
   learningProfile?: Prisma.UserLearningProfileUpdateOneWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUpdateManyWithoutUserNestedInput
+  vocabularyFavorites?: Prisma.VocabularyFavoriteUpdateManyWithoutUserNestedInput
+  vocabularyProgresses?: Prisma.UserVocabularyProgressUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutQuestionProgressesInput = {
@@ -682,6 +914,8 @@ export type UserUncheckedUpdateWithoutQuestionProgressesInput = {
   lessonProgresses?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
   learningProfile?: Prisma.UserLearningProfileUncheckedUpdateOneWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUncheckedUpdateManyWithoutUserNestedInput
+  vocabularyFavorites?: Prisma.VocabularyFavoriteUncheckedUpdateManyWithoutUserNestedInput
+  vocabularyProgresses?: Prisma.UserVocabularyProgressUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutLearningProfileInput = {
@@ -698,6 +932,8 @@ export type UserCreateWithoutLearningProfileInput = {
   lessonProgresses?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
   questionProgresses?: Prisma.UserQuestionProgressCreateNestedManyWithoutUserInput
   studySessions?: Prisma.StudySessionCreateNestedManyWithoutUserInput
+  vocabularyFavorites?: Prisma.VocabularyFavoriteCreateNestedManyWithoutUserInput
+  vocabularyProgresses?: Prisma.UserVocabularyProgressCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutLearningProfileInput = {
@@ -714,6 +950,8 @@ export type UserUncheckedCreateWithoutLearningProfileInput = {
   lessonProgresses?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
   questionProgresses?: Prisma.UserQuestionProgressUncheckedCreateNestedManyWithoutUserInput
   studySessions?: Prisma.StudySessionUncheckedCreateNestedManyWithoutUserInput
+  vocabularyFavorites?: Prisma.VocabularyFavoriteUncheckedCreateNestedManyWithoutUserInput
+  vocabularyProgresses?: Prisma.UserVocabularyProgressUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutLearningProfileInput = {
@@ -746,6 +984,8 @@ export type UserUpdateWithoutLearningProfileInput = {
   lessonProgresses?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
   questionProgresses?: Prisma.UserQuestionProgressUpdateManyWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUpdateManyWithoutUserNestedInput
+  vocabularyFavorites?: Prisma.VocabularyFavoriteUpdateManyWithoutUserNestedInput
+  vocabularyProgresses?: Prisma.UserVocabularyProgressUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLearningProfileInput = {
@@ -762,6 +1002,8 @@ export type UserUncheckedUpdateWithoutLearningProfileInput = {
   lessonProgresses?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
   questionProgresses?: Prisma.UserQuestionProgressUncheckedUpdateManyWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUncheckedUpdateManyWithoutUserNestedInput
+  vocabularyFavorites?: Prisma.VocabularyFavoriteUncheckedUpdateManyWithoutUserNestedInput
+  vocabularyProgresses?: Prisma.UserVocabularyProgressUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutStudySessionsInput = {
@@ -778,6 +1020,8 @@ export type UserCreateWithoutStudySessionsInput = {
   lessonProgresses?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
   questionProgresses?: Prisma.UserQuestionProgressCreateNestedManyWithoutUserInput
   learningProfile?: Prisma.UserLearningProfileCreateNestedOneWithoutUserInput
+  vocabularyFavorites?: Prisma.VocabularyFavoriteCreateNestedManyWithoutUserInput
+  vocabularyProgresses?: Prisma.UserVocabularyProgressCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutStudySessionsInput = {
@@ -794,6 +1038,8 @@ export type UserUncheckedCreateWithoutStudySessionsInput = {
   lessonProgresses?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
   questionProgresses?: Prisma.UserQuestionProgressUncheckedCreateNestedManyWithoutUserInput
   learningProfile?: Prisma.UserLearningProfileUncheckedCreateNestedOneWithoutUserInput
+  vocabularyFavorites?: Prisma.VocabularyFavoriteUncheckedCreateNestedManyWithoutUserInput
+  vocabularyProgresses?: Prisma.UserVocabularyProgressUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutStudySessionsInput = {
@@ -826,6 +1072,8 @@ export type UserUpdateWithoutStudySessionsInput = {
   lessonProgresses?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
   questionProgresses?: Prisma.UserQuestionProgressUpdateManyWithoutUserNestedInput
   learningProfile?: Prisma.UserLearningProfileUpdateOneWithoutUserNestedInput
+  vocabularyFavorites?: Prisma.VocabularyFavoriteUpdateManyWithoutUserNestedInput
+  vocabularyProgresses?: Prisma.UserVocabularyProgressUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutStudySessionsInput = {
@@ -842,6 +1090,8 @@ export type UserUncheckedUpdateWithoutStudySessionsInput = {
   lessonProgresses?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
   questionProgresses?: Prisma.UserQuestionProgressUncheckedUpdateManyWithoutUserNestedInput
   learningProfile?: Prisma.UserLearningProfileUncheckedUpdateOneWithoutUserNestedInput
+  vocabularyFavorites?: Prisma.VocabularyFavoriteUncheckedUpdateManyWithoutUserNestedInput
+  vocabularyProgresses?: Prisma.UserVocabularyProgressUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -853,12 +1103,16 @@ export type UserCountOutputType = {
   lessonProgresses: number
   questionProgresses: number
   studySessions: number
+  vocabularyFavorites: number
+  vocabularyProgresses: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lessonProgresses?: boolean | UserCountOutputTypeCountLessonProgressesArgs
   questionProgresses?: boolean | UserCountOutputTypeCountQuestionProgressesArgs
   studySessions?: boolean | UserCountOutputTypeCountStudySessionsArgs
+  vocabularyFavorites?: boolean | UserCountOutputTypeCountVocabularyFavoritesArgs
+  vocabularyProgresses?: boolean | UserCountOutputTypeCountVocabularyProgressesArgs
 }
 
 /**
@@ -892,6 +1146,20 @@ export type UserCountOutputTypeCountStudySessionsArgs<ExtArgs extends runtime.Ty
   where?: Prisma.StudySessionWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountVocabularyFavoritesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VocabularyFavoriteWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountVocabularyProgressesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserVocabularyProgressWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -908,6 +1176,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   questionProgresses?: boolean | Prisma.User$questionProgressesArgs<ExtArgs>
   learningProfile?: boolean | Prisma.User$learningProfileArgs<ExtArgs>
   studySessions?: boolean | Prisma.User$studySessionsArgs<ExtArgs>
+  vocabularyFavorites?: boolean | Prisma.User$vocabularyFavoritesArgs<ExtArgs>
+  vocabularyProgresses?: boolean | Prisma.User$vocabularyProgressesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -956,6 +1226,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   questionProgresses?: boolean | Prisma.User$questionProgressesArgs<ExtArgs>
   learningProfile?: boolean | Prisma.User$learningProfileArgs<ExtArgs>
   studySessions?: boolean | Prisma.User$studySessionsArgs<ExtArgs>
+  vocabularyFavorites?: boolean | Prisma.User$vocabularyFavoritesArgs<ExtArgs>
+  vocabularyProgresses?: boolean | Prisma.User$vocabularyProgressesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -968,6 +1240,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     questionProgresses: Prisma.$UserQuestionProgressPayload<ExtArgs>[]
     learningProfile: Prisma.$UserLearningProfilePayload<ExtArgs> | null
     studySessions: Prisma.$StudySessionPayload<ExtArgs>[]
+    vocabularyFavorites: Prisma.$VocabularyFavoritePayload<ExtArgs>[]
+    vocabularyProgresses: Prisma.$UserVocabularyProgressPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1378,6 +1652,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   questionProgresses<T extends Prisma.User$questionProgressesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$questionProgressesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserQuestionProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   learningProfile<T extends Prisma.User$learningProfileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$learningProfileArgs<ExtArgs>>): Prisma.Prisma__UserLearningProfileClient<runtime.Types.Result.GetResult<Prisma.$UserLearningProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   studySessions<T extends Prisma.User$studySessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$studySessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StudySessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  vocabularyFavorites<T extends Prisma.User$vocabularyFavoritesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$vocabularyFavoritesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VocabularyFavoritePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  vocabularyProgresses<T extends Prisma.User$vocabularyProgressesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$vocabularyProgressesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserVocabularyProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1898,6 +2174,54 @@ export type User$studySessionsArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.StudySessionScalarFieldEnum | Prisma.StudySessionScalarFieldEnum[]
+}
+
+/**
+ * User.vocabularyFavorites
+ */
+export type User$vocabularyFavoritesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the VocabularyFavorite
+   */
+  select?: Prisma.VocabularyFavoriteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the VocabularyFavorite
+   */
+  omit?: Prisma.VocabularyFavoriteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VocabularyFavoriteInclude<ExtArgs> | null
+  where?: Prisma.VocabularyFavoriteWhereInput
+  orderBy?: Prisma.VocabularyFavoriteOrderByWithRelationInput | Prisma.VocabularyFavoriteOrderByWithRelationInput[]
+  cursor?: Prisma.VocabularyFavoriteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VocabularyFavoriteScalarFieldEnum | Prisma.VocabularyFavoriteScalarFieldEnum[]
+}
+
+/**
+ * User.vocabularyProgresses
+ */
+export type User$vocabularyProgressesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserVocabularyProgress
+   */
+  select?: Prisma.UserVocabularyProgressSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserVocabularyProgress
+   */
+  omit?: Prisma.UserVocabularyProgressOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserVocabularyProgressInclude<ExtArgs> | null
+  where?: Prisma.UserVocabularyProgressWhereInput
+  orderBy?: Prisma.UserVocabularyProgressOrderByWithRelationInput | Prisma.UserVocabularyProgressOrderByWithRelationInput[]
+  cursor?: Prisma.UserVocabularyProgressWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserVocabularyProgressScalarFieldEnum | Prisma.UserVocabularyProgressScalarFieldEnum[]
 }
 
 /**

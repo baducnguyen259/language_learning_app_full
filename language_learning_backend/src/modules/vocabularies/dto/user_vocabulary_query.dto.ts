@@ -1,6 +1,7 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
+  IsEnum,
   IsInt,
   IsOptional,
   IsString,
@@ -9,7 +10,21 @@ import {
   Min,
 } from 'class-validator';
 
-export class FavoriteQueryDto {
+export enum UserVocabularyFilter {
+  ALL = 'ALL',
+  LEARNING = 'LEARNING',
+  MASTERED = 'MASTERED',
+  FAVORITE = 'FAVORITE',
+}
+
+export class UserVocabularyQueryDto {
+  @ApiPropertyOptional({
+    enum: UserVocabularyFilter,
+    default: UserVocabularyFilter.ALL,
+  })
+  @IsEnum(UserVocabularyFilter)
+  filter: UserVocabularyFilter = UserVocabularyFilter.ALL;
+
   @ApiPropertyOptional({ example: 'xin chào' })
   @IsOptional()
   @IsString()

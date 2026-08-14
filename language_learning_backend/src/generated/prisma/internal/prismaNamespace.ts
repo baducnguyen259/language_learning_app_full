@@ -403,6 +403,8 @@ export const ModelName = {
   Topic: 'Topic',
   Lesson: 'Lesson',
   Vocabulary: 'Vocabulary',
+  VocabularyFavorite: 'VocabularyFavorite',
+  UserVocabularyProgress: 'UserVocabularyProgress',
   Grammar: 'Grammar',
   Quiz: 'Quiz',
   QuizQuestion: 'QuizQuestion',
@@ -428,7 +430,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "language" | "level" | "topic" | "lesson" | "vocabulary" | "grammar" | "quiz" | "quizQuestion" | "quizOption" | "curriculum" | "chapter" | "lessonProgress" | "userQuestionProgress" | "userLearningProfile" | "studySession"
+    modelProps: "user" | "language" | "level" | "topic" | "lesson" | "vocabulary" | "vocabularyFavorite" | "userVocabularyProgress" | "grammar" | "quiz" | "quizQuestion" | "quizOption" | "curriculum" | "chapter" | "lessonProgress" | "userQuestionProgress" | "userLearningProfile" | "studySession"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -873,6 +875,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.VocabularyCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.VocabularyCountAggregateOutputType> | number
+        }
+      }
+    }
+    VocabularyFavorite: {
+      payload: Prisma.$VocabularyFavoritePayload<ExtArgs>
+      fields: Prisma.VocabularyFavoriteFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.VocabularyFavoriteFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VocabularyFavoritePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.VocabularyFavoriteFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VocabularyFavoritePayload>
+        }
+        findFirst: {
+          args: Prisma.VocabularyFavoriteFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VocabularyFavoritePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.VocabularyFavoriteFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VocabularyFavoritePayload>
+        }
+        findMany: {
+          args: Prisma.VocabularyFavoriteFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VocabularyFavoritePayload>[]
+        }
+        create: {
+          args: Prisma.VocabularyFavoriteCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VocabularyFavoritePayload>
+        }
+        createMany: {
+          args: Prisma.VocabularyFavoriteCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.VocabularyFavoriteCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VocabularyFavoritePayload>[]
+        }
+        delete: {
+          args: Prisma.VocabularyFavoriteDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VocabularyFavoritePayload>
+        }
+        update: {
+          args: Prisma.VocabularyFavoriteUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VocabularyFavoritePayload>
+        }
+        deleteMany: {
+          args: Prisma.VocabularyFavoriteDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.VocabularyFavoriteUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.VocabularyFavoriteUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VocabularyFavoritePayload>[]
+        }
+        upsert: {
+          args: Prisma.VocabularyFavoriteUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VocabularyFavoritePayload>
+        }
+        aggregate: {
+          args: Prisma.VocabularyFavoriteAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateVocabularyFavorite>
+        }
+        groupBy: {
+          args: Prisma.VocabularyFavoriteGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VocabularyFavoriteGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.VocabularyFavoriteCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VocabularyFavoriteCountAggregateOutputType> | number
+        }
+      }
+    }
+    UserVocabularyProgress: {
+      payload: Prisma.$UserVocabularyProgressPayload<ExtArgs>
+      fields: Prisma.UserVocabularyProgressFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.UserVocabularyProgressFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserVocabularyProgressPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.UserVocabularyProgressFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserVocabularyProgressPayload>
+        }
+        findFirst: {
+          args: Prisma.UserVocabularyProgressFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserVocabularyProgressPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.UserVocabularyProgressFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserVocabularyProgressPayload>
+        }
+        findMany: {
+          args: Prisma.UserVocabularyProgressFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserVocabularyProgressPayload>[]
+        }
+        create: {
+          args: Prisma.UserVocabularyProgressCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserVocabularyProgressPayload>
+        }
+        createMany: {
+          args: Prisma.UserVocabularyProgressCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.UserVocabularyProgressCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserVocabularyProgressPayload>[]
+        }
+        delete: {
+          args: Prisma.UserVocabularyProgressDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserVocabularyProgressPayload>
+        }
+        update: {
+          args: Prisma.UserVocabularyProgressUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserVocabularyProgressPayload>
+        }
+        deleteMany: {
+          args: Prisma.UserVocabularyProgressDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.UserVocabularyProgressUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.UserVocabularyProgressUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserVocabularyProgressPayload>[]
+        }
+        upsert: {
+          args: Prisma.UserVocabularyProgressUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserVocabularyProgressPayload>
+        }
+        aggregate: {
+          args: Prisma.UserVocabularyProgressAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUserVocabularyProgress>
+        }
+        groupBy: {
+          args: Prisma.UserVocabularyProgressGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserVocabularyProgressGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.UserVocabularyProgressCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserVocabularyProgressCountAggregateOutputType> | number
         }
       }
     }
@@ -1743,6 +1893,28 @@ export const VocabularyScalarFieldEnum = {
 export type VocabularyScalarFieldEnum = (typeof VocabularyScalarFieldEnum)[keyof typeof VocabularyScalarFieldEnum]
 
 
+export const VocabularyFavoriteScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  vocabularyId: 'vocabularyId',
+  createdAt: 'createdAt'
+} as const
+
+export type VocabularyFavoriteScalarFieldEnum = (typeof VocabularyFavoriteScalarFieldEnum)[keyof typeof VocabularyFavoriteScalarFieldEnum]
+
+
+export const UserVocabularyProgressScalarFieldEnum = {
+  userId: 'userId',
+  vocabularyId: 'vocabularyId',
+  status: 'status',
+  masteredAt: 'masteredAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserVocabularyProgressScalarFieldEnum = (typeof UserVocabularyProgressScalarFieldEnum)[keyof typeof UserVocabularyProgressScalarFieldEnum]
+
+
 export const GrammarScalarFieldEnum = {
   id: 'id',
   title: 'title',
@@ -2031,6 +2203,20 @@ export type ListEnumVocabularyStatusFieldRefInput<$PrismaModel> = FieldRefInputT
 
 
 /**
+ * Reference to a field of type 'VocabularyLearningStatus'
+ */
+export type EnumVocabularyLearningStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'VocabularyLearningStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'VocabularyLearningStatus[]'
+ */
+export type ListEnumVocabularyLearningStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'VocabularyLearningStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'GrammarStatus'
  */
 export type EnumGrammarStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GrammarStatus'>
@@ -2270,6 +2456,8 @@ export type GlobalOmitConfig = {
   topic?: Prisma.TopicOmit
   lesson?: Prisma.LessonOmit
   vocabulary?: Prisma.VocabularyOmit
+  vocabularyFavorite?: Prisma.VocabularyFavoriteOmit
+  userVocabularyProgress?: Prisma.UserVocabularyProgressOmit
   grammar?: Prisma.GrammarOmit
   quiz?: Prisma.QuizOmit
   quizQuestion?: Prisma.QuizQuestionOmit

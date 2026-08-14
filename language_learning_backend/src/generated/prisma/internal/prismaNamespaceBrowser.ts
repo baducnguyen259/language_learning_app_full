@@ -57,6 +57,8 @@ export const ModelName = {
   Topic: 'Topic',
   Lesson: 'Lesson',
   Vocabulary: 'Vocabulary',
+  VocabularyFavorite: 'VocabularyFavorite',
+  UserVocabularyProgress: 'UserVocabularyProgress',
   Grammar: 'Grammar',
   Quiz: 'Quiz',
   QuizQuestion: 'QuizQuestion',
@@ -171,6 +173,28 @@ export const VocabularyScalarFieldEnum = {
 } as const
 
 export type VocabularyScalarFieldEnum = (typeof VocabularyScalarFieldEnum)[keyof typeof VocabularyScalarFieldEnum]
+
+
+export const VocabularyFavoriteScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  vocabularyId: 'vocabularyId',
+  createdAt: 'createdAt'
+} as const
+
+export type VocabularyFavoriteScalarFieldEnum = (typeof VocabularyFavoriteScalarFieldEnum)[keyof typeof VocabularyFavoriteScalarFieldEnum]
+
+
+export const UserVocabularyProgressScalarFieldEnum = {
+  userId: 'userId',
+  vocabularyId: 'vocabularyId',
+  status: 'status',
+  masteredAt: 'masteredAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserVocabularyProgressScalarFieldEnum = (typeof UserVocabularyProgressScalarFieldEnum)[keyof typeof UserVocabularyProgressScalarFieldEnum]
 
 
 export const GrammarScalarFieldEnum = {

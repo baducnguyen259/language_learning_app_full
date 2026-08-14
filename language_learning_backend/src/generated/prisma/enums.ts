@@ -42,6 +42,14 @@ export const VocabularyStatus = {
 export type VocabularyStatus = (typeof VocabularyStatus)[keyof typeof VocabularyStatus]
 
 
+export const VocabularyLearningStatus = {
+  LEARNING: 'LEARNING',
+  MASTERED: 'MASTERED'
+} as const
+
+export type VocabularyLearningStatus = (typeof VocabularyLearningStatus)[keyof typeof VocabularyLearningStatus]
+
+
 export const CurriculumStatus = {
   DRAFT: 'DRAFT',
   PUBLISHED: 'PUBLISHED'

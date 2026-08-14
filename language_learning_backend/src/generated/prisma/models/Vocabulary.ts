@@ -231,6 +231,8 @@ export type VocabularyWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Vocabulary"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Vocabulary"> | Date | string
   lesson?: Prisma.XOR<Prisma.LessonScalarRelationFilter, Prisma.LessonWhereInput>
+  favorites?: Prisma.VocabularyFavoriteListRelationFilter
+  userProgressRecords?: Prisma.UserVocabularyProgressListRelationFilter
 }
 
 export type VocabularyOrderByWithRelationInput = {
@@ -246,6 +248,8 @@ export type VocabularyOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   lesson?: Prisma.LessonOrderByWithRelationInput
+  favorites?: Prisma.VocabularyFavoriteOrderByRelationAggregateInput
+  userProgressRecords?: Prisma.UserVocabularyProgressOrderByRelationAggregateInput
 }
 
 export type VocabularyWhereUniqueInput = Prisma.AtLeast<{
@@ -265,6 +269,8 @@ export type VocabularyWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Vocabulary"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Vocabulary"> | Date | string
   lesson?: Prisma.XOR<Prisma.LessonScalarRelationFilter, Prisma.LessonWhereInput>
+  favorites?: Prisma.VocabularyFavoriteListRelationFilter
+  userProgressRecords?: Prisma.UserVocabularyProgressListRelationFilter
 }, "id" | "lessonId_term">
 
 export type VocabularyOrderByWithAggregationInput = {
@@ -313,6 +319,8 @@ export type VocabularyCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   lesson: Prisma.LessonCreateNestedOneWithoutVocabulariesInput
+  favorites?: Prisma.VocabularyFavoriteCreateNestedManyWithoutVocabularyInput
+  userProgressRecords?: Prisma.UserVocabularyProgressCreateNestedManyWithoutVocabularyInput
 }
 
 export type VocabularyUncheckedCreateInput = {
@@ -327,6 +335,8 @@ export type VocabularyUncheckedCreateInput = {
   lessonId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  favorites?: Prisma.VocabularyFavoriteUncheckedCreateNestedManyWithoutVocabularyInput
+  userProgressRecords?: Prisma.UserVocabularyProgressUncheckedCreateNestedManyWithoutVocabularyInput
 }
 
 export type VocabularyUpdateInput = {
@@ -341,6 +351,8 @@ export type VocabularyUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lesson?: Prisma.LessonUpdateOneRequiredWithoutVocabulariesNestedInput
+  favorites?: Prisma.VocabularyFavoriteUpdateManyWithoutVocabularyNestedInput
+  userProgressRecords?: Prisma.UserVocabularyProgressUpdateManyWithoutVocabularyNestedInput
 }
 
 export type VocabularyUncheckedUpdateInput = {
@@ -355,6 +367,8 @@ export type VocabularyUncheckedUpdateInput = {
   lessonId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  favorites?: Prisma.VocabularyFavoriteUncheckedUpdateManyWithoutVocabularyNestedInput
+  userProgressRecords?: Prisma.UserVocabularyProgressUncheckedUpdateManyWithoutVocabularyNestedInput
 }
 
 export type VocabularyCreateManyInput = {
@@ -455,6 +469,11 @@ export type VocabularyMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
+export type VocabularyScalarRelationFilter = {
+  is?: Prisma.VocabularyWhereInput
+  isNot?: Prisma.VocabularyWhereInput
+}
+
 export type VocabularyCreateNestedManyWithoutLessonInput = {
   create?: Prisma.XOR<Prisma.VocabularyCreateWithoutLessonInput, Prisma.VocabularyUncheckedCreateWithoutLessonInput> | Prisma.VocabularyCreateWithoutLessonInput[] | Prisma.VocabularyUncheckedCreateWithoutLessonInput[]
   connectOrCreate?: Prisma.VocabularyCreateOrConnectWithoutLessonInput | Prisma.VocabularyCreateOrConnectWithoutLessonInput[]
@@ -501,6 +520,34 @@ export type EnumVocabularyStatusFieldUpdateOperationsInput = {
   set?: $Enums.VocabularyStatus
 }
 
+export type VocabularyCreateNestedOneWithoutFavoritesInput = {
+  create?: Prisma.XOR<Prisma.VocabularyCreateWithoutFavoritesInput, Prisma.VocabularyUncheckedCreateWithoutFavoritesInput>
+  connectOrCreate?: Prisma.VocabularyCreateOrConnectWithoutFavoritesInput
+  connect?: Prisma.VocabularyWhereUniqueInput
+}
+
+export type VocabularyUpdateOneRequiredWithoutFavoritesNestedInput = {
+  create?: Prisma.XOR<Prisma.VocabularyCreateWithoutFavoritesInput, Prisma.VocabularyUncheckedCreateWithoutFavoritesInput>
+  connectOrCreate?: Prisma.VocabularyCreateOrConnectWithoutFavoritesInput
+  upsert?: Prisma.VocabularyUpsertWithoutFavoritesInput
+  connect?: Prisma.VocabularyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.VocabularyUpdateToOneWithWhereWithoutFavoritesInput, Prisma.VocabularyUpdateWithoutFavoritesInput>, Prisma.VocabularyUncheckedUpdateWithoutFavoritesInput>
+}
+
+export type VocabularyCreateNestedOneWithoutUserProgressRecordsInput = {
+  create?: Prisma.XOR<Prisma.VocabularyCreateWithoutUserProgressRecordsInput, Prisma.VocabularyUncheckedCreateWithoutUserProgressRecordsInput>
+  connectOrCreate?: Prisma.VocabularyCreateOrConnectWithoutUserProgressRecordsInput
+  connect?: Prisma.VocabularyWhereUniqueInput
+}
+
+export type VocabularyUpdateOneRequiredWithoutUserProgressRecordsNestedInput = {
+  create?: Prisma.XOR<Prisma.VocabularyCreateWithoutUserProgressRecordsInput, Prisma.VocabularyUncheckedCreateWithoutUserProgressRecordsInput>
+  connectOrCreate?: Prisma.VocabularyCreateOrConnectWithoutUserProgressRecordsInput
+  upsert?: Prisma.VocabularyUpsertWithoutUserProgressRecordsInput
+  connect?: Prisma.VocabularyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.VocabularyUpdateToOneWithWhereWithoutUserProgressRecordsInput, Prisma.VocabularyUpdateWithoutUserProgressRecordsInput>, Prisma.VocabularyUncheckedUpdateWithoutUserProgressRecordsInput>
+}
+
 export type VocabularyCreateWithoutLessonInput = {
   id?: string
   term: string
@@ -512,6 +559,8 @@ export type VocabularyCreateWithoutLessonInput = {
   status?: $Enums.VocabularyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  favorites?: Prisma.VocabularyFavoriteCreateNestedManyWithoutVocabularyInput
+  userProgressRecords?: Prisma.UserVocabularyProgressCreateNestedManyWithoutVocabularyInput
 }
 
 export type VocabularyUncheckedCreateWithoutLessonInput = {
@@ -525,6 +574,8 @@ export type VocabularyUncheckedCreateWithoutLessonInput = {
   status?: $Enums.VocabularyStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  favorites?: Prisma.VocabularyFavoriteUncheckedCreateNestedManyWithoutVocabularyInput
+  userProgressRecords?: Prisma.UserVocabularyProgressUncheckedCreateNestedManyWithoutVocabularyInput
 }
 
 export type VocabularyCreateOrConnectWithoutLessonInput = {
@@ -570,6 +621,158 @@ export type VocabularyScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Vocabulary"> | Date | string
 }
 
+export type VocabularyCreateWithoutFavoritesInput = {
+  id?: string
+  term: string
+  pronunciation?: string | null
+  meaning: string
+  wordType?: string | null
+  imageUrl?: string | null
+  audioUrl?: string | null
+  status?: $Enums.VocabularyStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lesson: Prisma.LessonCreateNestedOneWithoutVocabulariesInput
+  userProgressRecords?: Prisma.UserVocabularyProgressCreateNestedManyWithoutVocabularyInput
+}
+
+export type VocabularyUncheckedCreateWithoutFavoritesInput = {
+  id?: string
+  term: string
+  pronunciation?: string | null
+  meaning: string
+  wordType?: string | null
+  imageUrl?: string | null
+  audioUrl?: string | null
+  status?: $Enums.VocabularyStatus
+  lessonId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userProgressRecords?: Prisma.UserVocabularyProgressUncheckedCreateNestedManyWithoutVocabularyInput
+}
+
+export type VocabularyCreateOrConnectWithoutFavoritesInput = {
+  where: Prisma.VocabularyWhereUniqueInput
+  create: Prisma.XOR<Prisma.VocabularyCreateWithoutFavoritesInput, Prisma.VocabularyUncheckedCreateWithoutFavoritesInput>
+}
+
+export type VocabularyUpsertWithoutFavoritesInput = {
+  update: Prisma.XOR<Prisma.VocabularyUpdateWithoutFavoritesInput, Prisma.VocabularyUncheckedUpdateWithoutFavoritesInput>
+  create: Prisma.XOR<Prisma.VocabularyCreateWithoutFavoritesInput, Prisma.VocabularyUncheckedCreateWithoutFavoritesInput>
+  where?: Prisma.VocabularyWhereInput
+}
+
+export type VocabularyUpdateToOneWithWhereWithoutFavoritesInput = {
+  where?: Prisma.VocabularyWhereInput
+  data: Prisma.XOR<Prisma.VocabularyUpdateWithoutFavoritesInput, Prisma.VocabularyUncheckedUpdateWithoutFavoritesInput>
+}
+
+export type VocabularyUpdateWithoutFavoritesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  term?: Prisma.StringFieldUpdateOperationsInput | string
+  pronunciation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meaning?: Prisma.StringFieldUpdateOperationsInput | string
+  wordType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  audioUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumVocabularyStatusFieldUpdateOperationsInput | $Enums.VocabularyStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lesson?: Prisma.LessonUpdateOneRequiredWithoutVocabulariesNestedInput
+  userProgressRecords?: Prisma.UserVocabularyProgressUpdateManyWithoutVocabularyNestedInput
+}
+
+export type VocabularyUncheckedUpdateWithoutFavoritesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  term?: Prisma.StringFieldUpdateOperationsInput | string
+  pronunciation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meaning?: Prisma.StringFieldUpdateOperationsInput | string
+  wordType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  audioUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumVocabularyStatusFieldUpdateOperationsInput | $Enums.VocabularyStatus
+  lessonId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userProgressRecords?: Prisma.UserVocabularyProgressUncheckedUpdateManyWithoutVocabularyNestedInput
+}
+
+export type VocabularyCreateWithoutUserProgressRecordsInput = {
+  id?: string
+  term: string
+  pronunciation?: string | null
+  meaning: string
+  wordType?: string | null
+  imageUrl?: string | null
+  audioUrl?: string | null
+  status?: $Enums.VocabularyStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lesson: Prisma.LessonCreateNestedOneWithoutVocabulariesInput
+  favorites?: Prisma.VocabularyFavoriteCreateNestedManyWithoutVocabularyInput
+}
+
+export type VocabularyUncheckedCreateWithoutUserProgressRecordsInput = {
+  id?: string
+  term: string
+  pronunciation?: string | null
+  meaning: string
+  wordType?: string | null
+  imageUrl?: string | null
+  audioUrl?: string | null
+  status?: $Enums.VocabularyStatus
+  lessonId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  favorites?: Prisma.VocabularyFavoriteUncheckedCreateNestedManyWithoutVocabularyInput
+}
+
+export type VocabularyCreateOrConnectWithoutUserProgressRecordsInput = {
+  where: Prisma.VocabularyWhereUniqueInput
+  create: Prisma.XOR<Prisma.VocabularyCreateWithoutUserProgressRecordsInput, Prisma.VocabularyUncheckedCreateWithoutUserProgressRecordsInput>
+}
+
+export type VocabularyUpsertWithoutUserProgressRecordsInput = {
+  update: Prisma.XOR<Prisma.VocabularyUpdateWithoutUserProgressRecordsInput, Prisma.VocabularyUncheckedUpdateWithoutUserProgressRecordsInput>
+  create: Prisma.XOR<Prisma.VocabularyCreateWithoutUserProgressRecordsInput, Prisma.VocabularyUncheckedCreateWithoutUserProgressRecordsInput>
+  where?: Prisma.VocabularyWhereInput
+}
+
+export type VocabularyUpdateToOneWithWhereWithoutUserProgressRecordsInput = {
+  where?: Prisma.VocabularyWhereInput
+  data: Prisma.XOR<Prisma.VocabularyUpdateWithoutUserProgressRecordsInput, Prisma.VocabularyUncheckedUpdateWithoutUserProgressRecordsInput>
+}
+
+export type VocabularyUpdateWithoutUserProgressRecordsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  term?: Prisma.StringFieldUpdateOperationsInput | string
+  pronunciation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meaning?: Prisma.StringFieldUpdateOperationsInput | string
+  wordType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  audioUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumVocabularyStatusFieldUpdateOperationsInput | $Enums.VocabularyStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lesson?: Prisma.LessonUpdateOneRequiredWithoutVocabulariesNestedInput
+  favorites?: Prisma.VocabularyFavoriteUpdateManyWithoutVocabularyNestedInput
+}
+
+export type VocabularyUncheckedUpdateWithoutUserProgressRecordsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  term?: Prisma.StringFieldUpdateOperationsInput | string
+  pronunciation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meaning?: Prisma.StringFieldUpdateOperationsInput | string
+  wordType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  audioUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumVocabularyStatusFieldUpdateOperationsInput | $Enums.VocabularyStatus
+  lessonId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  favorites?: Prisma.VocabularyFavoriteUncheckedUpdateManyWithoutVocabularyNestedInput
+}
+
 export type VocabularyCreateManyLessonInput = {
   id?: string
   term: string
@@ -594,6 +797,8 @@ export type VocabularyUpdateWithoutLessonInput = {
   status?: Prisma.EnumVocabularyStatusFieldUpdateOperationsInput | $Enums.VocabularyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  favorites?: Prisma.VocabularyFavoriteUpdateManyWithoutVocabularyNestedInput
+  userProgressRecords?: Prisma.UserVocabularyProgressUpdateManyWithoutVocabularyNestedInput
 }
 
 export type VocabularyUncheckedUpdateWithoutLessonInput = {
@@ -607,6 +812,8 @@ export type VocabularyUncheckedUpdateWithoutLessonInput = {
   status?: Prisma.EnumVocabularyStatusFieldUpdateOperationsInput | $Enums.VocabularyStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  favorites?: Prisma.VocabularyFavoriteUncheckedUpdateManyWithoutVocabularyNestedInput
+  userProgressRecords?: Prisma.UserVocabularyProgressUncheckedUpdateManyWithoutVocabularyNestedInput
 }
 
 export type VocabularyUncheckedUpdateManyWithoutLessonInput = {
@@ -623,6 +830,44 @@ export type VocabularyUncheckedUpdateManyWithoutLessonInput = {
 }
 
 
+/**
+ * Count Type VocabularyCountOutputType
+ */
+
+export type VocabularyCountOutputType = {
+  favorites: number
+  userProgressRecords: number
+}
+
+export type VocabularyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  favorites?: boolean | VocabularyCountOutputTypeCountFavoritesArgs
+  userProgressRecords?: boolean | VocabularyCountOutputTypeCountUserProgressRecordsArgs
+}
+
+/**
+ * VocabularyCountOutputType without action
+ */
+export type VocabularyCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the VocabularyCountOutputType
+   */
+  select?: Prisma.VocabularyCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * VocabularyCountOutputType without action
+ */
+export type VocabularyCountOutputTypeCountFavoritesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VocabularyFavoriteWhereInput
+}
+
+/**
+ * VocabularyCountOutputType without action
+ */
+export type VocabularyCountOutputTypeCountUserProgressRecordsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserVocabularyProgressWhereInput
+}
+
 
 export type VocabularySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -637,6 +882,9 @@ export type VocabularySelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   createdAt?: boolean
   updatedAt?: boolean
   lesson?: boolean | Prisma.LessonDefaultArgs<ExtArgs>
+  favorites?: boolean | Prisma.Vocabulary$favoritesArgs<ExtArgs>
+  userProgressRecords?: boolean | Prisma.Vocabulary$userProgressRecordsArgs<ExtArgs>
+  _count?: boolean | Prisma.VocabularyCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["vocabulary"]>
 
 export type VocabularySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -686,6 +934,9 @@ export type VocabularySelectScalar = {
 export type VocabularyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "term" | "pronunciation" | "meaning" | "wordType" | "imageUrl" | "audioUrl" | "status" | "lessonId" | "createdAt" | "updatedAt", ExtArgs["result"]["vocabulary"]>
 export type VocabularyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lesson?: boolean | Prisma.LessonDefaultArgs<ExtArgs>
+  favorites?: boolean | Prisma.Vocabulary$favoritesArgs<ExtArgs>
+  userProgressRecords?: boolean | Prisma.Vocabulary$userProgressRecordsArgs<ExtArgs>
+  _count?: boolean | Prisma.VocabularyCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type VocabularyIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lesson?: boolean | Prisma.LessonDefaultArgs<ExtArgs>
@@ -698,6 +949,8 @@ export type $VocabularyPayload<ExtArgs extends runtime.Types.Extensions.Internal
   name: "Vocabulary"
   objects: {
     lesson: Prisma.$LessonPayload<ExtArgs>
+    favorites: Prisma.$VocabularyFavoritePayload<ExtArgs>[]
+    userProgressRecords: Prisma.$UserVocabularyProgressPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1106,6 +1359,8 @@ readonly fields: VocabularyFieldRefs;
 export interface Prisma__VocabularyClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   lesson<T extends Prisma.LessonDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LessonDefaultArgs<ExtArgs>>): Prisma.Prisma__LessonClient<runtime.Types.Result.GetResult<Prisma.$LessonPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  favorites<T extends Prisma.Vocabulary$favoritesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Vocabulary$favoritesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VocabularyFavoritePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  userProgressRecords<T extends Prisma.Vocabulary$userProgressRecordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Vocabulary$userProgressRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserVocabularyProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1544,6 +1799,54 @@ export type VocabularyDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * Limit how many Vocabularies to delete.
    */
   limit?: number
+}
+
+/**
+ * Vocabulary.favorites
+ */
+export type Vocabulary$favoritesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the VocabularyFavorite
+   */
+  select?: Prisma.VocabularyFavoriteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the VocabularyFavorite
+   */
+  omit?: Prisma.VocabularyFavoriteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VocabularyFavoriteInclude<ExtArgs> | null
+  where?: Prisma.VocabularyFavoriteWhereInput
+  orderBy?: Prisma.VocabularyFavoriteOrderByWithRelationInput | Prisma.VocabularyFavoriteOrderByWithRelationInput[]
+  cursor?: Prisma.VocabularyFavoriteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VocabularyFavoriteScalarFieldEnum | Prisma.VocabularyFavoriteScalarFieldEnum[]
+}
+
+/**
+ * Vocabulary.userProgressRecords
+ */
+export type Vocabulary$userProgressRecordsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserVocabularyProgress
+   */
+  select?: Prisma.UserVocabularyProgressSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserVocabularyProgress
+   */
+  omit?: Prisma.UserVocabularyProgressOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserVocabularyProgressInclude<ExtArgs> | null
+  where?: Prisma.UserVocabularyProgressWhereInput
+  orderBy?: Prisma.UserVocabularyProgressOrderByWithRelationInput | Prisma.UserVocabularyProgressOrderByWithRelationInput[]
+  cursor?: Prisma.UserVocabularyProgressWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserVocabularyProgressScalarFieldEnum | Prisma.UserVocabularyProgressScalarFieldEnum[]
 }
 
 /**

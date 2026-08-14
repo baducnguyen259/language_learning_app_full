@@ -6,6 +6,7 @@ import {
   HttpStatus,
   Param,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -28,6 +29,8 @@ import { UserRole } from '../../../common/enums/user_role.enum';
 import { JwtAuthGuard } from '../../../common/guards/jwt_auth.guard';
 import { RolesGuard } from '../../../common/guards/roles.guard';
 import {
+  PracticeOverviewResponseDto,
+  PracticeQuestionQueueResponseDto,
   PublicQuizQuestionResponseDto,
   QuizAnswerResultResponseDto,
 } from '../dto/quiz_response.dto';
@@ -35,6 +38,7 @@ import { SubmitQuizAnswerDto } from '../dto/submit_quiz_answer.dto';
 import { QuizzesService } from '../quizzes.service';
 import { CurrentUser } from '../../../common/decorators/current_user.decorator';
 import type { AuthenticatedUser } from '../../auth/interfaces/jwt_payload.interface';
+import { PracticeQuestionQueryDto } from '../dto/practice_question_query.dto';
 
 @ApiTags('Quizzes')
 @ApiBearerAuth('access-token')
@@ -52,10 +56,27 @@ import type { AuthenticatedUser } from '../../auth/interfaces/jwt_payload.interf
 export class QuizzesController {
   constructor(private readonly quizzesService: QuizzesService) {}
 
-  @Get('lessons/:lessonId/questions')
+  @Get('practice/overview')
   @ApiOperation({
-    summary: 'Lấy bài luyện tập của một bài học',
+    summary: 'Lấy tổng quan các chế độ luyện tập',
   })
+  @ApiOkEnvelope(PracticeOverviewResponseDto)
+  getPracticeOverview(@CurrentUser() user: AuthenticatedUser) {
+    return this.quizzesService.getPracticeOverview(user.id);
+  }
+
+  @Get('practice/questions')
+  @ApiOperation({ summary: 'Lấy câu hỏi luyện tập theo kỹ năng' })
+  @ApiOkEnvelope(PracticeQuestionQueueResponseDto)
+  findPracticeQuestions(
+    @CurrentUser() user: AuthenticatedUser,
+    @Query() query: PracticeQuestionQueryDto,
+  ) {
+    return this.quizzesService.findPracticeQuestions(user.id, query);
+  }
+
+  @Get('lessons/:lessonId/questions')
+  @ApiOperation({ summary: 'Lấy bài luyện tập của một bài học' })
   @ApiArrayEnvelope(PublicQuizQuestionResponseDto)
   findQuestions(@Param('lessonId') lessonId: string) {
     return this.quizzesService.findQuestionsForApp(lessonId);
@@ -63,9 +84,7 @@ export class QuizzesController {
 
   @Post('questions/:questionId/answer')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({
-    summary: 'Nộp và chấm đáp án một câu hỏi',
-  })
+  @ApiOperation({ summary: 'Nộp và chấm đáp án một câu hỏi' })
   @ApiOkEnvelope(QuizAnswerResultResponseDto)
   @ApiNotFoundErrorResponse()
   @ApiBadRequestResponse({
