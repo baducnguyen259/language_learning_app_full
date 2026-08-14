@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Get,
   HttpCode,
@@ -11,6 +12,7 @@ import {
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
+  ApiConflictResponse,
   ApiForbiddenResponse,
   ApiOperation,
   ApiTags,
@@ -29,8 +31,10 @@ import { UserRole } from '../../../common/enums/user_role.enum';
 import { JwtAuthGuard } from '../../../common/guards/jwt_auth.guard';
 import { RolesGuard } from '../../../common/guards/roles.guard';
 import type { AuthenticatedUser } from '../../auth/interfaces/jwt_payload.interface';
+import { FinishStudySessionDto } from '../dto/finish_study_session.dto';
 import { ProgressQueryDto } from '../dto/progress_query.dto';
 import { ProgressResponseDto } from '../dto/progress_response.dto';
+import { StudySessionResponseDto } from '../dto/study_session_response.dto';
 import { ProgressService } from '../progress.service';
 
 @ApiTags('Progress')
@@ -61,10 +65,37 @@ export class ProgressController {
     return this.progressService.startLesson(user.id, lessonId);
   }
 
-  @Get()
-  @ApiOperation({
-    summary: 'Lấy danh sách tiến độ của người học',
+  @Post('lessons/:lessonId/sessions/start')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Bắt đầu phiên học' })
+  @ApiOkEnvelope(StudySessionResponseDto)
+  @ApiNotFoundErrorResponse()
+  @ApiConflictResponse({
+    description: 'Người học đang có phiên học khác chưa kết thúc',
+    type: ApiErrorResponseDto,
   })
+  startStudySession(
+    @CurrentUser() user: AuthenticatedUser,
+    @Param('lessonId') lessonId: string,
+  ) {
+    return this.progressService.startStudySession(user.id, lessonId);
+  }
+
+  @Post('sessions/:sessionId/finish')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Kết thúc phiên học' })
+  @ApiOkEnvelope(StudySessionResponseDto)
+  @ApiNotFoundErrorResponse()
+  finishStudySession(
+    @CurrentUser() user: AuthenticatedUser,
+    @Param('sessionId') sessionId: string,
+    @Body() dto: FinishStudySessionDto,
+  ) {
+    return this.progressService.finishStudySession(user.id, sessionId, dto);
+  }
+
+  @Get()
+  @ApiOperation({ summary: 'Lấy danh sách tiến độ của người học' })
   @ApiPaginatedEnvelope(ProgressResponseDto)
   findAll(
     @CurrentUser() user: AuthenticatedUser,

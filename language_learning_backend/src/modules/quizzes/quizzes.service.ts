@@ -410,7 +410,7 @@ export class QuizzesService {
       normalizedUserAnswer,
       normalizedCorrectAnswer,
     );
-    await this.progressService.recordQuizAnswer({
+    const experienceResult = await this.progressService.recordQuizAnswer({
       userId,
       lessonId: question.quiz.lessonId,
       questionId: question.id,
@@ -422,6 +422,8 @@ export class QuizzesService {
       questionId: question.id,
       isCorrect,
       score: isCorrect ? 1 : 0,
+      experienceEarned: experienceResult.experienceEarned,
+      totalExperience: experienceResult.totalExperience,
       userAnswer,
       correctAnswer: question.correctAnswer,
       feedback: isCorrect ? 'Chính xác!' : 'Chưa chính xác.',

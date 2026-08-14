@@ -324,6 +324,18 @@ export class PronunciationSegmentResponseDto {
 
   @ApiProperty({ example: 0.92 })
   score!: number;
+
+  @ApiProperty({
+    example: 10,
+    description: 'XP nhận được từ lần trả lời này',
+  })
+  experienceEarned!: number;
+
+  @ApiProperty({
+    example: 120,
+    description: 'Tổng XP hiện tại của người học',
+  })
+  totalExperience!: number;
 }
 
 export class QuizAnswerResultResponseDto {

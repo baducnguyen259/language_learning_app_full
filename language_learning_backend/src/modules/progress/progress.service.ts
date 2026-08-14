@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -12,6 +13,7 @@ import {
   QuizStatus,
 } from '../../generated/prisma/enums';
 import { ProgressQueryDto } from './dto/progress_query.dto';
+import { FinishStudySessionDto } from './dto/finish_study_session.dto';
 
 const progressInclude = {
   lesson: {
@@ -32,6 +34,21 @@ const progressInclude = {
   },
 } satisfies Prisma.LessonProgressInclude;
 
+const studySessionSelect = {
+  id: true,
+  lessonId: true,
+  startedAt: true,
+  endedAt: true,
+  durationSeconds: true,
+  experienceEarned: true,
+  lesson: {
+    select: {
+      id: true,
+      title: true,
+    },
+  },
+} satisfies Prisma.StudySessionSelect;
+
 type ProgressWithLesson = Prisma.LessonProgressGetPayload<{
   include: typeof progressInclude;
 }>;
@@ -43,6 +60,7 @@ type RecordQuizAnswerInput = {
   userAnswer: string[];
   isCorrect: boolean;
 };
+const CORRECT_ANSWER_EXPERIENCE = 10;
 
 @Injectable()
 export class ProgressService {
@@ -179,15 +197,14 @@ export class ProgressService {
       },
       include: progressInclude,
     });
-
     return this.toResponse(progress);
   }
 
-  async recordQuizAnswer(input: RecordQuizAnswerInput): Promise<void> {
+  async recordQuizAnswer(input: RecordQuizAnswerInput) {
     const now = new Date();
 
-    await this.prisma.$transaction(async (transaction) => {
-      await transaction.userQuestionProgress.upsert({
+    return this.prisma.$transaction(async (transaction) => {
+      const questionProgress = await transaction.userQuestionProgress.upsert({
         where: {
           userId_questionId: {
             userId: input.userId,
@@ -200,13 +217,38 @@ export class ProgressService {
           userAnswer: input.userAnswer,
           isCorrect: input.isCorrect,
         },
-        update: {
-          userAnswer: input.userAnswer,
-          isCorrect: input.isCorrect,
-          attempts: { increment: 1 },
-        },
+        update: { attempts: { increment: 1 } },
+        select: { id: true },
       });
 
+      if (input.isCorrect) {
+        await transaction.userQuestionProgress.update({
+          where: { id: questionProgress.id },
+          data: { userAnswer: input.userAnswer, isCorrect: true },
+        });
+      } else {
+        await transaction.userQuestionProgress.updateMany({
+          where: { id: questionProgress.id, isCorrect: false },
+          data: { userAnswer: input.userAnswer },
+        });
+      }
+      let experienceEarned = 0;
+      if (input.isCorrect) {
+        const experienceClaim =
+          await transaction.userQuestionProgress.updateMany({
+            where: {
+              id: questionProgress.id,
+              isCorrect: true,
+              experienceEarned: 0,
+            },
+            data: {
+              experienceEarned: CORRECT_ANSWER_EXPERIENCE,
+            },
+          });
+        if (experienceClaim.count === 1) {
+          experienceEarned = CORRECT_ANSWER_EXPERIENCE;
+        }
+      }
       const [
         totalQuestions,
         answeredQuestions,
@@ -215,41 +257,30 @@ export class ProgressService {
       ] = await Promise.all([
         transaction.quizQuestion.count({
           where: {
-            quiz: {
-              lessonId: input.lessonId,
-              status: QuizStatus.ACTIVE,
-            },
+            quiz: { lessonId: input.lessonId, status: QuizStatus.ACTIVE },
           },
         }),
         transaction.userQuestionProgress.count({
           where: {
             userId: input.userId,
             question: {
-              quiz: {
-                lessonId: input.lessonId,
-                status: QuizStatus.ACTIVE,
-              },
+              quiz: { lessonId: input.lessonId, status: QuizStatus.ACTIVE },
             },
           },
         }),
+
         transaction.userQuestionProgress.count({
           where: {
             userId: input.userId,
             isCorrect: true,
             question: {
-              quiz: {
-                lessonId: input.lessonId,
-                status: QuizStatus.ACTIVE,
-              },
+              quiz: { lessonId: input.lessonId, status: QuizStatus.ACTIVE },
             },
           },
         }),
         transaction.lessonProgress.findUnique({
           where: {
-            userId_lessonId: {
-              userId: input.userId,
-              lessonId: input.lessonId,
-            },
+            userId_lessonId: { userId: input.userId, lessonId: input.lessonId },
           },
           select: { completedAt: true },
         }),
@@ -295,6 +326,104 @@ export class ProgressService {
           lastStudiedAt: now,
         },
       });
+
+      const learningProfile = await transaction.userLearningProfile.upsert({
+        where: { userId: input.userId },
+        create: { userId: input.userId, totalExperience: experienceEarned },
+        update: { totalExperience: { increment: experienceEarned } },
+        select: { totalExperience: true },
+      });
+
+      if (experienceEarned > 0) {
+        const activeSession = await transaction.studySession.findFirst({
+          where: {
+            userId: input.userId,
+            lessonId: input.lessonId,
+            endedAt: null,
+          },
+          orderBy: { startedAt: 'desc' },
+          select: { id: true },
+        });
+
+        if (activeSession) {
+          await transaction.studySession.update({
+            where: { id: activeSession.id },
+            data: { experienceEarned: { increment: experienceEarned } },
+          });
+        }
+      }
+
+      return {
+        experienceEarned,
+        totalExperience: learningProfile.totalExperience,
+      };
+    });
+  }
+
+  async startStudySession(userId: string, lessonId: string) {
+    const lesson = await this.findAvailableLesson(lessonId);
+    const activeSession = await this.prisma.studySession.findFirst({
+      where: { userId, endedAt: null },
+      orderBy: { startedAt: 'desc' },
+      select: studySessionSelect,
+    });
+    if (activeSession) {
+      if (activeSession.lessonId === lessonId) {
+        return activeSession;
+      }
+      throw new ConflictException(
+        'Bạn đang có một phiên học khác chưa kết thúc',
+      );
+    }
+    const now = new Date();
+
+    return this.prisma.$transaction(async (transaction) => {
+      await transaction.userLearningProfile.upsert({
+        where: { userId },
+        create: { userId },
+        update: {},
+      });
+
+      await transaction.lessonProgress.upsert({
+        where: { userId_lessonId: { userId, lessonId } },
+        create: {
+          userId,
+          lessonId,
+          totalQuestions: lesson.totalQuestions,
+          lastStudiedAt: now,
+        },
+        update: { totalQuestions: lesson.totalQuestions, lastStudiedAt: now },
+      });
+      return transaction.studySession.create({
+        data: { userId, lessonId, startedAt: now },
+        select: studySessionSelect,
+      });
+    });
+  }
+
+  async finishStudySession(
+    userId: string,
+    sessionId: string,
+    dto: FinishStudySessionDto,
+  ) {
+    const session = await this.prisma.studySession.findFirst({
+      where: { id: sessionId, userId },
+      select: studySessionSelect,
+    });
+    if (!session) {
+      throw new NotFoundException('Không tìm thấy phiên học của người dùng');
+    }
+    if (session.endedAt) return session;
+    const endedAt = new Date();
+    const elapsedSeconds = Math.max(
+      1,
+      Math.floor((endedAt.getTime() - session.startedAt.getTime()) / 1000),
+    );
+    const durationSeconds = Math.min(dto.durationSeconds, elapsedSeconds + 60);
+    return this.prisma.studySession.update({
+      where: { id: session.id },
+      data: { endedAt, durationSeconds },
+      select: studySessionSelect,
     });
   }
 
@@ -316,7 +445,6 @@ export class ProgressService {
     if (!lesson) {
       throw new NotFoundException('Không tìm thấy bài học đang được xuất bản');
     }
-
     return {
       id: lesson.id,
       totalQuestions:
@@ -333,7 +461,6 @@ export class ProgressService {
         : Math.round(
             (progress.correctAnswers / progress.answeredQuestions) * 100,
           );
-
     return {
       id: progress.id,
       lessonId: progress.lessonId,
