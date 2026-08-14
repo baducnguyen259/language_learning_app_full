@@ -20,6 +20,8 @@ import { RolesGuard } from '../../../common/guards/roles.guard';
 import { CurriculumsService } from '../curriculums.service';
 import { AppCurriculumQueryDto } from '../dto/app_curriculum_query.dto';
 import { AppCurriculumResponseDto } from '../dto/app_curriculum_response.dto';
+import { CurrentUser } from '../../../common/decorators/current_user.decorator';
+import type { AuthenticatedUser } from '../../auth/interfaces/jwt_payload.interface';
 
 @ApiTags('Curriculums')
 @ApiBearerAuth('access-token')
@@ -42,8 +44,11 @@ export class CurriculumsController {
     summary: 'Lấy danh sách lộ trình đang được xuất bản',
   })
   @ApiArrayEnvelope(AppCurriculumResponseDto)
-  findAll(@Query() query: AppCurriculumQueryDto) {
-    return this.curriculumsService.findAllForApp(query);
+  findAll(
+    @CurrentUser() user: AuthenticatedUser,
+    @Query() query: AppCurriculumQueryDto,
+  ) {
+    return this.curriculumsService.findAllForApp(user.id, query);
   }
 
   @Get(':id')
@@ -52,7 +57,7 @@ export class CurriculumsController {
   })
   @ApiOkEnvelope(AppCurriculumResponseDto)
   @ApiNotFoundErrorResponse()
-  findOne(@Param('id') id: string) {
-    return this.curriculumsService.findOneForApp(id);
+  findOne(@CurrentUser() user: AuthenticatedUser, @Param('id') id: string) {
+    return this.curriculumsService.findOneForApp(user.id, id);
   }
 }

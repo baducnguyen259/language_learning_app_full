@@ -33,6 +33,8 @@ import {
 } from '../dto/quiz_response.dto';
 import { SubmitQuizAnswerDto } from '../dto/submit_quiz_answer.dto';
 import { QuizzesService } from '../quizzes.service';
+import { CurrentUser } from '../../../common/decorators/current_user.decorator';
+import type { AuthenticatedUser } from '../../auth/interfaces/jwt_payload.interface';
 
 @ApiTags('Quizzes')
 @ApiBearerAuth('access-token')
@@ -71,9 +73,10 @@ export class QuizzesController {
     type: ApiErrorResponseDto,
   })
   submitAnswer(
+    @CurrentUser() user: AuthenticatedUser,
     @Param('questionId') questionId: string,
     @Body() dto: SubmitQuizAnswerDto,
   ) {
-    return this.quizzesService.submitAnswer(questionId, dto);
+    return this.quizzesService.submitAnswer(user.id, questionId, dto);
   }
 }

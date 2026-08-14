@@ -22,10 +22,14 @@ import {
   CreateQuizQuestionDto,
 } from './dto/create_quiz_question.dto';
 import { SubmitQuizAnswerDto } from './dto/submit_quiz_answer.dto';
+import { ProgressService } from '../progress/progress.service';
 
 @Injectable()
 export class QuizzesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly progressService: ProgressService,
+  ) {}
 
   async findAllForAdmin(query: QuizQueryDto) {
     const page = query.page;
@@ -74,9 +78,7 @@ export class QuizzesService {
         where,
         skip,
         take: limit,
-        orderBy: {
-          createdAt: 'desc',
-        },
+        orderBy: { createdAt: 'desc' },
         include: this.getQuizInclude(),
       }),
       this.prisma.quiz.count({ where }),
@@ -147,7 +149,6 @@ export class QuizzesService {
       where: { id },
       data: {
         title: dto.title !== undefined ? dto.title.trim() : undefined,
-
         description:
           dto.description !== undefined
             ? dto.description.trim() || null
@@ -170,13 +171,7 @@ export class QuizzesService {
   async findQuestionForAdmin(id: string) {
     const question = await this.prisma.quizQuestion.findUnique({
       where: { id },
-      include: {
-        options: {
-          orderBy: {
-            order: 'asc',
-          },
-        },
-      },
+      include: { options: { orderBy: { order: 'asc' } } },
     });
 
     if (!question) {
@@ -208,29 +203,16 @@ export class QuizzesService {
         initialAnswer: this.normalizeAnswers(dto.initialAnswer ?? []),
         correctAnswer: this.normalizeRequiredAnswers(dto.correctAnswer),
         quizId,
-
         options: { create: this.prepareOptions(options) },
       },
-      include: {
-        options: {
-          orderBy: {
-            order: 'asc',
-          },
-        },
-      },
+      include: { options: { orderBy: { order: 'asc' } } },
     });
   }
 
   async updateQuestion(id: string, dto: UpdateQuizQuestionDto) {
     const currentQuestion = await this.prisma.quizQuestion.findUnique({
       where: { id },
-      include: {
-        options: {
-          orderBy: {
-            order: 'asc',
-          },
-        },
-      },
+      include: { options: { orderBy: { order: 'asc' } } },
     });
 
     if (!currentQuestion) {
@@ -305,13 +287,7 @@ export class QuizzesService {
               }
             : undefined,
       },
-      include: {
-        options: {
-          orderBy: {
-            order: 'asc',
-          },
-        },
-      },
+      include: { options: { orderBy: { order: 'asc' } } },
     });
   }
 
@@ -320,13 +296,7 @@ export class QuizzesService {
     await this.ensureQuestionCanBeRemoved(question.quizId);
     return this.prisma.quizQuestion.delete({
       where: { id },
-      include: {
-        options: {
-          orderBy: {
-            order: 'asc',
-          },
-        },
-      },
+      include: { options: { orderBy: { order: 'asc' } } },
     });
   }
 
@@ -337,9 +307,7 @@ export class QuizzesService {
         status: QuizStatus.ACTIVE,
         lesson: {
           status: LessonStatus.PUBLISHED,
-          chapter: {
-            curriculum: { status: CurriculumStatus.PUBLISHED },
-          },
+          chapter: { curriculum: { status: CurriculumStatus.PUBLISHED } },
         },
       },
       select: {
@@ -357,9 +325,7 @@ export class QuizzesService {
             initialAnswer: true,
 
             options: {
-              orderBy: {
-                order: 'asc',
-              },
+              orderBy: { order: 'asc' },
               select: {
                 optionKey: true,
                 text: true,
@@ -386,26 +352,26 @@ export class QuizzesService {
         totalQuestions,
         instruction: question.instruction,
         prompt: question.prompt ?? '',
-
         koreanText: hideListeningAnswer ? '' : (question.koreanText ?? ''),
         romanization: hideListeningAnswer ? '' : (question.romanization ?? ''),
         translation: hideListeningAnswer ? '' : (question.translation ?? ''),
-
         audioUrl: question.audioUrl ?? '',
         options: question.options.map((option) => ({
           id: option.optionKey,
           text: option.text,
           pairId: option.pairId,
-
           isMatched: question.initialAnswer.includes(option.optionKey),
         })),
-
         initialAnswer: question.initialAnswer,
       };
     });
   }
 
-  async submitAnswer(questionId: string, dto: SubmitQuizAnswerDto) {
+  async submitAnswer(
+    userId: string,
+    questionId: string,
+    dto: SubmitQuizAnswerDto,
+  ) {
     const question = await this.prisma.quizQuestion.findFirst({
       where: {
         id: questionId,
@@ -417,7 +383,12 @@ export class QuizzesService {
           },
         },
       },
-      select: { id: true, type: true, correctAnswer: true },
+      select: {
+        id: true,
+        type: true,
+        correctAnswer: true,
+        quiz: { select: { lessonId: true } },
+      },
     });
 
     if (!question) {
@@ -439,6 +410,13 @@ export class QuizzesService {
       normalizedUserAnswer,
       normalizedCorrectAnswer,
     );
+    await this.progressService.recordQuizAnswer({
+      userId,
+      lessonId: question.quiz.lessonId,
+      questionId: question.id,
+      userAnswer,
+      isCorrect,
+    });
 
     return {
       questionId: question.id,
@@ -511,7 +489,6 @@ export class QuizzesService {
       },
       select: { id: true },
     });
-
     if (duplicatedQuestion) {
       throw new ConflictException('Thứ tự câu hỏi đã tồn tại trong Quiz');
     }
@@ -649,9 +626,7 @@ export class QuizzesService {
                   id: true,
                   name: true,
                   order: true,
-                  language: {
-                    select: { id: true, name: true, code: true },
-                  },
+                  language: { select: { id: true, name: true, code: true } },
                 },
               },
             },

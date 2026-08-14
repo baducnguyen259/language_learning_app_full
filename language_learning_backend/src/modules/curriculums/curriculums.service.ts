@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma.service';
-import type { Prisma } from '../../generated/prisma/client';
+import { LessonProgressStatus, Prisma } from '../../generated/prisma/client';
 import { CurriculumStatus, LessonStatus } from '../../generated/prisma/enums';
 import { AssignLessonDto } from './dto/assign_lesson.dto';
 import { CreateChapterDto } from './dto/create_chapter.dto';
@@ -42,12 +42,7 @@ const curriculumInclude = {
           topicId: true,
           chapterId: true,
           orderInChapter: true,
-          topic: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
+          topic: { select: { id: true, name: true } },
         },
       },
     },
@@ -74,28 +69,16 @@ const appCurriculumSelect = {
     },
   },
   chapters: {
-    where: {
-      lessons: {
-        some: {
-          status: LessonStatus.PUBLISHED,
-        },
-      },
-    },
-    orderBy: {
-      order: 'asc',
-    },
+    where: { lessons: { some: { status: LessonStatus.PUBLISHED } } },
+    orderBy: { order: 'asc' },
     select: {
       id: true,
       title: true,
       description: true,
       order: true,
       lessons: {
-        where: {
-          status: LessonStatus.PUBLISHED,
-        },
-        orderBy: {
-          orderInChapter: 'asc',
-        },
+        where: { status: LessonStatus.PUBLISHED },
+        orderBy: { orderInChapter: 'asc' },
         select: {
           id: true,
           title: true,
@@ -107,12 +90,7 @@ const appCurriculumSelect = {
           thumbnailUrl: true,
           requiresPreviousLesson: true,
           allowReplay: true,
-          topic: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
+          topic: { select: { id: true, name: true } },
         },
       },
     },
@@ -123,14 +101,25 @@ type CurriculumWithRelations = Prisma.CurriculumGetPayload<{
   include: typeof curriculumInclude;
 }>;
 
+type AppCurriculumFromDatabase = Prisma.CurriculumGetPayload<{
+  select: typeof appCurriculumSelect;
+}>;
+
+type UserLessonProgress = {
+  status: LessonProgressStatus;
+  progressPercent: number;
+  totalQuestions: number;
+  answeredQuestions: number;
+  correctAnswers: number;
+};
+
 @Injectable()
 export class CurriculumsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAllForApp(query: AppCurriculumQueryDto) {
+  async findAllForApp(userId: string, query: AppCurriculumQueryDto) {
     const languageCode = query.languageCode?.trim().toLowerCase();
-
-    return this.prisma.curriculum.findMany({
+    const curriculums = await this.prisma.curriculum.findMany({
       where: {
         status: CurriculumStatus.PUBLISHED,
         ...(query.levelId ? { levelId: query.levelId } : {}),
@@ -138,10 +127,7 @@ export class CurriculumsService {
           ? {
               level: {
                 language: {
-                  code: {
-                    equals: languageCode,
-                    mode: 'insensitive',
-                  },
+                  code: { equals: languageCode, mode: 'insensitive' },
                 },
               },
             }
@@ -150,19 +136,21 @@ export class CurriculumsService {
       orderBy: [{ level: { order: 'asc' } }, { title: 'asc' }],
       select: appCurriculumSelect,
     });
+    return this.addUserProgress(userId, curriculums);
   }
 
-  async findOneForApp(id: string) {
+  async findOneForApp(userId: string, id: string) {
     const curriculum = await this.prisma.curriculum.findFirst({
       where: { id, status: CurriculumStatus.PUBLISHED },
       select: appCurriculumSelect,
     });
-
     if (!curriculum) {
       throw new NotFoundException('Không tìm thấy lộ trình đang được xuất bản');
     }
-
-    return curriculum;
+    const [curriculumWithProgress] = await this.addUserProgress(userId, [
+      curriculum,
+    ]);
+    return curriculumWithProgress;
   }
 
   async findAllForAdmin(query: CurriculumQueryDto) {
@@ -170,7 +158,6 @@ export class CurriculumsService {
     const limit = query.limit;
     const skip = (page - 1) * limit;
     const search = query.search?.trim();
-
     const where: Prisma.CurriculumWhereInput = {
       ...(query.levelId ? { levelId: query.levelId } : {}),
       ...(query.languageId ? { level: { languageId: query.languageId } } : {}),
@@ -216,13 +203,10 @@ export class CurriculumsService {
     if (!curriculum) {
       throw new NotFoundException('Không tìm thấy lộ trình');
     }
-
     return this.toResponse(curriculum);
   }
-
   async create(dto: CreateCurriculumDto) {
     await this.ensureLevelExists(dto.levelId);
-
     const title = dto.title.trim();
     await this.ensureCurriculumTitleIsUnique(dto.levelId, title);
 
@@ -235,10 +219,8 @@ export class CurriculumsService {
       },
       include: curriculumInclude,
     });
-
     return this.toResponse(curriculum);
   }
-
   async update(id: string, dto: UpdateCurriculumDto) {
     const currentCurriculum = await this.prisma.curriculum.findUnique({
       where: { id },
@@ -273,7 +255,6 @@ export class CurriculumsService {
 
     return this.toResponse(curriculum);
   }
-
   async remove(id: string) {
     const curriculum = await this.prisma.curriculum.findUnique({
       where: { id },
@@ -283,22 +264,18 @@ export class CurriculumsService {
     if (!curriculum) {
       throw new NotFoundException('Không tìm thấy lộ trình');
     }
-
     if (curriculum._count.chapters > 0) {
       throw new ConflictException(
         'Không thể xóa lộ trình đang có chương. Hãy xóa các chương trước',
       );
     }
-
     return this.prisma.curriculum.delete({ where: { id } });
   }
 
   async createChapter(curriculumId: string, dto: CreateChapterDto) {
     await this.ensureCurriculumExists(curriculumId);
-
     const title = dto.title.trim();
     await this.ensureChapterIsUnique(curriculumId, title, dto.order);
-
     return this.prisma.chapter.create({
       data: {
         title,
@@ -336,11 +313,7 @@ export class CurriculumsService {
             : undefined,
         order: dto.order,
       },
-      include: {
-        lessons: {
-          orderBy: { orderInChapter: 'asc' },
-        },
-      },
+      include: { lessons: { orderBy: { orderInChapter: 'asc' } } },
     });
   }
 
@@ -350,10 +323,7 @@ export class CurriculumsService {
     const [, deletedChapter] = await this.prisma.$transaction([
       this.prisma.lesson.updateMany({
         where: { chapterId },
-        data: {
-          chapterId: null,
-          orderInChapter: null,
-        },
+        data: { chapterId: null, orderInChapter: null },
       }),
       this.prisma.chapter.delete({ where: { id: chapterId } }),
     ]);
@@ -371,23 +341,17 @@ export class CurriculumsService {
 
     const lesson = await this.prisma.lesson.findUnique({
       where: { id: dto.lessonId },
-      include: {
-        topic: {
-          select: { levelId: true },
-        },
-      },
+      include: { topic: { select: { levelId: true } } },
     });
 
     if (!lesson) {
       throw new NotFoundException('Không tìm thấy bài học');
     }
-
     if (lesson.topic.levelId !== curriculum.levelId) {
       throw new ConflictException(
         'Bài học và lộ trình phải thuộc cùng một cấp độ',
       );
     }
-
     const occupiedOrder = await this.prisma.lesson.findFirst({
       where: {
         id: { not: dto.lessonId },
@@ -396,25 +360,13 @@ export class CurriculumsService {
       },
       select: { id: true },
     });
-
     if (occupiedOrder) {
       throw new ConflictException('Thứ tự bài học đã tồn tại trong chương');
     }
-
     return this.prisma.lesson.update({
       where: { id: dto.lessonId },
-      data: {
-        chapterId,
-        orderInChapter: dto.orderInChapter,
-      },
-      include: {
-        topic: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-      },
+      data: { chapterId, orderInChapter: dto.orderInChapter },
+      include: { topic: { select: { id: true, name: true } } },
     });
   }
 
@@ -426,31 +378,16 @@ export class CurriculumsService {
     await this.findChapterInCurriculum(curriculumId, chapterId);
 
     const lesson = await this.prisma.lesson.findFirst({
-      where: {
-        id: lessonId,
-        chapterId,
-      },
+      where: { id: lessonId, chapterId },
       select: { id: true },
     });
-
     if (!lesson) {
       throw new NotFoundException('Bài học không thuộc chương này');
     }
-
     return this.prisma.lesson.update({
       where: { id: lessonId },
-      data: {
-        chapterId: null,
-        orderInChapter: null,
-      },
-      include: {
-        topic: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-      },
+      data: { chapterId: null, orderInChapter: null },
+      include: { topic: { select: { id: true, name: true } } },
     });
   }
 
@@ -459,27 +396,21 @@ export class CurriculumsService {
       where: { id: levelId },
       select: { id: true },
     });
-
     if (!level) {
       throw new NotFoundException('Không tìm thấy cấp độ');
     }
-
     return level;
   }
 
   private async ensureCurriculumExists(id: string) {
     const curriculum = await this.prisma.curriculum.findUnique({
       where: { id },
-      select: {
-        id: true,
-        levelId: true,
-      },
+      select: { id: true, levelId: true },
     });
 
     if (!curriculum) {
       throw new NotFoundException('Không tìm thấy lộ trình');
     }
-
     return curriculum;
   }
 
@@ -488,16 +419,11 @@ export class CurriculumsService {
     chapterId: string,
   ) {
     const chapter = await this.prisma.chapter.findFirst({
-      where: {
-        id: chapterId,
-        curriculumId,
-      },
+      where: { id: chapterId, curriculumId },
     });
-
     if (!chapter) {
       throw new NotFoundException('Không tìm thấy chương trong lộ trình');
     }
-
     return chapter;
   }
 
@@ -510,14 +436,10 @@ export class CurriculumsService {
       where: {
         ...(excludedId ? { id: { not: excludedId } } : {}),
         levelId,
-        title: {
-          equals: title,
-          mode: 'insensitive',
-        },
+        title: { equals: title, mode: 'insensitive' },
       },
       select: { id: true },
     });
-
     if (duplicatedCurriculum) {
       throw new ConflictException('Tên lộ trình đã tồn tại trong cấp độ này');
     }
@@ -533,32 +455,133 @@ export class CurriculumsService {
       where: {
         ...(excludedId ? { id: { not: excludedId } } : {}),
         curriculumId,
-        OR: [
-          {
-            title: {
-              equals: title,
-              mode: 'insensitive',
-            },
-          },
-          { order },
-        ],
+        OR: [{ title: { equals: title, mode: 'insensitive' } }, { order }],
       },
-      select: {
-        id: true,
-        title: true,
-        order: true,
-      },
+      select: { id: true, title: true, order: true },
     });
-
-    if (!duplicatedChapter) {
-      return;
-    }
-
+    if (!duplicatedChapter) return;
     if (duplicatedChapter.order === order) {
       throw new ConflictException('Thứ tự chương đã tồn tại trong lộ trình');
     }
-
     throw new ConflictException('Tên chương đã tồn tại trong lộ trình');
+  }
+  private async addUserProgress(
+    userId: string,
+    curriculums: AppCurriculumFromDatabase[],
+  ) {
+    const lessonIds = curriculums.flatMap((curriculum) =>
+      curriculum.chapters.flatMap((chapter) =>
+        chapter.lessons.map((lesson) => lesson.id),
+      ),
+    );
+
+    const progressRecords = await this.prisma.lessonProgress.findMany({
+      where: { userId, lessonId: { in: lessonIds } },
+      select: {
+        lessonId: true,
+        status: true,
+        progressPercent: true,
+        totalQuestions: true,
+        answeredQuestions: true,
+        correctAnswers: true,
+      },
+    });
+
+    const progressByLessonId = new Map<string, UserLessonProgress>(
+      progressRecords.map((record) => [
+        record.lessonId,
+        {
+          status: record.status,
+          progressPercent: record.progressPercent,
+          totalQuestions: record.totalQuestions,
+          answeredQuestions: record.answeredQuestions,
+          correctAnswers: record.correctAnswers,
+        },
+      ]),
+    );
+
+    return curriculums.map((curriculum) =>
+      this.toAppResponse(curriculum, progressByLessonId),
+    );
+  }
+
+  private toAppResponse(
+    curriculum: AppCurriculumFromDatabase,
+    progressByLessonId: Map<string, UserLessonProgress>,
+  ) {
+    const orderedLessons = curriculum.chapters.flatMap(
+      (chapter) => chapter.lessons,
+    );
+    const lessonStates = new Map<
+      string,
+      {
+        progress: UserLessonProgress | null;
+        isCompleted: boolean;
+        isLocked: boolean;
+      }
+    >();
+
+    orderedLessons.forEach((lesson, index) => {
+      const progress = progressByLessonId.get(lesson.id) ?? null;
+      const isCompleted = progress?.status === LessonProgressStatus.COMPLETED;
+      const previousLesson = orderedLessons[index - 1];
+      const previousLessonCompleted = previousLesson
+        ? lessonStates.get(previousLesson.id)?.isCompleted === true
+        : true;
+
+      const isLocked =
+        !isCompleted &&
+        lesson.requiresPreviousLesson &&
+        !previousLessonCompleted;
+
+      lessonStates.set(lesson.id, {
+        progress,
+        isCompleted,
+        isLocked,
+      });
+    });
+
+    const chapters = curriculum.chapters.map((chapter) => {
+      const lessons = chapter.lessons.map((lesson) => {
+        const state = lessonStates.get(lesson.id);
+        return {
+          ...lesson,
+          progress: state?.progress ?? null,
+          isCompleted: state?.isCompleted ?? false,
+          isLocked: state?.isLocked ?? false,
+        };
+      });
+      const totalLessons = lessons.length;
+      const completedLessons = lessons.filter(
+        (lesson) => lesson.isCompleted,
+      ).length;
+      return {
+        ...chapter,
+        lessons,
+        totalLessons,
+        completedLessons,
+        progressPercent:
+          totalLessons === 0
+            ? 0
+            : Math.round((completedLessons / totalLessons) * 100),
+      };
+    });
+
+    const allLessons = chapters.flatMap((chapter) => chapter.lessons);
+    const totalLessons = allLessons.length;
+    const completedLessons = allLessons.filter(
+      (lesson) => lesson.isCompleted,
+    ).length;
+    return {
+      ...curriculum,
+      chapters,
+      totalLessons,
+      completedLessons,
+      progressPercent:
+        totalLessons === 0
+          ? 0
+          : Math.round((completedLessons / totalLessons) * 100),
+    };
   }
 
   private toResponse(curriculum: CurriculumWithRelations) {
@@ -567,7 +590,6 @@ export class CurriculumsService {
     const publishedLessonCount = lessons.filter(
       (lesson) => lesson.status === LessonStatus.PUBLISHED,
     ).length;
-
     return {
       ...curriculum,
       chapterCount: curriculum.chapters.length,

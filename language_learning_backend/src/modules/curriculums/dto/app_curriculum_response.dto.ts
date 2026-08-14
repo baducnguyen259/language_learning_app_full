@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { LessonProgressStatus } from '../../../generated/prisma/enums';
 
 class AppCurriculumLanguageResponseDto {
   @ApiProperty({ example: 'cm123language' })
@@ -31,6 +32,26 @@ class AppCurriculumTopicResponseDto {
 
   @ApiProperty({ example: 'Chào hỏi' })
   name!: string;
+}
+
+class AppLessonProgressResponseDto {
+  @ApiProperty({
+    enum: LessonProgressStatus,
+    example: LessonProgressStatus.IN_PROGRESS,
+  })
+  status!: LessonProgressStatus;
+
+  @ApiProperty({ example: 40, minimum: 0, maximum: 100 })
+  progressPercent!: number;
+
+  @ApiProperty({ example: 5 })
+  totalQuestions!: number;
+
+  @ApiProperty({ example: 2 })
+  answeredQuestions!: number;
+
+  @ApiProperty({ example: 1 })
+  correctAnswers!: number;
 }
 
 class AppCurriculumLessonResponseDto {
@@ -72,6 +93,24 @@ class AppCurriculumLessonResponseDto {
 
   @ApiProperty({ example: true })
   allowReplay!: boolean;
+
+  @ApiProperty({
+    type: AppLessonProgressResponseDto,
+    nullable: true,
+  })
+  progress!: AppLessonProgressResponseDto | null;
+
+  @ApiProperty({
+    example: false,
+    description: 'Bài học đã hoàn thành hay chưa',
+  })
+  isCompleted!: boolean;
+
+  @ApiProperty({
+    example: false,
+    description: 'Bài học hiện có bị khóa hay không',
+  })
+  isLocked!: boolean;
 }
 
 class AppCurriculumChapterResponseDto {
@@ -92,6 +131,15 @@ class AppCurriculumChapterResponseDto {
 
   @ApiProperty({ type: [AppCurriculumLessonResponseDto] })
   lessons!: AppCurriculumLessonResponseDto[];
+
+  @ApiProperty({ example: 5 })
+  totalLessons!: number;
+
+  @ApiProperty({ example: 2 })
+  completedLessons!: number;
+
+  @ApiProperty({ example: 40, minimum: 0, maximum: 100 })
+  progressPercent!: number;
 }
 
 export class AppCurriculumResponseDto {
@@ -115,4 +163,13 @@ export class AppCurriculumResponseDto {
 
   @ApiProperty({ type: [AppCurriculumChapterResponseDto] })
   chapters!: AppCurriculumChapterResponseDto[];
+
+  @ApiProperty({ example: 15 })
+  totalLessons!: number;
+
+  @ApiProperty({ example: 5 })
+  completedLessons!: number;
+
+  @ApiProperty({ example: 33, minimum: 0, maximum: 100 })
+  progressPercent!: number;
 }
