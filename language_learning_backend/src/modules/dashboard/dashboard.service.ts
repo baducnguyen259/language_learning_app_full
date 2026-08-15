@@ -4,9 +4,12 @@ import {
   LessonProgressStatus,
   LessonStatus,
   UserStatus,
+  VocabularyLearningStatus,
+  VocabularyStatus,
 } from '../../generated/prisma/enums';
 import { PrismaService } from '../../database/prisma.service';
 import { UpdateDailyGoalDto } from './dto/update_daily_goal.dto';
+import { Prisma } from '../../generated/prisma/client';
 
 @Injectable()
 export class DashboardService {
@@ -28,64 +31,110 @@ export class DashboardService {
       now.getTime() - 370 * 24 * 60 * 60 * 1000,
     );
 
-    const [user, currentProgress, completedLessons, studySessions] =
-      await Promise.all([
-        this.prisma.user.findUnique({
-          where: { id: userId },
-          select: { id: true, name: true, avatarUrl: true },
-        }),
+    const visibleVocabularyWhere = {
+      status: VocabularyStatus.ACTIVE,
+      lesson: {
+        status: LessonStatus.PUBLISHED,
+        chapter: { curriculum: { status: CurriculumStatus.PUBLISHED } },
+      },
+    } satisfies Prisma.VocabularyWhereInput;
 
-        this.prisma.lessonProgress.findFirst({
-          where: {
-            userId,
-            status: LessonProgressStatus.IN_PROGRESS,
-            lesson: {
-              status: LessonStatus.PUBLISHED,
-              chapter: { curriculum: { status: CurriculumStatus.PUBLISHED } },
-            },
+    const [
+      user,
+      currentProgress,
+      completedLessons,
+      inProgressLessons,
+      studySessions,
+      totalStudyDuration,
+      learningVocabulary,
+      masteredVocabulary,
+      favoriteVocabulary,
+    ] = await Promise.all([
+      this.prisma.user.findUnique({
+        where: { id: userId },
+        select: { id: true, name: true, avatarUrl: true },
+      }),
+      this.prisma.lessonProgress.findFirst({
+        where: {
+          userId,
+          status: LessonProgressStatus.IN_PROGRESS,
+          lesson: {
+            status: LessonStatus.PUBLISHED,
+            chapter: { curriculum: { status: CurriculumStatus.PUBLISHED } },
           },
-          orderBy: { lastStudiedAt: 'desc' },
-          select: {
-            progressPercent: true,
-            lesson: {
-              select: {
-                id: true,
-                title: true,
-                durationMinutes: true,
-                thumbnailUrl: true,
-                chapter: {
-                  select: {
-                    id: true,
-                    title: true,
-                    curriculum: { select: { id: true, title: true } },
+        },
+        orderBy: { lastStudiedAt: 'desc' },
+        select: {
+          progressPercent: true,
+          lesson: {
+            select: {
+              id: true,
+              title: true,
+              durationMinutes: true,
+              thumbnailUrl: true,
+              chapter: {
+                select: {
+                  id: true,
+                  title: true,
+                  curriculum: {
+                    select: { id: true, title: true },
                   },
                 },
               },
             },
           },
-        }),
-
-        this.prisma.lessonProgress.count({
-          where: {
-            userId,
-            status: LessonProgressStatus.COMPLETED,
-            lesson: {
-              status: LessonStatus.PUBLISHED,
-              chapter: { curriculum: { status: CurriculumStatus.PUBLISHED } },
-            },
+        },
+      }),
+      this.prisma.lessonProgress.count({
+        where: {
+          userId,
+          status: LessonProgressStatus.COMPLETED,
+          lesson: {
+            status: LessonStatus.PUBLISHED,
+            chapter: { curriculum: { status: CurriculumStatus.PUBLISHED } },
           },
-        }),
-
-        this.prisma.studySession.findMany({
-          where: {
-            userId,
-            endedAt: { not: null, gte: oldestSessionDate },
-            durationSeconds: { gt: 0 },
+        },
+      }),
+      this.prisma.lessonProgress.count({
+        where: {
+          userId,
+          status: LessonProgressStatus.IN_PROGRESS,
+          lesson: {
+            status: LessonStatus.PUBLISHED,
+            chapter: { curriculum: { status: CurriculumStatus.PUBLISHED } },
           },
-          select: { endedAt: true, durationSeconds: true },
-        }),
-      ]);
-
+        },
+      }),
+      this.prisma.studySession.findMany({
+        where: {
+          userId,
+          endedAt: { not: null, gte: oldestSessionDate },
+          durationSeconds: { gt: 0 },
+        },
+        select: { endedAt: true, durationSeconds: true },
+      }),
+      this.prisma.studySession.aggregate({
+        where: { userId, endedAt: { not: null }, durationSeconds: { gt: 0 } },
+        _sum: { durationSeconds: true },
+      }),
+      this.prisma.userVocabularyProgress.count({
+        where: {
+          userId,
+          status: VocabularyLearningStatus.LEARNING,
+          vocabulary: visibleVocabularyWhere,
+        },
+      }),
+      this.prisma.userVocabularyProgress.count({
+        where: {
+          userId,
+          status: VocabularyLearningStatus.MASTERED,
+          vocabulary: visibleVocabularyWhere,
+        },
+      }),
+      this.prisma.vocabularyFavorite.count({
+        where: { userId, vocabulary: visibleVocabularyWhere },
+      }),
+    ]);
     if (!user) {
       throw new NotFoundException('Không tìm thấy người dùng');
     }
@@ -107,6 +156,10 @@ export class DashboardService {
     }
 
     const completedMinutesToday = Math.floor(completedSecondsToday / 60);
+    const totalStudyMinutes = Math.floor(
+      (totalStudyDuration._sum.durationSeconds ?? 0) / 60,
+    );
+    const studiedVocabulary = learningVocabulary + masteredVocabulary;
     const dailyGoalProgress = Math.min(
       100,
       Math.round((completedMinutesToday / profile.dailyGoalMinutes) * 100),

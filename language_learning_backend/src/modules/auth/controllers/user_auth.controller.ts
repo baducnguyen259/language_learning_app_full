@@ -4,10 +4,12 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBadRequestResponse,
   ApiBearerAuth,
   ApiConflictResponse,
   ApiOperation,
@@ -35,6 +37,10 @@ import type { AuthenticatedUser } from '../interfaces/jwt_payload.interface';
 import { UserAuthService } from '../services/user_auth.service';
 import { GoogleAuthService } from '../services/google_auth.service';
 import { GoogleLoginDto } from '../dto/user/google_login.dto';
+import {
+  ChangePasswordDto,
+  ChangePasswordResponseDto,
+} from '../dto/user/change_password.dto';
 
 @ApiTags('User Auth')
 @Controller('auth')
@@ -88,6 +94,48 @@ export class UserAuthController {
   googleLogin(@Body() dto: GoogleLoginDto) {
     return this.googleAuthService.login(dto);
   }
+
+  @Patch('change-password')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.USER)
+  @ApiBearerAuth('access-token')
+  @ApiOperation({
+    summary: 'Đổi mật khẩu người học',
+  })
+  @ApiOkEnvelope(ChangePasswordResponseDto)
+  @ApiBadRequestResponse({
+    description:
+      'Mật khẩu xác nhận không khớp, trùng mật khẩu cũ hoặc tài khoản Google',
+    type: ApiErrorResponseDto,
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Access token hoặc mật khẩu hiện tại không hợp lệ',
+    type: ApiErrorResponseDto,
+  })
+  changePassword(
+    @CurrentUser() user: AuthenticatedUser,
+    @Body() dto: ChangePasswordDto,
+  ) {
+    return this.userAuthService.changePassword(user.id, dto);
+  }
+
+  @Post('logout-all')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.USER)
+  @ApiBearerAuth('access-token')
+  @ApiOperation({
+    summary: 'Đăng xuất tài khoản khỏi tất cả thiết bị',
+  })
+  @ApiOkEnvelope(ChangePasswordResponseDto)
+  @ApiUnauthorizedResponse({
+    description: 'Access token không hợp lệ hoặc đã hết hiệu lực',
+    type: ApiErrorResponseDto,
+  })
+  logoutAll(@CurrentUser() user: AuthenticatedUser) {
+    return this.userAuthService.logoutAll(user.id);
+  }
+
   @Get('me')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.USER)

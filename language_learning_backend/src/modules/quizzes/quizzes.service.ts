@@ -68,7 +68,6 @@ export class QuizzesService {
 
     const lessonWhere: Prisma.LessonWhereInput = {
       ...(query.topicId ? { topicId: query.topicId } : {}),
-
       ...(query.levelId || query.languageId
         ? {
             topic: {

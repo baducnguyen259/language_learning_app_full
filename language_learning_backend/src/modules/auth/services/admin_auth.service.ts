@@ -45,6 +45,7 @@ export class AdminAuthService {
       sub: admin.id,
       email: admin.email,
       role: admin.role,
+      tokenVersion: admin.tokenVersion,
     });
 
     return {
@@ -54,6 +55,7 @@ export class AdminAuthService {
         name: admin.name,
         email: admin.email,
         role: admin.role,
+        tokenVersion: admin.tokenVersion,
       },
     };
   }

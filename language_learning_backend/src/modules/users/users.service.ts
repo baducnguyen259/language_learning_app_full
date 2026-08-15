@@ -4,15 +4,117 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import type { Prisma } from '../../generated/prisma/client';
-import { UserStatus } from '../../generated/prisma/enums';
+import {
+  CurriculumStatus,
+  LessonStatus,
+  UserStatus,
+} from '../../generated/prisma/enums';
 import { PrismaService } from '../../database/prisma.service';
 import { UpdateUserDto } from './dto/update_user.dto';
 import { UpdateUserStatusDto } from './dto/update_user_status.dto';
 import { UserQueryDto } from './dto/user_query.dto';
+import { UpdateMyProfileDto } from './dto/update_my_profile.dto';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
+
+  async getMyProfile(userId: string) {
+    const [user, latestProgress] = await Promise.all([
+      this.prisma.user.findUnique({
+        where: { id: userId },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          avatarUrl: true,
+          createdAt: true,
+          learningProfile: {
+            select: {
+              dailyGoalMinutes: true,
+              totalExperience: true,
+              timezone: true,
+            },
+          },
+        },
+      }),
+
+      this.prisma.lessonProgress.findFirst({
+        where: {
+          userId,
+          lesson: {
+            status: LessonStatus.PUBLISHED,
+            chapter: { curriculum: { status: CurriculumStatus.PUBLISHED } },
+          },
+        },
+        orderBy: { lastStudiedAt: 'desc' },
+        select: {
+          lesson: {
+            select: {
+              topic: {
+                select: {
+                  level: {
+                    select: {
+                      id: true,
+                      name: true,
+                      order: true,
+                      language: {
+                        select: { id: true, name: true, code: true },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      }),
+    ]);
+
+    if (!user) {
+      throw new NotFoundException('Không tìm thấy người dùng');
+    }
+
+    const currentLevel = latestProgress?.lesson.topic.level ?? null;
+
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      avatarUrl: user.avatarUrl,
+      dailyGoalMinutes: user.learningProfile?.dailyGoalMinutes ?? 15,
+      totalExperience: user.learningProfile?.totalExperience ?? 0,
+      timezone: user.learningProfile?.timezone ?? 'Asia/Ho_Chi_Minh',
+      currentLanguage: currentLevel?.language ?? null,
+
+      currentLevel: currentLevel
+        ? {
+            id: currentLevel.id,
+            name: currentLevel.name,
+            order: currentLevel.order,
+          }
+        : null,
+      createdAt: user.createdAt,
+    };
+  }
+
+  async updateMyProfile(userId: string, dto: UpdateMyProfileDto) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true },
+    });
+
+    if (!user) {
+      throw new NotFoundException('Không tìm thấy người dùng');
+    }
+
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { name: dto.name },
+    });
+
+    return this.getMyProfile(userId);
+  }
 
   async findAllForAdmin(query: UserQueryDto) {
     const page = query.page;

@@ -71,6 +71,7 @@ model User {
   avatarUrl           String?
   role                UserRole               @default(USER)
   status              UserStatus             @default(ACTIVE)
+  tokenVersion        Int                    @default(0)
   createdAt           DateTime               @default(now())
   updatedAt           DateTime               @updatedAt
   lessonProgresses    LessonProgress[]
@@ -79,6 +80,20 @@ model User {
   studySessions       StudySession[]
   vocabularyFavorites VocabularyFavorite[]
   vocabularyProgresses UserVocabularyProgress[]
+  refreshTokens       RefreshToken[]
+}
+
+model RefreshToken {
+  id        String    @id @default(cuid())
+  tokenHash String    @unique
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
 }
 
 model Language {

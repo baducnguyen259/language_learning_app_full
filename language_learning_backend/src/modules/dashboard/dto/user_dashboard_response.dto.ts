@@ -79,6 +79,38 @@ export class UserDashboardResponseDto {
   @ApiProperty()
   completedLessons!: number;
 
+  @ApiProperty({
+    example: 2,
+  })
+  inProgressLessons!: number;
+
+  @ApiProperty({
+    example: 320,
+    description: 'Tổng số phút đã học',
+  })
+  totalStudyMinutes!: number;
+
+  @ApiProperty({
+    example: 126,
+    description: 'Tổng số từ đang học và đã nhớ',
+  })
+  studiedVocabulary!: number;
+
+  @ApiProperty({
+    example: 45,
+  })
+  learningVocabulary!: number;
+
+  @ApiProperty({
+    example: 81,
+  })
+  masteredVocabulary!: number;
+
+  @ApiProperty({
+    example: 12,
+  })
+  favoriteVocabulary!: number;
+
   @ApiProperty()
   dailyGoalMinutes!: number;
 

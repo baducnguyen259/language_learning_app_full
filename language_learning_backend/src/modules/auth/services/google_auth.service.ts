@@ -22,13 +22,11 @@ export class GoogleAuthService {
     configService: ConfigService,
   ) {
     this.googleClientId = configService.getOrThrow<string>('GOOGLE_CLIENT_ID');
-
     this.googleClient = new OAuth2Client();
   }
 
   async login(dto: GoogleLoginDto) {
     const payload = await this.verifyGoogleIdToken(dto.idToken);
-
     const googleId = payload.sub;
     const email = payload.email?.trim().toLowerCase();
 
@@ -37,9 +35,7 @@ export class GoogleAuthService {
     }
 
     const existingByGoogleId = await this.prisma.user.findUnique({
-      where: {
-        googleId,
-      },
+      where: { googleId },
     });
 
     if (existingByGoogleId) {
@@ -49,12 +45,9 @@ export class GoogleAuthService {
       );
 
       const user = await this.prisma.user.update({
-        where: {
-          id: existingByGoogleId.id,
-        },
+        where: { id: existingByGoogleId.id },
         data: {
           name: payload.name?.trim() || existingByGoogleId.name,
-
           avatarUrl: payload.picture ?? existingByGoogleId.avatarUrl,
         },
         select: {
@@ -63,18 +56,15 @@ export class GoogleAuthService {
           email: true,
           role: true,
           avatarUrl: true,
+          tokenVersion: true,
         },
       });
 
       return this.createLoginResponse(user);
     }
-
     const existingByEmail = await this.prisma.user.findUnique({
-      where: {
-        email,
-      },
+      where: { email },
     });
-
     if (existingByEmail) {
       this.ensureUserCanUseGoogleLogin(
         existingByEmail.role,
@@ -92,11 +82,8 @@ export class GoogleAuthService {
           'Email đã có tài khoản. Hãy đăng nhập bằng mật khẩu để liên kết Google',
         );
       }
-
       const linkedUser = await this.prisma.user.update({
-        where: {
-          id: existingByEmail.id,
-        },
+        where: { id: existingByEmail.id },
         data: {
           googleId,
           avatarUrl: payload.picture ?? existingByEmail.avatarUrl,
@@ -107,6 +94,7 @@ export class GoogleAuthService {
           email: true,
           role: true,
           avatarUrl: true,
+          tokenVersion: true,
         },
       });
 
@@ -131,6 +119,7 @@ export class GoogleAuthService {
         email: true,
         role: true,
         avatarUrl: true,
+        tokenVersion: true,
       },
     });
 
@@ -190,16 +179,17 @@ export class GoogleAuthService {
     email: string;
     role: UserRole;
     avatarUrl: string | null;
+    tokenVersion: number;
   }) {
     const accessToken = await this.jwtService.signAsync({
       sub: user.id,
       email: user.email,
       role: user.role,
+      tokenVersion: user.tokenVersion,
     });
 
-    return {
-      accessToken,
-      user,
-    };
+    const { tokenVersion: _tokenVersion, ...safeUser } = user;
+
+    return { accessToken, user: safeUser };
   }
 }

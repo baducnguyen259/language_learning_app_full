@@ -9,6 +9,7 @@ import { AdminAuthService } from './services/admin_auth.service';
 import { UserAuthService } from './services/user_auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { GoogleAuthService } from './services/google_auth.service';
+import { TokenService } from './services/token.service';
 
 @Module({
   imports: [
@@ -32,7 +33,14 @@ import { GoogleAuthService } from './services/google_auth.service';
     UserAuthService,
     JwtStrategy,
     GoogleAuthService,
+    TokenService,
   ],
-  exports: [AdminAuthService, UserAuthService, JwtModule, GoogleAuthService],
+  exports: [
+    AdminAuthService,
+    UserAuthService,
+    JwtModule,
+    GoogleAuthService,
+    TokenService,
+  ],
 })
 export class AuthModule {}
