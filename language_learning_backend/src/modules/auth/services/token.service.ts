@@ -108,6 +108,7 @@ export class TokenService {
             role: true,
             status: true,
             tokenVersion: true,
+            emailVerifiedAt: true,
           },
         },
       },
@@ -117,7 +118,9 @@ export class TokenService {
       storedToken.revokedAt ||
       storedToken.expiresAt <= now ||
       storedToken.user.status === UserStatus.LOCKED ||
-      storedToken.user.role !== requiredRole
+      storedToken.user.role !== requiredRole ||
+      (storedToken.user.role === UserRole.USER &&
+        !storedToken.user.emailVerifiedAt)
     ) {
       throw new UnauthorizedException(
         'Refresh token không hợp lệ hoặc đã hết hạn',

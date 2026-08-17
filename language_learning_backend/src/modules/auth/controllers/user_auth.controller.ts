@@ -54,6 +54,12 @@ import {
   VerifyPasswordResetOtpDto,
   VerifyPasswordResetOtpResponseDto,
 } from '../dto/user/password_reset.dto';
+import { EmailVerificationService } from '../services/email_verification.service';
+import {
+  EmailVerificationMessageResponseDto,
+  ResendEmailVerificationDto,
+  VerifyEmailOtpDto,
+} from '../dto/user/email_verification.dto';
 
 @ApiTags('User Auth')
 @Controller('auth')
@@ -62,18 +68,43 @@ export class UserAuthController {
     private readonly userAuthService: UserAuthService,
     private readonly googleAuthService: GoogleAuthService,
     private readonly passwordResetService: PasswordResetService,
+    private readonly emailVerificationService: EmailVerificationService,
   ) {}
   @Post('register')
   @ApiOperation({
     summary: 'Đăng ký tài khoản người học',
   })
-  @ApiCreatedEnvelope(UserAuthResponseDto)
+  @ApiCreatedEnvelope(EmailVerificationMessageResponseDto)
   @ApiConflictResponse({
     description: 'Email đã được đăng ký',
     type: ApiErrorResponseDto,
   })
   register(@Body() dto: RegisterDto) {
     return this.userAuthService.register(dto);
+  }
+
+  @Post('verify-email')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Xác minh email đăng ký bằng OTP',
+  })
+  @ApiOkEnvelope(UserAuthResponseDto)
+  @ApiUnauthorizedResponse({
+    description: 'OTP không hợp lệ hoặc đã hết hạn',
+    type: ApiErrorResponseDto,
+  })
+  verifyEmail(@Body() dto: VerifyEmailOtpDto) {
+    return this.emailVerificationService.verify(dto);
+  }
+
+  @Post('resend-verification-otp')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Gửi lại OTP xác minh email',
+  })
+  @ApiOkEnvelope(EmailVerificationMessageResponseDto)
+  resendVerificationOtp(@Body() dto: ResendEmailVerificationDto) {
+    return this.emailVerificationService.resend(dto);
   }
 
   @Post('login')

@@ -2040,6 +2040,7 @@ export const UserScalarFieldEnum = {
   role: 'role',
   status: 'status',
   emailVerifiedAt: 'emailVerifiedAt',
+  termsAcceptedAt: 'termsAcceptedAt',
   tokenVersion: 'tokenVersion',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

@@ -7,7 +7,7 @@ import {
   AuthenticatedUser,
   JwtPayload,
 } from '../interfaces/jwt_payload.interface';
-import { UserStatus } from '../../../generated/prisma/enums';
+import { UserRole, UserStatus } from '../../../generated/prisma/enums';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -30,12 +30,16 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
         role: true,
         status: true,
         tokenVersion: true,
+        emailVerifiedAt: true,
       },
     });
     if (!user || user.status === UserStatus.LOCKED) {
       throw new UnauthorizedException(
         'Tài khoản không tồn tại hoặc đã bị khóa ',
       );
+    }
+    if (user.role === UserRole.USER && !user.emailVerifiedAt) {
+      throw new UnauthorizedException('Email chưa được xác minh');
     }
     if (payload.tokenVersion !== user.tokenVersion) {
       throw new UnauthorizedException(

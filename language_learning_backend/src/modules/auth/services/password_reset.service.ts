@@ -44,12 +44,14 @@ export class PasswordResetService {
         email: true,
         role: true,
         status: true,
+        emailVerifiedAt: true,
       },
     });
     if (
       !user ||
       user.role !== UserRole.USER ||
-      user.status !== UserStatus.ACTIVE
+      user.status !== UserStatus.ACTIVE ||
+      !user.emailVerifiedAt
     ) {
       return genericResponse;
     }

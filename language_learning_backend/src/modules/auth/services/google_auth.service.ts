@@ -1,11 +1,11 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { OAuth2Client } from 'google-auth-library';
-
 import { PrismaService } from '../../../database/prisma.service';
 import { UserRole, UserStatus } from '../../../generated/prisma/enums';
 import { GoogleLoginDto } from '../dto/user/google_login.dto';
@@ -36,7 +36,6 @@ export class GoogleAuthService {
     const existingByGoogleId = await this.prisma.user.findUnique({
       where: { googleId },
     });
-
     if (existingByGoogleId) {
       this.ensureUserCanUseGoogleLogin(
         existingByGoogleId.role,
@@ -47,6 +46,7 @@ export class GoogleAuthService {
         data: {
           name: payload.name?.trim() || existingByGoogleId.name,
           avatarUrl: payload.picture ?? existingByGoogleId.avatarUrl,
+          emailVerifiedAt: existingByGoogleId.emailVerifiedAt ?? new Date(),
         },
         select: {
           id: true,
@@ -56,6 +56,9 @@ export class GoogleAuthService {
           avatarUrl: true,
           tokenVersion: true,
         },
+      });
+      await this.prisma.emailVerificationOtp.deleteMany({
+        where: { userId: user.id },
       });
       return this.createLoginResponse(user);
     }
@@ -82,6 +85,7 @@ export class GoogleAuthService {
         data: {
           googleId,
           avatarUrl: payload.picture ?? existingByEmail.avatarUrl,
+          emailVerifiedAt: new Date(),
         },
         select: {
           id: true,
@@ -92,12 +96,17 @@ export class GoogleAuthService {
           tokenVersion: true,
         },
       });
-
+      await this.prisma.emailVerificationOtp.deleteMany({
+        where: { userId: linkedUser.id },
+      });
       return this.createLoginResponse(linkedUser);
     }
-
+    if (dto.acceptTerms !== true) {
+      throw new BadRequestException(
+        'Bạn phải đồng ý điều khoản và chính sách bảo mật',
+      );
+    }
     const name = payload.name?.trim() || email.split('@')[0] || 'Người học';
-
     const newUser = await this.prisma.user.create({
       data: {
         name,
@@ -107,6 +116,8 @@ export class GoogleAuthService {
         avatarUrl: payload.picture ?? null,
         role: UserRole.USER,
         status: UserStatus.ACTIVE,
+        emailVerifiedAt: new Date(),
+        termsAcceptedAt: new Date(),
       },
       select: {
         id: true,
@@ -117,7 +128,6 @@ export class GoogleAuthService {
         tokenVersion: true,
       },
     });
-
     return this.createLoginResponse(newUser);
   }
 
@@ -127,19 +137,15 @@ export class GoogleAuthService {
         idToken,
         audience: this.googleClientId,
       });
-
       const payload = ticket.getPayload();
-
       if (!payload) {
         throw new UnauthorizedException('Google ID token không hợp lệ');
       }
-
       return payload;
     } catch (error: unknown) {
       if (error instanceof UnauthorizedException) {
         throw error;
       }
-
       throw new UnauthorizedException(
         'Google ID token không hợp lệ hoặc đã hết hạn',
       );
@@ -153,7 +159,6 @@ export class GoogleAuthService {
     if (status === UserStatus.LOCKED) {
       throw new UnauthorizedException('Tài khoản đã bị khóa');
     }
-
     if (role !== UserRole.USER) {
       throw new UnauthorizedException(
         'Tài khoản này không dành cho ứng dụng học',
@@ -177,7 +182,15 @@ export class GoogleAuthService {
     tokenVersion: number;
   }) {
     const tokens = await this.tokenService.issueTokenPair(user);
-    const { tokenVersion: _tokenVersion, ...safeUser } = user;
-    return { ...tokens, user: safeUser };
+    return {
+      ...tokens,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        avatarUrl: user.avatarUrl,
+      },
+    };
   }
 }

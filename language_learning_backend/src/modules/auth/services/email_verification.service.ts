@@ -127,15 +127,16 @@ export class EmailVerificationService {
     ]);
 
     const tokens = await this.tokenService.issueTokenPair(user);
-    const {
-      tokenVersion: _tokenVersion,
-      emailVerifiedAt: _emailVerifiedAt,
-      emailVerificationOtp: _emailVerificationOtp,
-      status: _status,
-      ...safeUser
-    } = user;
-
-    return { ...tokens, user: safeUser };
+    return {
+      ...tokens,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        avatarUrl: user.avatarUrl,
+      },
+    };
   }
 
   private async createAndSendOtp(user: RegistrationUser): Promise<void> {
