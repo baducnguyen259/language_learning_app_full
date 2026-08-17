@@ -53,6 +53,8 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   RefreshToken: 'RefreshToken',
+  PasswordResetRequest: 'PasswordResetRequest',
+  EmailVerificationOtp: 'EmailVerificationOtp',
   Language: 'Language',
   Level: 'Level',
   Topic: 'Topic',
@@ -97,6 +99,7 @@ export const UserScalarFieldEnum = {
   avatarUrl: 'avatarUrl',
   role: 'role',
   status: 'status',
+  emailVerifiedAt: 'emailVerifiedAt',
   tokenVersion: 'tokenVersion',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -115,6 +118,37 @@ export const RefreshTokenScalarFieldEnum = {
 } as const
 
 export type RefreshTokenScalarFieldEnum = (typeof RefreshTokenScalarFieldEnum)[keyof typeof RefreshTokenScalarFieldEnum]
+
+
+export const PasswordResetRequestScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  otpHash: 'otpHash',
+  otpExpiresAt: 'otpExpiresAt',
+  attempts: 'attempts',
+  lastSentAt: 'lastSentAt',
+  verifiedAt: 'verifiedAt',
+  resetTokenHash: 'resetTokenHash',
+  resetTokenExpiresAt: 'resetTokenExpiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PasswordResetRequestScalarFieldEnum = (typeof PasswordResetRequestScalarFieldEnum)[keyof typeof PasswordResetRequestScalarFieldEnum]
+
+
+export const EmailVerificationOtpScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  otpHash: 'otpHash',
+  expiresAt: 'expiresAt',
+  attempts: 'attempts',
+  lastSentAt: 'lastSentAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EmailVerificationOtpScalarFieldEnum = (typeof EmailVerificationOtpScalarFieldEnum)[keyof typeof EmailVerificationOtpScalarFieldEnum]
 
 
 export const LanguageScalarFieldEnum = {

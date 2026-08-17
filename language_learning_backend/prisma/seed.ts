@@ -36,6 +36,7 @@ async function main(): Promise<void> {
       passwordHash,
       role: UserRole.ADMIN,
       status: UserStatus.ACTIVE,
+      emailVerifiedAt: new Date(),
     },
     create: {
       name,
@@ -43,6 +44,7 @@ async function main(): Promise<void> {
       passwordHash,
       role: UserRole.ADMIN,
       status: UserStatus.ACTIVE,
+      emailVerifiedAt: new Date(),
     },
     select: {
       id: true,

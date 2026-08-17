@@ -4,12 +4,12 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
 import { OAuth2Client } from 'google-auth-library';
 
 import { PrismaService } from '../../../database/prisma.service';
 import { UserRole, UserStatus } from '../../../generated/prisma/enums';
 import { GoogleLoginDto } from '../dto/user/google_login.dto';
+import { TokenService } from './token.service';
 
 @Injectable()
 export class GoogleAuthService {
@@ -18,7 +18,7 @@ export class GoogleAuthService {
 
   constructor(
     private readonly prisma: PrismaService,
-    private readonly jwtService: JwtService,
+    private readonly tokenService: TokenService,
     configService: ConfigService,
   ) {
     this.googleClientId = configService.getOrThrow<string>('GOOGLE_CLIENT_ID');
@@ -33,7 +33,6 @@ export class GoogleAuthService {
     if (!googleId || !email || payload.email_verified !== true) {
       throw new UnauthorizedException('Tài khoản Google chưa xác minh email');
     }
-
     const existingByGoogleId = await this.prisma.user.findUnique({
       where: { googleId },
     });
@@ -43,7 +42,6 @@ export class GoogleAuthService {
         existingByGoogleId.role,
         existingByGoogleId.status,
       );
-
       const user = await this.prisma.user.update({
         where: { id: existingByGoogleId.id },
         data: {
@@ -59,7 +57,6 @@ export class GoogleAuthService {
           tokenVersion: true,
         },
       });
-
       return this.createLoginResponse(user);
     }
     const existingByEmail = await this.prisma.user.findUnique({
@@ -70,13 +67,11 @@ export class GoogleAuthService {
         existingByEmail.role,
         existingByEmail.status,
       );
-
       if (existingByEmail.googleId && existingByEmail.googleId !== googleId) {
         throw new ConflictException(
           'Email đã được liên kết với một tài khoản Google khác',
         );
       }
-
       if (!this.isGoogleAuthoritativeForEmail(email, payload.hd)) {
         throw new ConflictException(
           'Email đã có tài khoản. Hãy đăng nhập bằng mật khẩu để liên kết Google',
@@ -181,15 +176,8 @@ export class GoogleAuthService {
     avatarUrl: string | null;
     tokenVersion: number;
   }) {
-    const accessToken = await this.jwtService.signAsync({
-      sub: user.id,
-      email: user.email,
-      role: user.role,
-      tokenVersion: user.tokenVersion,
-    });
-
+    const tokens = await this.tokenService.issueTokenPair(user);
     const { tokenVersion: _tokenVersion, ...safeUser } = user;
-
-    return { accessToken, user: safeUser };
+    return { ...tokens, user: safeUser };
   }
 }

@@ -41,6 +41,19 @@ import {
   ChangePasswordDto,
   ChangePasswordResponseDto,
 } from '../dto/user/change_password.dto';
+import {
+  LogoutResponseDto,
+  RefreshTokenDto,
+  TokenPairResponseDto,
+} from '../dto/common/refresh_token.dto';
+import { PasswordResetService } from '../services/password_reset.service';
+import {
+  ForgotPasswordDto,
+  PasswordResetMessageResponseDto,
+  ResetPasswordDto,
+  VerifyPasswordResetOtpDto,
+  VerifyPasswordResetOtpResponseDto,
+} from '../dto/user/password_reset.dto';
 
 @ApiTags('User Auth')
 @Controller('auth')
@@ -48,6 +61,7 @@ export class UserAuthController {
   constructor(
     private readonly userAuthService: UserAuthService,
     private readonly googleAuthService: GoogleAuthService,
+    private readonly passwordResetService: PasswordResetService,
   ) {}
   @Post('register')
   @ApiOperation({
@@ -95,6 +109,72 @@ export class UserAuthController {
     return this.googleAuthService.login(dto);
   }
 
+  @Post('forgot-password')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Gửi OTP đặt lại mật khẩu',
+  })
+  @ApiOkEnvelope(PasswordResetMessageResponseDto)
+  forgotPassword(@Body() dto: ForgotPasswordDto) {
+    return this.passwordResetService.requestOtp(dto);
+  }
+
+  @Post('verify-reset-otp')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Xác minh OTP đặt lại mật khẩu',
+  })
+  @ApiOkEnvelope(VerifyPasswordResetOtpResponseDto)
+  @ApiUnauthorizedResponse({
+    description: 'OTP không hợp lệ hoặc đã hết hạn',
+    type: ApiErrorResponseDto,
+  })
+  verifyResetOtp(@Body() dto: VerifyPasswordResetOtpDto) {
+    return this.passwordResetService.verifyOtp(dto);
+  }
+
+  @Post('reset-password')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Đặt mật khẩu mới bằng reset token',
+  })
+  @ApiOkEnvelope(PasswordResetMessageResponseDto)
+  @ApiBadRequestResponse({
+    description: 'Mật khẩu xác nhận không khớp hoặc mật khẩu không hợp lệ',
+    type: ApiErrorResponseDto,
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Reset token không hợp lệ hoặc đã hết hạn',
+    type: ApiErrorResponseDto,
+  })
+  resetPassword(@Body() dto: ResetPasswordDto) {
+    return this.passwordResetService.resetPassword(dto);
+  }
+
+  @Post('refresh')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Lấy access token mới bằng refresh token',
+  })
+  @ApiOkEnvelope(TokenPairResponseDto)
+  @ApiUnauthorizedResponse({
+    description: 'Refresh token không hợp lệ hoặc đã hết hạn',
+    type: ApiErrorResponseDto,
+  })
+  refresh(@Body() dto: RefreshTokenDto) {
+    return this.userAuthService.refresh(dto);
+  }
+
+  @Post('logout')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Đăng xuất phiên hiện tại',
+  })
+  @ApiOkEnvelope(LogoutResponseDto)
+  logout(@Body() dto: RefreshTokenDto) {
+    return this.userAuthService.logout(dto);
+  }
+
   @Patch('change-password')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.USER)
@@ -127,7 +207,7 @@ export class UserAuthController {
   @ApiOperation({
     summary: 'Đăng xuất tài khoản khỏi tất cả thiết bị',
   })
-  @ApiOkEnvelope(ChangePasswordResponseDto)
+  @ApiOkEnvelope(LogoutResponseDto)
   @ApiUnauthorizedResponse({
     description: 'Access token không hợp lệ hoặc đã hết hiệu lực',
     type: ApiErrorResponseDto,

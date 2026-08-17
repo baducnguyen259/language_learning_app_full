@@ -10,6 +10,8 @@
  */
 export type * from './models/User.js'
 export type * from './models/RefreshToken.js'
+export type * from './models/PasswordResetRequest.js'
+export type * from './models/EmailVerificationOtp.js'
 export type * from './models/Language.js'
 export type * from './models/Level.js'
 export type * from './models/Topic.js'

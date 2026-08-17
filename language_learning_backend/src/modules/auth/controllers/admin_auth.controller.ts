@@ -28,6 +28,11 @@ import { AdminAuthService } from '../services/admin_auth.service';
 import { RolesGuard } from '../../../common/guards/roles.guard';
 import { Roles } from '../../../common/decorators/roles.decorator';
 import { UserRole } from '../../../generated/prisma/enums';
+import {
+  LogoutResponseDto,
+  RefreshTokenDto,
+  TokenPairResponseDto,
+} from '../dto/common/refresh_token.dto';
 
 @ApiTags('Admin Auth')
 @Controller('admin/auth')
@@ -46,6 +51,30 @@ export class AdminAuthController {
   })
   login(@Body() dto: AdminLoginDto) {
     return this.adminAuthService.login(dto);
+  }
+
+  @Post('refresh')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Lấy access token admin mới',
+  })
+  @ApiOkEnvelope(TokenPairResponseDto)
+  @ApiUnauthorizedResponse({
+    description: 'Refresh token không hợp lệ hoặc đã hết hạn',
+    type: ApiErrorResponseDto,
+  })
+  refresh(@Body() dto: RefreshTokenDto) {
+    return this.adminAuthService.refresh(dto);
+  }
+
+  @Post('logout')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Đăng xuất phiên admin hiện tại',
+  })
+  @ApiOkEnvelope(LogoutResponseDto)
+  logout(@Body() dto: RefreshTokenDto) {
+    return this.adminAuthService.logout(dto);
   }
 
   @Get('me')

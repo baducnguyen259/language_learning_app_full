@@ -4,7 +4,6 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
 import { PrismaService } from '../../../database/prisma.service';
@@ -12,6 +11,8 @@ import { UserRole, UserStatus } from '../../../generated/prisma/enums';
 import { RegisterDto } from '../dto/user/register.dto';
 import { UserLoginDto } from '../dto/user/user_login.dto';
 import { ChangePasswordDto } from '../dto/user/change_password.dto';
+import { TokenService } from './token.service';
+import { RefreshTokenDto } from '../dto/common/refresh_token.dto';
 
 @Injectable()
 export class UserAuthService {
@@ -19,7 +20,7 @@ export class UserAuthService {
 
   constructor(
     private readonly prisma: PrismaService,
-    private readonly jwtService: JwtService,
+    private readonly tokenService: TokenService,
   ) {}
 
   async register(dto: RegisterDto) {
@@ -59,10 +60,11 @@ export class UserAuthService {
         tokenVersion: true,
       },
     });
-    const accessToken = await this.createAccessToken(user);
+    const tokens = await this.tokenService.issueTokenPair(user);
     const { tokenVersion: _tokenVersion, ...safeUser } = user;
+
     return {
-      accessToken,
+      ...tokens,
       user: safeUser,
     };
   }
@@ -90,9 +92,9 @@ export class UserAuthService {
         'Tài khoản này không dành cho ứng dụng học',
       );
     }
-    const accessToken = await this.createAccessToken(user);
+    const tokens = await this.tokenService.issueTokenPair(user);
     return {
-      accessToken,
+      ...tokens,
       user: {
         id: user.id,
         name: user.name,
@@ -150,41 +152,44 @@ export class UserAuthService {
       dto.newPassword,
       UserAuthService.PASSWORD_SALT_ROUNDS,
     );
-    await this.prisma.user.update({
-      where: { id: userId },
-      data: {
-        passwordHash: newPasswordHash,
-        tokenVersion: { increment: 1 },
-      },
-    });
+    await this.prisma.$transaction([
+      this.prisma.user.update({
+        where: { id: userId },
+        data: { passwordHash: newPasswordHash, tokenVersion: { increment: 1 } },
+      }),
+
+      this.prisma.refreshToken.updateMany({
+        where: { userId, revokedAt: null },
+        data: { revokedAt: new Date() },
+      }),
+    ]);
     return {
       message: 'Đổi mật khẩu thành công',
     };
   }
 
   async logoutAll(userId: string) {
-    await this.prisma.user.update({
-      where: { id: userId },
-      data: { tokenVersion: { increment: 1 } },
-    });
+    await this.prisma.$transaction([
+      this.prisma.user.update({
+        where: { id: userId },
+        data: { tokenVersion: { increment: 1 } },
+      }),
 
+      this.prisma.refreshToken.updateMany({
+        where: { userId, revokedAt: null },
+        data: { revokedAt: new Date() },
+      }),
+    ]);
     return {
       message: 'Đã đăng xuất khỏi tất cả thiết bị',
     };
   }
 
-  private async createAccessToken(user: {
-    id: string;
-    email: string;
-    role: UserRole;
-    tokenVersion: number;
-  }): Promise<string> {
-    return this.jwtService.signAsync({
-      sub: user.id,
-      email: user.email,
-      role: user.role,
-      tokenVersion: user.tokenVersion,
-    });
+  refresh(dto: RefreshTokenDto) {
+    return this.tokenService.rotate(dto.refreshToken, UserRole.USER);
+  }
+  logout(dto: RefreshTokenDto) {
+    return this.tokenService.revoke(dto.refreshToken);
   }
 
   private ensurePasswordDoesNotMatchAccount(

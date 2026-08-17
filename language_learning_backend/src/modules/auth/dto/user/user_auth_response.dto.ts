@@ -31,7 +31,8 @@ export class UserAuthResponseDto {
     description: 'JWT access token của người học',
   })
   accessToken!: string;
-
+  @ApiProperty({ description: 'Token dùng để lấy access token mới' })
+  refreshToken!: string;
   @ApiProperty({ type: UserProfileResponseDto })
   user!: UserProfileResponseDto;
 }

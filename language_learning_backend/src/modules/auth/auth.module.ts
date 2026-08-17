@@ -10,6 +10,9 @@ import { UserAuthService } from './services/user_auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { GoogleAuthService } from './services/google_auth.service';
 import { TokenService } from './services/token.service';
+import { MailService } from './services/mail.service';
+import { PasswordResetService } from './services/password_reset.service';
+import { EmailVerificationService } from './services/email_verification.service';
 
 @Module({
   imports: [
@@ -17,7 +20,6 @@ import { TokenService } from './services/token.service';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         secret: configService.getOrThrow<string>('JWT_SECRET'),
-
         signOptions: {
           expiresIn: configService.get<string>(
             'JWT_EXPIRES_IN',
@@ -34,6 +36,9 @@ import { TokenService } from './services/token.service';
     JwtStrategy,
     GoogleAuthService,
     TokenService,
+    MailService,
+    PasswordResetService,
+    EmailVerificationService,
   ],
   exports: [
     AdminAuthService,

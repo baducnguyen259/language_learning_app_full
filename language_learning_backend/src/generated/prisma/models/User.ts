@@ -43,6 +43,7 @@ export type UserMinAggregateOutputType = {
   avatarUrl: string | null
   role: $Enums.UserRole | null
   status: $Enums.UserStatus | null
+  emailVerifiedAt: Date | null
   tokenVersion: number | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -57,6 +58,7 @@ export type UserMaxAggregateOutputType = {
   avatarUrl: string | null
   role: $Enums.UserRole | null
   status: $Enums.UserStatus | null
+  emailVerifiedAt: Date | null
   tokenVersion: number | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -71,6 +73,7 @@ export type UserCountAggregateOutputType = {
   avatarUrl: number
   role: number
   status: number
+  emailVerifiedAt: number
   tokenVersion: number
   createdAt: number
   updatedAt: number
@@ -95,6 +98,7 @@ export type UserMinAggregateInputType = {
   avatarUrl?: true
   role?: true
   status?: true
+  emailVerifiedAt?: true
   tokenVersion?: true
   createdAt?: true
   updatedAt?: true
@@ -109,6 +113,7 @@ export type UserMaxAggregateInputType = {
   avatarUrl?: true
   role?: true
   status?: true
+  emailVerifiedAt?: true
   tokenVersion?: true
   createdAt?: true
   updatedAt?: true
@@ -123,6 +128,7 @@ export type UserCountAggregateInputType = {
   avatarUrl?: true
   role?: true
   status?: true
+  emailVerifiedAt?: true
   tokenVersion?: true
   createdAt?: true
   updatedAt?: true
@@ -224,6 +230,7 @@ export type UserGroupByOutputType = {
   avatarUrl: string | null
   role: $Enums.UserRole
   status: $Enums.UserStatus
+  emailVerifiedAt: Date | null
   tokenVersion: number
   createdAt: Date
   updatedAt: Date
@@ -261,6 +268,7 @@ export type UserWhereInput = {
   avatarUrl?: Prisma.StringNullableFilter<"User"> | string | null
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   status?: Prisma.EnumUserStatusFilter<"User"> | $Enums.UserStatus
+  emailVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   tokenVersion?: Prisma.IntFilter<"User"> | number
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -271,6 +279,8 @@ export type UserWhereInput = {
   vocabularyFavorites?: Prisma.VocabularyFavoriteListRelationFilter
   vocabularyProgresses?: Prisma.UserVocabularyProgressListRelationFilter
   refreshTokens?: Prisma.RefreshTokenListRelationFilter
+  passwordResetRequest?: Prisma.XOR<Prisma.PasswordResetRequestNullableScalarRelationFilter, Prisma.PasswordResetRequestWhereInput> | null
+  emailVerificationOtp?: Prisma.XOR<Prisma.EmailVerificationOtpNullableScalarRelationFilter, Prisma.EmailVerificationOtpWhereInput> | null
 }
 
 export type UserOrderByWithRelationInput = {
@@ -282,6 +292,7 @@ export type UserOrderByWithRelationInput = {
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  emailVerifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   tokenVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -292,6 +303,8 @@ export type UserOrderByWithRelationInput = {
   vocabularyFavorites?: Prisma.VocabularyFavoriteOrderByRelationAggregateInput
   vocabularyProgresses?: Prisma.UserVocabularyProgressOrderByRelationAggregateInput
   refreshTokens?: Prisma.RefreshTokenOrderByRelationAggregateInput
+  passwordResetRequest?: Prisma.PasswordResetRequestOrderByWithRelationInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpOrderByWithRelationInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -306,6 +319,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   avatarUrl?: Prisma.StringNullableFilter<"User"> | string | null
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   status?: Prisma.EnumUserStatusFilter<"User"> | $Enums.UserStatus
+  emailVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   tokenVersion?: Prisma.IntFilter<"User"> | number
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -316,6 +330,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   vocabularyFavorites?: Prisma.VocabularyFavoriteListRelationFilter
   vocabularyProgresses?: Prisma.UserVocabularyProgressListRelationFilter
   refreshTokens?: Prisma.RefreshTokenListRelationFilter
+  passwordResetRequest?: Prisma.XOR<Prisma.PasswordResetRequestNullableScalarRelationFilter, Prisma.PasswordResetRequestWhereInput> | null
+  emailVerificationOtp?: Prisma.XOR<Prisma.EmailVerificationOtpNullableScalarRelationFilter, Prisma.EmailVerificationOtpWhereInput> | null
 }, "id" | "email" | "googleId">
 
 export type UserOrderByWithAggregationInput = {
@@ -327,6 +343,7 @@ export type UserOrderByWithAggregationInput = {
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  emailVerifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   tokenVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -349,6 +366,7 @@ export type UserScalarWhereWithAggregatesInput = {
   avatarUrl?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   role?: Prisma.EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
   status?: Prisma.EnumUserStatusWithAggregatesFilter<"User"> | $Enums.UserStatus
+  emailVerifiedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   tokenVersion?: Prisma.IntWithAggregatesFilter<"User"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -363,6 +381,7 @@ export type UserCreateInput = {
   avatarUrl?: string | null
   role?: $Enums.UserRole
   status?: $Enums.UserStatus
+  emailVerifiedAt?: Date | string | null
   tokenVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -373,6 +392,8 @@ export type UserCreateInput = {
   vocabularyFavorites?: Prisma.VocabularyFavoriteCreateNestedManyWithoutUserInput
   vocabularyProgresses?: Prisma.UserVocabularyProgressCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  passwordResetRequest?: Prisma.PasswordResetRequestCreateNestedOneWithoutUserInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -384,6 +405,7 @@ export type UserUncheckedCreateInput = {
   avatarUrl?: string | null
   role?: $Enums.UserRole
   status?: $Enums.UserStatus
+  emailVerifiedAt?: Date | string | null
   tokenVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -394,6 +416,8 @@ export type UserUncheckedCreateInput = {
   vocabularyFavorites?: Prisma.VocabularyFavoriteUncheckedCreateNestedManyWithoutUserInput
   vocabularyProgresses?: Prisma.UserVocabularyProgressUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  passwordResetRequest?: Prisma.PasswordResetRequestUncheckedCreateNestedOneWithoutUserInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -405,6 +429,7 @@ export type UserUpdateInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -415,6 +440,8 @@ export type UserUpdateInput = {
   vocabularyFavorites?: Prisma.VocabularyFavoriteUpdateManyWithoutUserNestedInput
   vocabularyProgresses?: Prisma.UserVocabularyProgressUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  passwordResetRequest?: Prisma.PasswordResetRequestUpdateOneWithoutUserNestedInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -426,6 +453,7 @@ export type UserUncheckedUpdateInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -436,6 +464,8 @@ export type UserUncheckedUpdateInput = {
   vocabularyFavorites?: Prisma.VocabularyFavoriteUncheckedUpdateManyWithoutUserNestedInput
   vocabularyProgresses?: Prisma.UserVocabularyProgressUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  passwordResetRequest?: Prisma.PasswordResetRequestUncheckedUpdateOneWithoutUserNestedInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -447,6 +477,7 @@ export type UserCreateManyInput = {
   avatarUrl?: string | null
   role?: $Enums.UserRole
   status?: $Enums.UserStatus
+  emailVerifiedAt?: Date | string | null
   tokenVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -461,6 +492,7 @@ export type UserUpdateManyMutationInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -475,6 +507,7 @@ export type UserUncheckedUpdateManyInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -489,6 +522,7 @@ export type UserCountOrderByAggregateInput = {
   avatarUrl?: Prisma.SortOrder
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  emailVerifiedAt?: Prisma.SortOrder
   tokenVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -507,6 +541,7 @@ export type UserMaxOrderByAggregateInput = {
   avatarUrl?: Prisma.SortOrder
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  emailVerifiedAt?: Prisma.SortOrder
   tokenVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -521,6 +556,7 @@ export type UserMinOrderByAggregateInput = {
   avatarUrl?: Prisma.SortOrder
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  emailVerifiedAt?: Prisma.SortOrder
   tokenVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -551,6 +587,10 @@ export type EnumUserStatusFieldUpdateOperationsInput = {
   set?: $Enums.UserStatus
 }
 
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
 export type IntFieldUpdateOperationsInput = {
   set?: number
   increment?: number
@@ -575,6 +615,34 @@ export type UserUpdateOneRequiredWithoutRefreshTokensNestedInput = {
   upsert?: Prisma.UserUpsertWithoutRefreshTokensInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRefreshTokensInput, Prisma.UserUpdateWithoutRefreshTokensInput>, Prisma.UserUncheckedUpdateWithoutRefreshTokensInput>
+}
+
+export type UserCreateNestedOneWithoutPasswordResetRequestInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPasswordResetRequestInput, Prisma.UserUncheckedCreateWithoutPasswordResetRequestInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPasswordResetRequestInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutPasswordResetRequestNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPasswordResetRequestInput, Prisma.UserUncheckedCreateWithoutPasswordResetRequestInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPasswordResetRequestInput
+  upsert?: Prisma.UserUpsertWithoutPasswordResetRequestInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPasswordResetRequestInput, Prisma.UserUpdateWithoutPasswordResetRequestInput>, Prisma.UserUncheckedUpdateWithoutPasswordResetRequestInput>
+}
+
+export type UserCreateNestedOneWithoutEmailVerificationOtpInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutEmailVerificationOtpInput, Prisma.UserUncheckedCreateWithoutEmailVerificationOtpInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEmailVerificationOtpInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutEmailVerificationOtpNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutEmailVerificationOtpInput, Prisma.UserUncheckedCreateWithoutEmailVerificationOtpInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEmailVerificationOtpInput
+  upsert?: Prisma.UserUpsertWithoutEmailVerificationOtpInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutEmailVerificationOtpInput, Prisma.UserUpdateWithoutEmailVerificationOtpInput>, Prisma.UserUncheckedUpdateWithoutEmailVerificationOtpInput>
 }
 
 export type UserCreateNestedOneWithoutVocabularyFavoritesInput = {
@@ -670,6 +738,7 @@ export type UserCreateWithoutRefreshTokensInput = {
   avatarUrl?: string | null
   role?: $Enums.UserRole
   status?: $Enums.UserStatus
+  emailVerifiedAt?: Date | string | null
   tokenVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -679,6 +748,8 @@ export type UserCreateWithoutRefreshTokensInput = {
   studySessions?: Prisma.StudySessionCreateNestedManyWithoutUserInput
   vocabularyFavorites?: Prisma.VocabularyFavoriteCreateNestedManyWithoutUserInput
   vocabularyProgresses?: Prisma.UserVocabularyProgressCreateNestedManyWithoutUserInput
+  passwordResetRequest?: Prisma.PasswordResetRequestCreateNestedOneWithoutUserInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRefreshTokensInput = {
@@ -690,6 +761,7 @@ export type UserUncheckedCreateWithoutRefreshTokensInput = {
   avatarUrl?: string | null
   role?: $Enums.UserRole
   status?: $Enums.UserStatus
+  emailVerifiedAt?: Date | string | null
   tokenVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -699,6 +771,8 @@ export type UserUncheckedCreateWithoutRefreshTokensInput = {
   studySessions?: Prisma.StudySessionUncheckedCreateNestedManyWithoutUserInput
   vocabularyFavorites?: Prisma.VocabularyFavoriteUncheckedCreateNestedManyWithoutUserInput
   vocabularyProgresses?: Prisma.UserVocabularyProgressUncheckedCreateNestedManyWithoutUserInput
+  passwordResetRequest?: Prisma.PasswordResetRequestUncheckedCreateNestedOneWithoutUserInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRefreshTokensInput = {
@@ -726,6 +800,7 @@ export type UserUpdateWithoutRefreshTokensInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -735,6 +810,8 @@ export type UserUpdateWithoutRefreshTokensInput = {
   studySessions?: Prisma.StudySessionUpdateManyWithoutUserNestedInput
   vocabularyFavorites?: Prisma.VocabularyFavoriteUpdateManyWithoutUserNestedInput
   vocabularyProgresses?: Prisma.UserVocabularyProgressUpdateManyWithoutUserNestedInput
+  passwordResetRequest?: Prisma.PasswordResetRequestUpdateOneWithoutUserNestedInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRefreshTokensInput = {
@@ -746,6 +823,7 @@ export type UserUncheckedUpdateWithoutRefreshTokensInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -755,6 +833,224 @@ export type UserUncheckedUpdateWithoutRefreshTokensInput = {
   studySessions?: Prisma.StudySessionUncheckedUpdateManyWithoutUserNestedInput
   vocabularyFavorites?: Prisma.VocabularyFavoriteUncheckedUpdateManyWithoutUserNestedInput
   vocabularyProgresses?: Prisma.UserVocabularyProgressUncheckedUpdateManyWithoutUserNestedInput
+  passwordResetRequest?: Prisma.PasswordResetRequestUncheckedUpdateOneWithoutUserNestedInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpUncheckedUpdateOneWithoutUserNestedInput
+}
+
+export type UserCreateWithoutPasswordResetRequestInput = {
+  id?: string
+  name: string
+  email: string
+  passwordHash?: string | null
+  googleId?: string | null
+  avatarUrl?: string | null
+  role?: $Enums.UserRole
+  status?: $Enums.UserStatus
+  emailVerifiedAt?: Date | string | null
+  tokenVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lessonProgresses?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
+  questionProgresses?: Prisma.UserQuestionProgressCreateNestedManyWithoutUserInput
+  learningProfile?: Prisma.UserLearningProfileCreateNestedOneWithoutUserInput
+  studySessions?: Prisma.StudySessionCreateNestedManyWithoutUserInput
+  vocabularyFavorites?: Prisma.VocabularyFavoriteCreateNestedManyWithoutUserInput
+  vocabularyProgresses?: Prisma.UserVocabularyProgressCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpCreateNestedOneWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutPasswordResetRequestInput = {
+  id?: string
+  name: string
+  email: string
+  passwordHash?: string | null
+  googleId?: string | null
+  avatarUrl?: string | null
+  role?: $Enums.UserRole
+  status?: $Enums.UserStatus
+  emailVerifiedAt?: Date | string | null
+  tokenVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lessonProgresses?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
+  questionProgresses?: Prisma.UserQuestionProgressUncheckedCreateNestedManyWithoutUserInput
+  learningProfile?: Prisma.UserLearningProfileUncheckedCreateNestedOneWithoutUserInput
+  studySessions?: Prisma.StudySessionUncheckedCreateNestedManyWithoutUserInput
+  vocabularyFavorites?: Prisma.VocabularyFavoriteUncheckedCreateNestedManyWithoutUserInput
+  vocabularyProgresses?: Prisma.UserVocabularyProgressUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpUncheckedCreateNestedOneWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutPasswordResetRequestInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPasswordResetRequestInput, Prisma.UserUncheckedCreateWithoutPasswordResetRequestInput>
+}
+
+export type UserUpsertWithoutPasswordResetRequestInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPasswordResetRequestInput, Prisma.UserUncheckedUpdateWithoutPasswordResetRequestInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPasswordResetRequestInput, Prisma.UserUncheckedCreateWithoutPasswordResetRequestInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPasswordResetRequestInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPasswordResetRequestInput, Prisma.UserUncheckedUpdateWithoutPasswordResetRequestInput>
+}
+
+export type UserUpdateWithoutPasswordResetRequestInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lessonProgresses?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
+  questionProgresses?: Prisma.UserQuestionProgressUpdateManyWithoutUserNestedInput
+  learningProfile?: Prisma.UserLearningProfileUpdateOneWithoutUserNestedInput
+  studySessions?: Prisma.StudySessionUpdateManyWithoutUserNestedInput
+  vocabularyFavorites?: Prisma.VocabularyFavoriteUpdateManyWithoutUserNestedInput
+  vocabularyProgresses?: Prisma.UserVocabularyProgressUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpUpdateOneWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPasswordResetRequestInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lessonProgresses?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
+  questionProgresses?: Prisma.UserQuestionProgressUncheckedUpdateManyWithoutUserNestedInput
+  learningProfile?: Prisma.UserLearningProfileUncheckedUpdateOneWithoutUserNestedInput
+  studySessions?: Prisma.StudySessionUncheckedUpdateManyWithoutUserNestedInput
+  vocabularyFavorites?: Prisma.VocabularyFavoriteUncheckedUpdateManyWithoutUserNestedInput
+  vocabularyProgresses?: Prisma.UserVocabularyProgressUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpUncheckedUpdateOneWithoutUserNestedInput
+}
+
+export type UserCreateWithoutEmailVerificationOtpInput = {
+  id?: string
+  name: string
+  email: string
+  passwordHash?: string | null
+  googleId?: string | null
+  avatarUrl?: string | null
+  role?: $Enums.UserRole
+  status?: $Enums.UserStatus
+  emailVerifiedAt?: Date | string | null
+  tokenVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lessonProgresses?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
+  questionProgresses?: Prisma.UserQuestionProgressCreateNestedManyWithoutUserInput
+  learningProfile?: Prisma.UserLearningProfileCreateNestedOneWithoutUserInput
+  studySessions?: Prisma.StudySessionCreateNestedManyWithoutUserInput
+  vocabularyFavorites?: Prisma.VocabularyFavoriteCreateNestedManyWithoutUserInput
+  vocabularyProgresses?: Prisma.UserVocabularyProgressCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  passwordResetRequest?: Prisma.PasswordResetRequestCreateNestedOneWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutEmailVerificationOtpInput = {
+  id?: string
+  name: string
+  email: string
+  passwordHash?: string | null
+  googleId?: string | null
+  avatarUrl?: string | null
+  role?: $Enums.UserRole
+  status?: $Enums.UserStatus
+  emailVerifiedAt?: Date | string | null
+  tokenVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lessonProgresses?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
+  questionProgresses?: Prisma.UserQuestionProgressUncheckedCreateNestedManyWithoutUserInput
+  learningProfile?: Prisma.UserLearningProfileUncheckedCreateNestedOneWithoutUserInput
+  studySessions?: Prisma.StudySessionUncheckedCreateNestedManyWithoutUserInput
+  vocabularyFavorites?: Prisma.VocabularyFavoriteUncheckedCreateNestedManyWithoutUserInput
+  vocabularyProgresses?: Prisma.UserVocabularyProgressUncheckedCreateNestedManyWithoutUserInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  passwordResetRequest?: Prisma.PasswordResetRequestUncheckedCreateNestedOneWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutEmailVerificationOtpInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutEmailVerificationOtpInput, Prisma.UserUncheckedCreateWithoutEmailVerificationOtpInput>
+}
+
+export type UserUpsertWithoutEmailVerificationOtpInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutEmailVerificationOtpInput, Prisma.UserUncheckedUpdateWithoutEmailVerificationOtpInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutEmailVerificationOtpInput, Prisma.UserUncheckedCreateWithoutEmailVerificationOtpInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutEmailVerificationOtpInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutEmailVerificationOtpInput, Prisma.UserUncheckedUpdateWithoutEmailVerificationOtpInput>
+}
+
+export type UserUpdateWithoutEmailVerificationOtpInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lessonProgresses?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
+  questionProgresses?: Prisma.UserQuestionProgressUpdateManyWithoutUserNestedInput
+  learningProfile?: Prisma.UserLearningProfileUpdateOneWithoutUserNestedInput
+  studySessions?: Prisma.StudySessionUpdateManyWithoutUserNestedInput
+  vocabularyFavorites?: Prisma.VocabularyFavoriteUpdateManyWithoutUserNestedInput
+  vocabularyProgresses?: Prisma.UserVocabularyProgressUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  passwordResetRequest?: Prisma.PasswordResetRequestUpdateOneWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutEmailVerificationOtpInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lessonProgresses?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
+  questionProgresses?: Prisma.UserQuestionProgressUncheckedUpdateManyWithoutUserNestedInput
+  learningProfile?: Prisma.UserLearningProfileUncheckedUpdateOneWithoutUserNestedInput
+  studySessions?: Prisma.StudySessionUncheckedUpdateManyWithoutUserNestedInput
+  vocabularyFavorites?: Prisma.VocabularyFavoriteUncheckedUpdateManyWithoutUserNestedInput
+  vocabularyProgresses?: Prisma.UserVocabularyProgressUncheckedUpdateManyWithoutUserNestedInput
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  passwordResetRequest?: Prisma.PasswordResetRequestUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutVocabularyFavoritesInput = {
@@ -766,6 +1062,7 @@ export type UserCreateWithoutVocabularyFavoritesInput = {
   avatarUrl?: string | null
   role?: $Enums.UserRole
   status?: $Enums.UserStatus
+  emailVerifiedAt?: Date | string | null
   tokenVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -775,6 +1072,8 @@ export type UserCreateWithoutVocabularyFavoritesInput = {
   studySessions?: Prisma.StudySessionCreateNestedManyWithoutUserInput
   vocabularyProgresses?: Prisma.UserVocabularyProgressCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  passwordResetRequest?: Prisma.PasswordResetRequestCreateNestedOneWithoutUserInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutVocabularyFavoritesInput = {
@@ -786,6 +1085,7 @@ export type UserUncheckedCreateWithoutVocabularyFavoritesInput = {
   avatarUrl?: string | null
   role?: $Enums.UserRole
   status?: $Enums.UserStatus
+  emailVerifiedAt?: Date | string | null
   tokenVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -795,6 +1095,8 @@ export type UserUncheckedCreateWithoutVocabularyFavoritesInput = {
   studySessions?: Prisma.StudySessionUncheckedCreateNestedManyWithoutUserInput
   vocabularyProgresses?: Prisma.UserVocabularyProgressUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  passwordResetRequest?: Prisma.PasswordResetRequestUncheckedCreateNestedOneWithoutUserInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutVocabularyFavoritesInput = {
@@ -822,6 +1124,7 @@ export type UserUpdateWithoutVocabularyFavoritesInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -831,6 +1134,8 @@ export type UserUpdateWithoutVocabularyFavoritesInput = {
   studySessions?: Prisma.StudySessionUpdateManyWithoutUserNestedInput
   vocabularyProgresses?: Prisma.UserVocabularyProgressUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  passwordResetRequest?: Prisma.PasswordResetRequestUpdateOneWithoutUserNestedInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutVocabularyFavoritesInput = {
@@ -842,6 +1147,7 @@ export type UserUncheckedUpdateWithoutVocabularyFavoritesInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -851,6 +1157,8 @@ export type UserUncheckedUpdateWithoutVocabularyFavoritesInput = {
   studySessions?: Prisma.StudySessionUncheckedUpdateManyWithoutUserNestedInput
   vocabularyProgresses?: Prisma.UserVocabularyProgressUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  passwordResetRequest?: Prisma.PasswordResetRequestUncheckedUpdateOneWithoutUserNestedInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutVocabularyProgressesInput = {
@@ -862,6 +1170,7 @@ export type UserCreateWithoutVocabularyProgressesInput = {
   avatarUrl?: string | null
   role?: $Enums.UserRole
   status?: $Enums.UserStatus
+  emailVerifiedAt?: Date | string | null
   tokenVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -871,6 +1180,8 @@ export type UserCreateWithoutVocabularyProgressesInput = {
   studySessions?: Prisma.StudySessionCreateNestedManyWithoutUserInput
   vocabularyFavorites?: Prisma.VocabularyFavoriteCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  passwordResetRequest?: Prisma.PasswordResetRequestCreateNestedOneWithoutUserInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutVocabularyProgressesInput = {
@@ -882,6 +1193,7 @@ export type UserUncheckedCreateWithoutVocabularyProgressesInput = {
   avatarUrl?: string | null
   role?: $Enums.UserRole
   status?: $Enums.UserStatus
+  emailVerifiedAt?: Date | string | null
   tokenVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -891,6 +1203,8 @@ export type UserUncheckedCreateWithoutVocabularyProgressesInput = {
   studySessions?: Prisma.StudySessionUncheckedCreateNestedManyWithoutUserInput
   vocabularyFavorites?: Prisma.VocabularyFavoriteUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  passwordResetRequest?: Prisma.PasswordResetRequestUncheckedCreateNestedOneWithoutUserInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutVocabularyProgressesInput = {
@@ -918,6 +1232,7 @@ export type UserUpdateWithoutVocabularyProgressesInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -927,6 +1242,8 @@ export type UserUpdateWithoutVocabularyProgressesInput = {
   studySessions?: Prisma.StudySessionUpdateManyWithoutUserNestedInput
   vocabularyFavorites?: Prisma.VocabularyFavoriteUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  passwordResetRequest?: Prisma.PasswordResetRequestUpdateOneWithoutUserNestedInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutVocabularyProgressesInput = {
@@ -938,6 +1255,7 @@ export type UserUncheckedUpdateWithoutVocabularyProgressesInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -947,6 +1265,8 @@ export type UserUncheckedUpdateWithoutVocabularyProgressesInput = {
   studySessions?: Prisma.StudySessionUncheckedUpdateManyWithoutUserNestedInput
   vocabularyFavorites?: Prisma.VocabularyFavoriteUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  passwordResetRequest?: Prisma.PasswordResetRequestUncheckedUpdateOneWithoutUserNestedInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutLessonProgressesInput = {
@@ -958,6 +1278,7 @@ export type UserCreateWithoutLessonProgressesInput = {
   avatarUrl?: string | null
   role?: $Enums.UserRole
   status?: $Enums.UserStatus
+  emailVerifiedAt?: Date | string | null
   tokenVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -967,6 +1288,8 @@ export type UserCreateWithoutLessonProgressesInput = {
   vocabularyFavorites?: Prisma.VocabularyFavoriteCreateNestedManyWithoutUserInput
   vocabularyProgresses?: Prisma.UserVocabularyProgressCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  passwordResetRequest?: Prisma.PasswordResetRequestCreateNestedOneWithoutUserInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutLessonProgressesInput = {
@@ -978,6 +1301,7 @@ export type UserUncheckedCreateWithoutLessonProgressesInput = {
   avatarUrl?: string | null
   role?: $Enums.UserRole
   status?: $Enums.UserStatus
+  emailVerifiedAt?: Date | string | null
   tokenVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -987,6 +1311,8 @@ export type UserUncheckedCreateWithoutLessonProgressesInput = {
   vocabularyFavorites?: Prisma.VocabularyFavoriteUncheckedCreateNestedManyWithoutUserInput
   vocabularyProgresses?: Prisma.UserVocabularyProgressUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  passwordResetRequest?: Prisma.PasswordResetRequestUncheckedCreateNestedOneWithoutUserInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutLessonProgressesInput = {
@@ -1014,6 +1340,7 @@ export type UserUpdateWithoutLessonProgressesInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1023,6 +1350,8 @@ export type UserUpdateWithoutLessonProgressesInput = {
   vocabularyFavorites?: Prisma.VocabularyFavoriteUpdateManyWithoutUserNestedInput
   vocabularyProgresses?: Prisma.UserVocabularyProgressUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  passwordResetRequest?: Prisma.PasswordResetRequestUpdateOneWithoutUserNestedInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLessonProgressesInput = {
@@ -1034,6 +1363,7 @@ export type UserUncheckedUpdateWithoutLessonProgressesInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1043,6 +1373,8 @@ export type UserUncheckedUpdateWithoutLessonProgressesInput = {
   vocabularyFavorites?: Prisma.VocabularyFavoriteUncheckedUpdateManyWithoutUserNestedInput
   vocabularyProgresses?: Prisma.UserVocabularyProgressUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  passwordResetRequest?: Prisma.PasswordResetRequestUncheckedUpdateOneWithoutUserNestedInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutQuestionProgressesInput = {
@@ -1054,6 +1386,7 @@ export type UserCreateWithoutQuestionProgressesInput = {
   avatarUrl?: string | null
   role?: $Enums.UserRole
   status?: $Enums.UserStatus
+  emailVerifiedAt?: Date | string | null
   tokenVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1063,6 +1396,8 @@ export type UserCreateWithoutQuestionProgressesInput = {
   vocabularyFavorites?: Prisma.VocabularyFavoriteCreateNestedManyWithoutUserInput
   vocabularyProgresses?: Prisma.UserVocabularyProgressCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  passwordResetRequest?: Prisma.PasswordResetRequestCreateNestedOneWithoutUserInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutQuestionProgressesInput = {
@@ -1074,6 +1409,7 @@ export type UserUncheckedCreateWithoutQuestionProgressesInput = {
   avatarUrl?: string | null
   role?: $Enums.UserRole
   status?: $Enums.UserStatus
+  emailVerifiedAt?: Date | string | null
   tokenVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1083,6 +1419,8 @@ export type UserUncheckedCreateWithoutQuestionProgressesInput = {
   vocabularyFavorites?: Prisma.VocabularyFavoriteUncheckedCreateNestedManyWithoutUserInput
   vocabularyProgresses?: Prisma.UserVocabularyProgressUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  passwordResetRequest?: Prisma.PasswordResetRequestUncheckedCreateNestedOneWithoutUserInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutQuestionProgressesInput = {
@@ -1110,6 +1448,7 @@ export type UserUpdateWithoutQuestionProgressesInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1119,6 +1458,8 @@ export type UserUpdateWithoutQuestionProgressesInput = {
   vocabularyFavorites?: Prisma.VocabularyFavoriteUpdateManyWithoutUserNestedInput
   vocabularyProgresses?: Prisma.UserVocabularyProgressUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  passwordResetRequest?: Prisma.PasswordResetRequestUpdateOneWithoutUserNestedInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutQuestionProgressesInput = {
@@ -1130,6 +1471,7 @@ export type UserUncheckedUpdateWithoutQuestionProgressesInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1139,6 +1481,8 @@ export type UserUncheckedUpdateWithoutQuestionProgressesInput = {
   vocabularyFavorites?: Prisma.VocabularyFavoriteUncheckedUpdateManyWithoutUserNestedInput
   vocabularyProgresses?: Prisma.UserVocabularyProgressUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  passwordResetRequest?: Prisma.PasswordResetRequestUncheckedUpdateOneWithoutUserNestedInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutLearningProfileInput = {
@@ -1150,6 +1494,7 @@ export type UserCreateWithoutLearningProfileInput = {
   avatarUrl?: string | null
   role?: $Enums.UserRole
   status?: $Enums.UserStatus
+  emailVerifiedAt?: Date | string | null
   tokenVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1159,6 +1504,8 @@ export type UserCreateWithoutLearningProfileInput = {
   vocabularyFavorites?: Prisma.VocabularyFavoriteCreateNestedManyWithoutUserInput
   vocabularyProgresses?: Prisma.UserVocabularyProgressCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  passwordResetRequest?: Prisma.PasswordResetRequestCreateNestedOneWithoutUserInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutLearningProfileInput = {
@@ -1170,6 +1517,7 @@ export type UserUncheckedCreateWithoutLearningProfileInput = {
   avatarUrl?: string | null
   role?: $Enums.UserRole
   status?: $Enums.UserStatus
+  emailVerifiedAt?: Date | string | null
   tokenVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1179,6 +1527,8 @@ export type UserUncheckedCreateWithoutLearningProfileInput = {
   vocabularyFavorites?: Prisma.VocabularyFavoriteUncheckedCreateNestedManyWithoutUserInput
   vocabularyProgresses?: Prisma.UserVocabularyProgressUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  passwordResetRequest?: Prisma.PasswordResetRequestUncheckedCreateNestedOneWithoutUserInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutLearningProfileInput = {
@@ -1206,6 +1556,7 @@ export type UserUpdateWithoutLearningProfileInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1215,6 +1566,8 @@ export type UserUpdateWithoutLearningProfileInput = {
   vocabularyFavorites?: Prisma.VocabularyFavoriteUpdateManyWithoutUserNestedInput
   vocabularyProgresses?: Prisma.UserVocabularyProgressUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  passwordResetRequest?: Prisma.PasswordResetRequestUpdateOneWithoutUserNestedInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLearningProfileInput = {
@@ -1226,6 +1579,7 @@ export type UserUncheckedUpdateWithoutLearningProfileInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1235,6 +1589,8 @@ export type UserUncheckedUpdateWithoutLearningProfileInput = {
   vocabularyFavorites?: Prisma.VocabularyFavoriteUncheckedUpdateManyWithoutUserNestedInput
   vocabularyProgresses?: Prisma.UserVocabularyProgressUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  passwordResetRequest?: Prisma.PasswordResetRequestUncheckedUpdateOneWithoutUserNestedInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutStudySessionsInput = {
@@ -1246,6 +1602,7 @@ export type UserCreateWithoutStudySessionsInput = {
   avatarUrl?: string | null
   role?: $Enums.UserRole
   status?: $Enums.UserStatus
+  emailVerifiedAt?: Date | string | null
   tokenVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1255,6 +1612,8 @@ export type UserCreateWithoutStudySessionsInput = {
   vocabularyFavorites?: Prisma.VocabularyFavoriteCreateNestedManyWithoutUserInput
   vocabularyProgresses?: Prisma.UserVocabularyProgressCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  passwordResetRequest?: Prisma.PasswordResetRequestCreateNestedOneWithoutUserInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutStudySessionsInput = {
@@ -1266,6 +1625,7 @@ export type UserUncheckedCreateWithoutStudySessionsInput = {
   avatarUrl?: string | null
   role?: $Enums.UserRole
   status?: $Enums.UserStatus
+  emailVerifiedAt?: Date | string | null
   tokenVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1275,6 +1635,8 @@ export type UserUncheckedCreateWithoutStudySessionsInput = {
   vocabularyFavorites?: Prisma.VocabularyFavoriteUncheckedCreateNestedManyWithoutUserInput
   vocabularyProgresses?: Prisma.UserVocabularyProgressUncheckedCreateNestedManyWithoutUserInput
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  passwordResetRequest?: Prisma.PasswordResetRequestUncheckedCreateNestedOneWithoutUserInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutStudySessionsInput = {
@@ -1302,6 +1664,7 @@ export type UserUpdateWithoutStudySessionsInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1311,6 +1674,8 @@ export type UserUpdateWithoutStudySessionsInput = {
   vocabularyFavorites?: Prisma.VocabularyFavoriteUpdateManyWithoutUserNestedInput
   vocabularyProgresses?: Prisma.UserVocabularyProgressUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  passwordResetRequest?: Prisma.PasswordResetRequestUpdateOneWithoutUserNestedInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutStudySessionsInput = {
@@ -1322,6 +1687,7 @@ export type UserUncheckedUpdateWithoutStudySessionsInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1331,6 +1697,8 @@ export type UserUncheckedUpdateWithoutStudySessionsInput = {
   vocabularyFavorites?: Prisma.VocabularyFavoriteUncheckedUpdateManyWithoutUserNestedInput
   vocabularyProgresses?: Prisma.UserVocabularyProgressUncheckedUpdateManyWithoutUserNestedInput
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  passwordResetRequest?: Prisma.PasswordResetRequestUncheckedUpdateOneWithoutUserNestedInput
+  emailVerificationOtp?: Prisma.EmailVerificationOtpUncheckedUpdateOneWithoutUserNestedInput
 }
 
 
@@ -1418,6 +1786,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   avatarUrl?: boolean
   role?: boolean
   status?: boolean
+  emailVerifiedAt?: boolean
   tokenVersion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1428,6 +1797,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   vocabularyFavorites?: boolean | Prisma.User$vocabularyFavoritesArgs<ExtArgs>
   vocabularyProgresses?: boolean | Prisma.User$vocabularyProgressesArgs<ExtArgs>
   refreshTokens?: boolean | Prisma.User$refreshTokensArgs<ExtArgs>
+  passwordResetRequest?: boolean | Prisma.User$passwordResetRequestArgs<ExtArgs>
+  emailVerificationOtp?: boolean | Prisma.User$emailVerificationOtpArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1440,6 +1811,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   avatarUrl?: boolean
   role?: boolean
   status?: boolean
+  emailVerifiedAt?: boolean
   tokenVersion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1454,6 +1826,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   avatarUrl?: boolean
   role?: boolean
   status?: boolean
+  emailVerifiedAt?: boolean
   tokenVersion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1468,12 +1841,13 @@ export type UserSelectScalar = {
   avatarUrl?: boolean
   role?: boolean
   status?: boolean
+  emailVerifiedAt?: boolean
   tokenVersion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "passwordHash" | "googleId" | "avatarUrl" | "role" | "status" | "tokenVersion" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "passwordHash" | "googleId" | "avatarUrl" | "role" | "status" | "emailVerifiedAt" | "tokenVersion" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lessonProgresses?: boolean | Prisma.User$lessonProgressesArgs<ExtArgs>
   questionProgresses?: boolean | Prisma.User$questionProgressesArgs<ExtArgs>
@@ -1482,6 +1856,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   vocabularyFavorites?: boolean | Prisma.User$vocabularyFavoritesArgs<ExtArgs>
   vocabularyProgresses?: boolean | Prisma.User$vocabularyProgressesArgs<ExtArgs>
   refreshTokens?: boolean | Prisma.User$refreshTokensArgs<ExtArgs>
+  passwordResetRequest?: boolean | Prisma.User$passwordResetRequestArgs<ExtArgs>
+  emailVerificationOtp?: boolean | Prisma.User$emailVerificationOtpArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1497,6 +1873,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     vocabularyFavorites: Prisma.$VocabularyFavoritePayload<ExtArgs>[]
     vocabularyProgresses: Prisma.$UserVocabularyProgressPayload<ExtArgs>[]
     refreshTokens: Prisma.$RefreshTokenPayload<ExtArgs>[]
+    passwordResetRequest: Prisma.$PasswordResetRequestPayload<ExtArgs> | null
+    emailVerificationOtp: Prisma.$EmailVerificationOtpPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1507,6 +1885,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     avatarUrl: string | null
     role: $Enums.UserRole
     status: $Enums.UserStatus
+    emailVerifiedAt: Date | null
     tokenVersion: number
     createdAt: Date
     updatedAt: Date
@@ -1911,6 +2290,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   vocabularyFavorites<T extends Prisma.User$vocabularyFavoritesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$vocabularyFavoritesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VocabularyFavoritePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   vocabularyProgresses<T extends Prisma.User$vocabularyProgressesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$vocabularyProgressesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserVocabularyProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   refreshTokens<T extends Prisma.User$refreshTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$refreshTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RefreshTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  passwordResetRequest<T extends Prisma.User$passwordResetRequestArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$passwordResetRequestArgs<ExtArgs>>): Prisma.Prisma__PasswordResetRequestClient<runtime.Types.Result.GetResult<Prisma.$PasswordResetRequestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  emailVerificationOtp<T extends Prisma.User$emailVerificationOtpArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$emailVerificationOtpArgs<ExtArgs>>): Prisma.Prisma__EmailVerificationOtpClient<runtime.Types.Result.GetResult<Prisma.$EmailVerificationOtpPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1948,6 +2329,7 @@ export interface UserFieldRefs {
   readonly avatarUrl: Prisma.FieldRef<"User", 'String'>
   readonly role: Prisma.FieldRef<"User", 'UserRole'>
   readonly status: Prisma.FieldRef<"User", 'UserStatus'>
+  readonly emailVerifiedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly tokenVersion: Prisma.FieldRef<"User", 'Int'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
@@ -2504,6 +2886,44 @@ export type User$refreshTokensArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.RefreshTokenScalarFieldEnum | Prisma.RefreshTokenScalarFieldEnum[]
+}
+
+/**
+ * User.passwordResetRequest
+ */
+export type User$passwordResetRequestArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PasswordResetRequest
+   */
+  select?: Prisma.PasswordResetRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PasswordResetRequest
+   */
+  omit?: Prisma.PasswordResetRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PasswordResetRequestInclude<ExtArgs> | null
+  where?: Prisma.PasswordResetRequestWhereInput
+}
+
+/**
+ * User.emailVerificationOtp
+ */
+export type User$emailVerificationOtpArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EmailVerificationOtp
+   */
+  select?: Prisma.EmailVerificationOtpSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EmailVerificationOtp
+   */
+  omit?: Prisma.EmailVerificationOtpOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EmailVerificationOtpInclude<ExtArgs> | null
+  where?: Prisma.EmailVerificationOtpWhereInput
 }
 
 /**

@@ -22,6 +22,8 @@ type CreatedTokenPair = {
 
 @Injectable()
 export class TokenService {
+  private static readonly MAX_ACTIVE_SESSIONS = 5;
+  private static readonly REVOKED_TOKEN_RETENTION_MS = 24 * 60 * 60 * 1000;
   private readonly refreshTokenLifetimeMs: number;
 
   constructor(
@@ -40,12 +42,49 @@ export class TokenService {
 
   async issueTokenPair(user: TokenUser) {
     const tokenPair = await this.createTokenPair(user);
-    await this.prisma.refreshToken.create({
-      data: {
-        tokenHash: tokenPair.refreshTokenHash,
-        userId: user.id,
-        expiresAt: tokenPair.refreshTokenExpiresAt,
-      },
+    const now = new Date();
+
+    const revokedTokenCutoff = new Date(
+      now.getTime() - TokenService.REVOKED_TOKEN_RETENTION_MS,
+    );
+    await this.prisma.$transaction(async (transaction) => {
+      // Xóa token đã hết hạn hoặc bị thu hồi quá lâu.
+      await transaction.refreshToken.deleteMany({
+        where: {
+          userId: user.id,
+          OR: [
+            { expiresAt: { lte: now } },
+            { revokedAt: { lte: revokedTokenCutoff } },
+          ],
+        },
+      });
+      const sessionsToRemove = await transaction.refreshToken.findMany({
+        where: {
+          userId: user.id,
+          revokedAt: null,
+          expiresAt: { gt: now },
+        },
+        orderBy: { createdAt: 'desc' },
+        skip: TokenService.MAX_ACTIVE_SESSIONS - 1,
+        select: { id: true },
+      });
+
+      if (sessionsToRemove.length > 0) {
+        await transaction.refreshToken.deleteMany({
+          where: {
+            id: {
+              in: sessionsToRemove.map((session) => session.id),
+            },
+          },
+        });
+      }
+      await transaction.refreshToken.create({
+        data: {
+          tokenHash: tokenPair.refreshTokenHash,
+          userId: user.id,
+          expiresAt: tokenPair.refreshTokenExpiresAt,
+        },
+      });
     });
     return {
       accessToken: tokenPair.accessToken,
@@ -73,7 +112,6 @@ export class TokenService {
         },
       },
     });
-
     if (
       !storedToken ||
       storedToken.revokedAt ||
@@ -86,7 +124,6 @@ export class TokenService {
       );
     }
     const nextTokenPair = await this.createTokenPair(storedToken.user);
-
     await this.prisma.$transaction(async (transaction) => {
       const revokedToken = await transaction.refreshToken.updateMany({
         where: { id: storedToken.id, revokedAt: null, expiresAt: { gt: now } },
@@ -103,6 +140,19 @@ export class TokenService {
           expiresAt: nextTokenPair.refreshTokenExpiresAt,
         },
       });
+      const revokedTokenCutoff = new Date(
+        now.getTime() - TokenService.REVOKED_TOKEN_RETENTION_MS,
+      );
+
+      await transaction.refreshToken.deleteMany({
+        where: {
+          userId: storedToken.user.id,
+          OR: [
+            { expiresAt: { lte: now } },
+            { revokedAt: { lte: revokedTokenCutoff } },
+          ],
+        },
+      });
     });
     return {
       accessToken: nextTokenPair.accessToken,
@@ -114,9 +164,7 @@ export class TokenService {
       where: { tokenHash: this.hashToken(refreshToken), revokedAt: null },
       data: { revokedAt: new Date() },
     });
-    return {
-      message: 'Đăng xuất thành công',
-    };
+    return { message: 'Đăng xuất thành công' };
   }
 
   async revokeAll(userId: string): Promise<void> {
