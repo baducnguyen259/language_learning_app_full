@@ -18,6 +18,7 @@ import { EmailVerificationService } from './email_verification.service';
 @Injectable()
 export class UserAuthService {
   private static readonly PASSWORD_SALT_ROUNDS = 12;
+  private static readonly UNVERIFIED_ACCOUNT_TTL_MS = 24 * 60 * 60 * 1000;
 
   constructor(
     private readonly prisma: PrismaService,
@@ -44,38 +45,67 @@ export class UserAuthService {
         role: true,
         status: true,
         emailVerifiedAt: true,
+        createdAt: true,
       },
     });
-
+    let expiredUserId: string | null = null;
     if (existingUser) {
-      if (
+      const isUnverifiedUser =
         existingUser.role === UserRole.USER &&
         existingUser.status === UserStatus.ACTIVE &&
-        !existingUser.emailVerifiedAt
-      ) {
+        !existingUser.emailVerifiedAt;
+      if (!isUnverifiedUser) {
+        throw new ConflictException('Email này đã được đăng ký');
+      }
+      const expirationTime =
+        existingUser.createdAt.getTime() +
+        UserAuthService.UNVERIFIED_ACCOUNT_TTL_MS;
+      if (Date.now() < expirationTime) {
         await this.emailVerificationService.resend({ email });
         return response;
       }
-      throw new ConflictException('Email này đã được đăng ký');
+      expiredUserId = existingUser.id;
     }
     const passwordHash = await bcrypt.hash(
       dto.password,
       UserAuthService.PASSWORD_SALT_ROUNDS,
     );
-    const user = await this.prisma.user.create({
-      data: {
-        name,
-        email,
-        passwordHash,
-        role: UserRole.USER,
-        status: UserStatus.ACTIVE,
-        emailVerifiedAt: null,
-        termsAcceptedAt: new Date(),
-      },
-      select: { id: true, email: true },
+    const expirationCutoff = new Date(
+      Date.now() - UserAuthService.UNVERIFIED_ACCOUNT_TTL_MS,
+    );
+    const user = await this.prisma.$transaction(async (transaction) => {
+      if (expiredUserId) {
+        const deletedUser = await transaction.user.deleteMany({
+          where: {
+            id: expiredUserId,
+            role: UserRole.USER,
+            status: UserStatus.ACTIVE,
+            emailVerifiedAt: null,
+            createdAt: { lte: expirationCutoff },
+          },
+        });
+        if (deletedUser.count !== 1) {
+          throw new ConflictException(
+            'Trạng thái đăng ký đã thay đổi. Vui lòng thử lại',
+          );
+        }
+      }
+      return transaction.user.create({
+        data: {
+          name,
+          email,
+          passwordHash,
+          role: UserRole.USER,
+          status: UserStatus.ACTIVE,
+          emailVerifiedAt: null,
+          termsAcceptedAt: new Date(),
+        },
+        select: { id: true, email: true },
+      });
     });
-
+    // Chỉ gửi email sau khi transaction đã hoàn tất.
     await this.emailVerificationService.sendRegistrationOtp(user);
+
     return response;
   }
 
@@ -170,7 +200,6 @@ export class UserAuthService {
         where: { id: userId },
         data: { passwordHash: newPasswordHash, tokenVersion: { increment: 1 } },
       }),
-
       this.prisma.refreshToken.updateMany({
         where: { userId, revokedAt: null },
         data: { revokedAt: new Date() },
@@ -187,7 +216,6 @@ export class UserAuthService {
         where: { id: userId },
         data: { tokenVersion: { increment: 1 } },
       }),
-
       this.prisma.refreshToken.updateMany({
         where: { userId, revokedAt: null },
         data: { revokedAt: new Date() },

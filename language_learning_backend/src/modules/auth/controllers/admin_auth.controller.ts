@@ -33,12 +33,19 @@ import {
   RefreshTokenDto,
   TokenPairResponseDto,
 } from '../dto/common/refresh_token.dto';
+import { minutes, Throttle } from '@nestjs/throttler';
 
 @ApiTags('Admin Auth')
 @Controller('admin/auth')
 export class AdminAuthController {
   constructor(private readonly adminAuthService: AdminAuthService) {}
 
+  @Throttle({
+    default: {
+      limit: 5,
+      ttl: minutes(5),
+    },
+  })
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
@@ -53,6 +60,12 @@ export class AdminAuthController {
     return this.adminAuthService.login(dto);
   }
 
+  @Throttle({
+    default: {
+      limit: 30,
+      ttl: minutes(1),
+    },
+  })
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({

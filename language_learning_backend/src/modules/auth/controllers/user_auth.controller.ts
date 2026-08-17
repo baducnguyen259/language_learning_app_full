@@ -60,6 +60,7 @@ import {
   ResendEmailVerificationDto,
   VerifyEmailOtpDto,
 } from '../dto/user/email_verification.dto';
+import { minutes, Throttle } from '@nestjs/throttler';
 
 @ApiTags('User Auth')
 @Controller('auth')
@@ -70,6 +71,12 @@ export class UserAuthController {
     private readonly passwordResetService: PasswordResetService,
     private readonly emailVerificationService: EmailVerificationService,
   ) {}
+  @Throttle({
+    default: {
+      limit: 5,
+      ttl: minutes(10),
+    },
+  })
   @Post('register')
   @ApiOperation({
     summary: 'Đăng ký tài khoản người học',
@@ -83,6 +90,12 @@ export class UserAuthController {
     return this.userAuthService.register(dto);
   }
 
+  @Throttle({
+    default: {
+      limit: 10,
+      ttl: minutes(5),
+    },
+  })
   @Post('verify-email')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
@@ -97,6 +110,12 @@ export class UserAuthController {
     return this.emailVerificationService.verify(dto);
   }
 
+  @Throttle({
+    default: {
+      limit: 3,
+      ttl: minutes(10),
+    },
+  })
   @Post('resend-verification-otp')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
@@ -107,6 +126,12 @@ export class UserAuthController {
     return this.emailVerificationService.resend(dto);
   }
 
+  @Throttle({
+    default: {
+      limit: 10,
+      ttl: minutes(1),
+    },
+  })
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
@@ -121,6 +146,12 @@ export class UserAuthController {
     return this.userAuthService.login(dto);
   }
 
+  @Throttle({
+    default: {
+      limit: 20,
+      ttl: minutes(1),
+    },
+  })
   @Post('google')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
@@ -140,6 +171,12 @@ export class UserAuthController {
     return this.googleAuthService.login(dto);
   }
 
+  @Throttle({
+    default: {
+      limit: 3,
+      ttl: minutes(15),
+    },
+  })
   @Post('forgot-password')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
@@ -150,6 +187,12 @@ export class UserAuthController {
     return this.passwordResetService.requestOtp(dto);
   }
 
+  @Throttle({
+    default: {
+      limit: 10,
+      ttl: minutes(5),
+    },
+  })
   @Post('verify-reset-otp')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
@@ -164,6 +207,12 @@ export class UserAuthController {
     return this.passwordResetService.verifyOtp(dto);
   }
 
+  @Throttle({
+    default: {
+      limit: 5,
+      ttl: minutes(10),
+    },
+  })
   @Post('reset-password')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
@@ -182,6 +231,12 @@ export class UserAuthController {
     return this.passwordResetService.resetPassword(dto);
   }
 
+  @Throttle({
+    default: {
+      limit: 30,
+      ttl: minutes(1),
+    },
+  })
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({

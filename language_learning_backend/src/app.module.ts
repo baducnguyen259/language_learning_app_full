@@ -17,15 +17,26 @@ import { TopicsModule } from './modules/topics/topics.module';
 import { UsersModule } from './modules/users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { VocabulariesModule } from './modules/vocabularies/vocabularies.module';
-import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { HttpExceptionFilter } from './common/filters/http_exception.filter';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 import { CurriculumsModule } from './modules/curriculums/curriculums.module';
+import { minutes, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+    }),
+    ThrottlerModule.forRoot({
+      throttlers: [
+        {
+          name: 'default',
+          ttl: minutes(1),
+          limit: 100,
+        },
+      ],
+      errorMessage: 'Bạn gửi quá nhiều yêu cầu. Vui lòng thử lại sau',
     }),
     PrismaModule,
     AuthModule,
@@ -54,6 +65,10 @@ import { CurriculumsModule } from './modules/curriculums/curriculums.module';
     {
       provide: APP_INTERCEPTOR,
       useClass: ResponseInterceptor,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
     },
   ],
 })
