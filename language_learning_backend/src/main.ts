@@ -2,15 +2,41 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { ConfigService } from '@nestjs/config';
+import helmet from 'helmet';
+import { requestIdMiddleware } from './common/middleware/request_id.middleware';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.enableShutdownHooks();
+
+  const configService = app.get(ConfigService);
+
+  const swaggerEnabled =
+    configService.getOrThrow<string>('SWAGGER_ENABLED') === 'true';
+
+  const corsOrigins = configService
+    .getOrThrow<string>('CORS_ORIGINS')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+  app.use(
+    helmet({
+      contentSecurityPolicy: swaggerEnabled ? false : undefined,
+    }),
+  );
+
+  app.use(requestIdMiddleware);
+
   app.setGlobalPrefix('api');
 
   app.enableCors({
-    origin: 'http://localhost:5136',
+    origin: corsOrigins,
     credentials: true,
+    methods: ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    maxAge: 86400,
   });
 
   app.useGlobalPipes(
@@ -21,7 +47,7 @@ async function bootstrap() {
     }),
   );
 
-  if (process.env.SWAGGER_ENABLED === 'true') {
+  if (swaggerEnabled) {
     const swaggerConfig = new DocumentBuilder()
       .setTitle('Language Learning API')
       .setDescription('API quản trị và ứng dụng học ngôn ngữ')
@@ -49,7 +75,7 @@ async function bootstrap() {
     });
   }
 
-  await app.listen(process.env.PORT ?? 3000);
+  const port = configService.getOrThrow<number>('PORT');
+  await app.listen(port);
 }
-
 void bootstrap();

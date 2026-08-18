@@ -22,11 +22,14 @@ import { HttpExceptionFilter } from './common/filters/http_exception.filter';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 import { CurriculumsModule } from './modules/curriculums/curriculums.module';
 import { minutes, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { validateEnvironment } from './config/env.validation';
+import { HealthModule } from './modules/health/health.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      validate: validateEnvironment,
     }),
     ThrottlerModule.forRoot({
       throttlers: [
@@ -54,6 +57,7 @@ import { minutes, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
     DashboardModule,
     ReportsModule,
     MediaModule,
+    HealthModule,
   ],
   controllers: [AppController],
   providers: [

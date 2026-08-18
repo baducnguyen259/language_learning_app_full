@@ -1,4 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
+import {
+  ApiErrorCode,
+  type ApiErrorCode as ApiErrorCodeType,
+} from '../enums/api_error_code.enum';
 
 export class PaginationMetaDto {
   @ApiProperty({ example: 1 })
@@ -27,13 +31,17 @@ export class ApiSuccessResponseDto {
   })
   data!: unknown;
 
-  @ApiProperty({
-    example: '/api/admin/languages',
-  })
+  @ApiProperty({ example: '/api/admin/languages' })
   path!: string;
 
   @ApiProperty({
-    example: '2026-08-10T10:00:00.000Z',
+    example: 'e4235d14-a7e4-4caa-9f07-a824b4bc7c82',
+    format: 'uuid',
+  })
+  requestId!: string;
+
+  @ApiProperty({
+    example: '2026-08-18T10:00:00.000Z',
     format: 'date-time',
   })
   timestamp!: string;
@@ -46,16 +54,24 @@ export class ApiErrorDetailDto {
   statusCode!: number;
 
   @ApiProperty({
+    enum: Object.values(ApiErrorCode),
+    example: ApiErrorCode.VALIDATION_ERROR,
+  })
+  code!: ApiErrorCodeType;
+
+  @ApiProperty({
     oneOf: [
       {
         type: 'string',
-        example: 'Request không hợp lệ',
+        example: 'Yêu cầu không hợp lệ',
       },
       {
         type: 'array',
-        items: {
-          type: 'string',
-        },
+        items: { type: 'string' },
+        example: [
+          'Email không đúng định dạng',
+          'Mật khẩu phải có ít nhất 8 ký tự',
+        ],
       },
     ],
   })
@@ -80,13 +96,17 @@ export class ApiErrorResponseDto {
   })
   error!: ApiErrorDetailDto;
 
-  @ApiProperty({
-    example: '/api/admin/languages',
-  })
+  @ApiProperty({ example: '/api/admin/languages' })
   path!: string;
 
   @ApiProperty({
-    example: '2026-08-10T10:00:00.000Z',
+    example: 'e4235d14-a7e4-4caa-9f07-a824b4bc7c82',
+    format: 'uuid',
+  })
+  requestId!: string;
+
+  @ApiProperty({
+    example: '2026-08-18T10:00:00.000Z',
     format: 'date-time',
   })
   timestamp!: string;

@@ -4,31 +4,34 @@ import {
   Injectable,
   NestInterceptor,
 } from '@nestjs/common';
-import type { Request } from 'express';
 import { map, Observable } from 'rxjs';
+import type { RequestWithId } from '../middleware/request_id.middleware';
 
 export interface ApiSuccessResponse<T> {
   success: true;
   data: T;
   path: string;
+  requestId: string;
   timestamp: string;
 }
 
 @Injectable()
-export class ResponseInterceptor<T>
-  implements NestInterceptor<T, ApiSuccessResponse<T>>
-{
+export class ResponseInterceptor<T> implements NestInterceptor<
+  T,
+  ApiSuccessResponse<T>
+> {
   intercept(
     context: ExecutionContext,
     next: CallHandler<T>,
   ): Observable<ApiSuccessResponse<T>> {
-    const request = context.switchToHttp().getRequest<Request>();
+    const request = context.switchToHttp().getRequest<RequestWithId>();
 
     return next.handle().pipe(
       map((data) => ({
         success: true as const,
         data,
         path: request.url,
+        requestId: request.requestId,
         timestamp: new Date().toISOString(),
       })),
     );
