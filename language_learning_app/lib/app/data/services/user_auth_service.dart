@@ -10,7 +10,10 @@ final class UserAuthService {
 
   Future<AuthSessionModel> signInWithGoogle() async {
     final session = await _googleAuthProvider.signIn();
-    await _tokenStorage.saveAccessToken(session.accessToken);
+    await _tokenStorage.saveTokenPair(
+      accessToken: session.accessToken,
+      refreshToken: session.refreshToken,
+    );
     return session;
   }
 }
