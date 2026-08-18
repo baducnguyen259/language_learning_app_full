@@ -8,6 +8,7 @@ import { LevelQueryDto } from './dto/level_query.dto';
 import { Prisma } from '../../generated/prisma/client';
 import { CreateLevelDto } from './dto/create_level.dto';
 import { UpdateLevelDto } from './dto/update_level.dto';
+import { ApiErrorCode } from '../../common/enums/api_error_code.enum';
 
 @Injectable()
 export class LevelsService {
@@ -96,7 +97,10 @@ export class LevelsService {
       },
     });
     if (!level) {
-      throw new NotFoundException('Không tìm thấy cấp độ');
+      throw new NotFoundException({
+        code: ApiErrorCode.LEVEL_NOT_FOUND,
+        message: 'Không tìm thấy cấp độ',
+      });
     }
     return level;
   }
@@ -111,7 +115,10 @@ export class LevelsService {
       },
     });
     if (!language) {
-      throw new NotFoundException('Không tìm thấy ngôn ngữ');
+      throw new NotFoundException({
+        code: ApiErrorCode.LANGUAGE_NOT_FOUND,
+        message: 'Không tìm thấy ngôn ngữ',
+      });
     }
     const duplicatedOrder = await this.prisma.level.findUnique({
       where: {
@@ -122,9 +129,10 @@ export class LevelsService {
       },
     });
     if (duplicatedOrder) {
-      throw new ConflictException(
-        'Thứ tự cấp độ đã tồn tại trong ngôn ngữ này',
-      );
+      throw new ConflictException({
+        code: ApiErrorCode.LEVEL_ORDER_ALREADY_EXISTS,
+        message: 'Thứ tự cấp độ đã tồn tại trong ngôn ngữ này',
+      });
     }
     return this.prisma.level.create({
       data: {
@@ -150,7 +158,10 @@ export class LevelsService {
       },
     });
     if (!currentLevel) {
-      throw new NotFoundException('Không tìm thấy cấp độ');
+      throw new NotFoundException({
+        code: ApiErrorCode.LEVEL_NOT_FOUND,
+        message: 'Không tìm thấy cấp độ',
+      });
     }
     const targetLanguageId = dto.languageId ?? currentLevel.languageId;
     const targetOrder = dto.order ?? currentLevel.order;
@@ -164,7 +175,10 @@ export class LevelsService {
         },
       });
       if (!language) {
-        throw new NotFoundException('Không tìm thấy ngôn ngữ');
+        throw new NotFoundException({
+          code: ApiErrorCode.LANGUAGE_NOT_FOUND,
+          message: 'Không tìm thấy ngôn ngữ',
+        });
       }
     }
     const duplicatedOrder = await this.prisma.level.findFirst({
@@ -180,9 +194,10 @@ export class LevelsService {
       },
     });
     if (duplicatedOrder) {
-      throw new ConflictException(
-        'Thứ tự cấp độ đã tồn tại trong ngôn ngữ này',
-      );
+      throw new ConflictException({
+        code: ApiErrorCode.LEVEL_ORDER_ALREADY_EXISTS,
+        message: 'Thứ tự cấp độ đã tồn tại trong ngôn ngữ này',
+      });
     }
     return this.prisma.level.update({
       where: {
@@ -219,11 +234,17 @@ export class LevelsService {
     });
 
     if (!level) {
-      throw new NotFoundException('Không tìm thấy cấp độ');
+      throw new NotFoundException({
+        code: ApiErrorCode.LEVEL_NOT_FOUND,
+        message: 'Không tìm thấy cấp độ',
+      });
     }
 
     if (level._count.topics > 0) {
-      throw new ConflictException('Không thể xóa cấp độ đang có chủ đề');
+      throw new ConflictException({
+        code: ApiErrorCode.LEVEL_HAS_TOPICS,
+        message: 'Không thể xóa cấp độ đang có chủ đề',
+      });
     }
 
     return this.prisma.level.delete({

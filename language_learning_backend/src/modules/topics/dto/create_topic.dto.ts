@@ -9,7 +9,10 @@ export class CreateTopicDto {
   @MaxLength(150)
   name!: string;
 
-  @ApiProperty({ example: 'cm123level', description: 'ID cấp độ sở hữu chủ đề' })
+  @ApiProperty({
+    example: 'cm123level',
+    description: 'ID cấp độ sở hữu chủ đề',
+  })
   @IsString()
   @IsNotEmpty()
   levelId!: string;

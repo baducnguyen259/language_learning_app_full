@@ -13,6 +13,7 @@ import { CurriculumQueryDto } from './dto/curriculum_query.dto';
 import { UpdateChapterDto } from './dto/update_chapter.dto';
 import { UpdateCurriculumDto } from './dto/update_curriculum.dto';
 import { AppCurriculumQueryDto } from './dto/app_curriculum_query.dto';
+import { ApiErrorCode } from '../../common/enums/api_error_code.enum';
 
 const curriculumInclude = {
   level: {
@@ -145,7 +146,10 @@ export class CurriculumsService {
       select: appCurriculumSelect,
     });
     if (!curriculum) {
-      throw new NotFoundException('Không tìm thấy lộ trình đang được xuất bản');
+      throw new NotFoundException({
+        code: ApiErrorCode.CURRICULUM_NOT_FOUND,
+        message: 'Không tìm thấy lộ trình đang được xuất bản',
+      });
     }
     const [curriculumWithProgress] = await this.addUserProgress(userId, [
       curriculum,
@@ -201,7 +205,10 @@ export class CurriculumsService {
     });
 
     if (!curriculum) {
-      throw new NotFoundException('Không tìm thấy lộ trình');
+      throw new NotFoundException({
+        code: ApiErrorCode.CURRICULUM_NOT_FOUND,
+        message: 'Không tìm thấy lộ trình',
+      });
     }
     return this.toResponse(curriculum);
   }
@@ -227,7 +234,10 @@ export class CurriculumsService {
     });
 
     if (!currentCurriculum) {
-      throw new NotFoundException('Không tìm thấy lộ trình');
+      throw new NotFoundException({
+        code: ApiErrorCode.CURRICULUM_NOT_FOUND,
+        message: 'Không tìm thấy lộ trình',
+      });
     }
 
     const targetLevelId = dto.levelId ?? currentCurriculum.levelId;
@@ -262,12 +272,17 @@ export class CurriculumsService {
     });
 
     if (!curriculum) {
-      throw new NotFoundException('Không tìm thấy lộ trình');
+      throw new NotFoundException({
+        code: ApiErrorCode.CURRICULUM_NOT_FOUND,
+        message: 'Không tìm thấy lộ trình',
+      });
     }
     if (curriculum._count.chapters > 0) {
-      throw new ConflictException(
-        'Không thể xóa lộ trình đang có chương. Hãy xóa các chương trước',
-      );
+      throw new ConflictException({
+        code: ApiErrorCode.CURRICULUM_HAS_CHAPTERS,
+        message:
+          'Không thể xóa lộ trình đang có chương. Hãy xóa các chương trước',
+      });
     }
     return this.prisma.curriculum.delete({ where: { id } });
   }
@@ -345,12 +360,16 @@ export class CurriculumsService {
     });
 
     if (!lesson) {
-      throw new NotFoundException('Không tìm thấy bài học');
+      throw new NotFoundException({
+        code: ApiErrorCode.LESSON_NOT_FOUND,
+        message: 'Không tìm thấy bài học',
+      });
     }
     if (lesson.topic.levelId !== curriculum.levelId) {
-      throw new ConflictException(
-        'Bài học và lộ trình phải thuộc cùng một cấp độ',
-      );
+      throw new ConflictException({
+        code: ApiErrorCode.CURRICULUM_LEVEL_MISMATCH,
+        message: 'Bài học và lộ trình phải thuộc cùng một cấp độ',
+      });
     }
     const occupiedOrder = await this.prisma.lesson.findFirst({
       where: {
@@ -361,7 +380,10 @@ export class CurriculumsService {
       select: { id: true },
     });
     if (occupiedOrder) {
-      throw new ConflictException('Thứ tự bài học đã tồn tại trong chương');
+      throw new ConflictException({
+        code: ApiErrorCode.CHAPTER_LESSON_ORDER_ALREADY_EXISTS,
+        message: 'Thứ tự bài học đã tồn tại trong chương',
+      });
     }
     return this.prisma.lesson.update({
       where: { id: dto.lessonId },
@@ -382,7 +404,10 @@ export class CurriculumsService {
       select: { id: true },
     });
     if (!lesson) {
-      throw new NotFoundException('Bài học không thuộc chương này');
+      throw new NotFoundException({
+        code: ApiErrorCode.LESSON_NOT_IN_CHAPTER,
+        message: 'Bài học không thuộc chương này',
+      });
     }
     return this.prisma.lesson.update({
       where: { id: lessonId },
@@ -397,7 +422,10 @@ export class CurriculumsService {
       select: { id: true },
     });
     if (!level) {
-      throw new NotFoundException('Không tìm thấy cấp độ');
+      throw new NotFoundException({
+        code: ApiErrorCode.LEVEL_NOT_FOUND,
+        message: 'Không tìm thấy cấp độ',
+      });
     }
     return level;
   }
@@ -409,7 +437,10 @@ export class CurriculumsService {
     });
 
     if (!curriculum) {
-      throw new NotFoundException('Không tìm thấy lộ trình');
+      throw new NotFoundException({
+        code: ApiErrorCode.CURRICULUM_NOT_FOUND,
+        message: 'Không tìm thấy lộ trình',
+      });
     }
     return curriculum;
   }
@@ -422,7 +453,10 @@ export class CurriculumsService {
       where: { id: chapterId, curriculumId },
     });
     if (!chapter) {
-      throw new NotFoundException('Không tìm thấy chương trong lộ trình');
+      throw new NotFoundException({
+        code: ApiErrorCode.CHAPTER_NOT_FOUND,
+        message: 'Không tìm thấy chương trong lộ trình',
+      });
     }
     return chapter;
   }
@@ -441,7 +475,10 @@ export class CurriculumsService {
       select: { id: true },
     });
     if (duplicatedCurriculum) {
-      throw new ConflictException('Tên lộ trình đã tồn tại trong cấp độ này');
+      throw new ConflictException({
+        code: ApiErrorCode.CURRICULUM_ALREADY_EXISTS,
+        message: 'Tên lộ trình đã tồn tại trong cấp độ này',
+      });
     }
   }
 
@@ -461,9 +498,15 @@ export class CurriculumsService {
     });
     if (!duplicatedChapter) return;
     if (duplicatedChapter.order === order) {
-      throw new ConflictException('Thứ tự chương đã tồn tại trong lộ trình');
+      throw new ConflictException({
+        code: ApiErrorCode.CHAPTER_ORDER_ALREADY_EXISTS,
+        message: 'Thứ tự chương đã tồn tại trong lộ trình',
+      });
     }
-    throw new ConflictException('Tên chương đã tồn tại trong lộ trình');
+    throw new ConflictException({
+      code: ApiErrorCode.CHAPTER_TITLE_ALREADY_EXISTS,
+      message: 'Tên chương đã tồn tại trong lộ trình',
+    });
   }
   private async addUserProgress(
     userId: string,

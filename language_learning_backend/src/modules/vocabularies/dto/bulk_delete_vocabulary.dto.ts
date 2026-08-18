@@ -1,10 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  ArrayNotEmpty,
-  ArrayUnique,
-  IsArray,
-  IsString,
-} from 'class-validator';
+import { ArrayNotEmpty, ArrayUnique, IsArray, IsString } from 'class-validator';
 
 export class BulkDeleteVocabularyDto {
   @ApiProperty({

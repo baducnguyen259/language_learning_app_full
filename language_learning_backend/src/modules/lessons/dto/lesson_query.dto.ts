@@ -4,27 +4,43 @@ import { IsEnum, IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
 import { LessonStatus } from '../../../generated/prisma/enums';
 
 export class LessonQueryDto {
-  @ApiPropertyOptional({ example: 'Xin chào', description: 'Tìm theo tiêu đề hoặc mô tả' })
+  @ApiPropertyOptional({
+    example: 'Xin chào',
+    description: 'Tìm theo tiêu đề hoặc mô tả',
+  })
   @IsOptional()
   @IsString()
   search?: string;
 
-  @ApiPropertyOptional({ example: 'cm123language', description: 'Lọc theo ngôn ngữ' })
+  @ApiPropertyOptional({
+    example: 'cm123language',
+    description: 'Lọc theo ngôn ngữ',
+  })
   @IsOptional()
   @IsString()
   languageId?: string;
 
-  @ApiPropertyOptional({ example: 'cm123level', description: 'Lọc theo cấp độ' })
+  @ApiPropertyOptional({
+    example: 'cm123level',
+    description: 'Lọc theo cấp độ',
+  })
   @IsOptional()
   @IsString()
   levelId?: string;
 
-  @ApiPropertyOptional({ example: 'cm123topic', description: 'Lọc theo chủ đề' })
+  @ApiPropertyOptional({
+    example: 'cm123topic',
+    description: 'Lọc theo chủ đề',
+  })
   @IsOptional()
   @IsString()
   topicId?: string;
 
-  @ApiPropertyOptional({ enum: LessonStatus, example: LessonStatus.DRAFT, description: 'Lọc theo trạng thái' })
+  @ApiPropertyOptional({
+    enum: LessonStatus,
+    example: LessonStatus.DRAFT,
+    description: 'Lọc theo trạng thái',
+  })
   @IsOptional()
   @IsEnum(LessonStatus)
   status?: LessonStatus;

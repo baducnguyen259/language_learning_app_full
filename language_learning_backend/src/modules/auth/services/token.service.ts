@@ -5,6 +5,7 @@ import { createHash, randomBytes } from 'node:crypto';
 
 import { PrismaService } from '../../../database/prisma.service';
 import { UserRole, UserStatus } from '../../../generated/prisma/enums';
+import { ApiErrorCode } from '../../../common/enums/api_error_code.enum';
 
 type TokenUser = {
   id: string;
@@ -12,7 +13,6 @@ type TokenUser = {
   role: UserRole;
   tokenVersion: number;
 };
-
 type CreatedTokenPair = {
   accessToken: string;
   refreshToken: string;
@@ -122,9 +122,10 @@ export class TokenService {
       (storedToken.user.role === UserRole.USER &&
         !storedToken.user.emailVerifiedAt)
     ) {
-      throw new UnauthorizedException(
-        'Refresh token không hợp lệ hoặc đã hết hạn',
-      );
+      throw new UnauthorizedException({
+        code: ApiErrorCode.INVALID_REFRESH_TOKEN,
+        message: 'Refresh token không hợp lệ hoặc đã hết hạn',
+      });
     }
     const nextTokenPair = await this.createTokenPair(storedToken.user);
     await this.prisma.$transaction(async (transaction) => {
@@ -134,7 +135,10 @@ export class TokenService {
       });
 
       if (revokedToken.count !== 1) {
-        throw new UnauthorizedException('Refresh token đã được sử dụng');
+        throw new UnauthorizedException({
+          code: ApiErrorCode.REFRESH_TOKEN_REUSED,
+          message: 'Refresh token đã được sử dụng',
+        });
       }
       await transaction.refreshToken.create({
         data: {

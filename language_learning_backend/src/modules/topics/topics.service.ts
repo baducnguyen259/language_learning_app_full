@@ -8,6 +8,7 @@ import { PrismaService } from '../../database/prisma.service';
 import { CreateTopicDto } from './dto/create_topic.dto';
 import { TopicQueryDto } from './dto/topic_query.dto';
 import { UpdateTopicDto } from './dto/update_topic.dto';
+import { ApiErrorCode } from '../../common/enums/api_error_code.enum';
 
 @Injectable()
 export class TopicsService {
@@ -111,7 +112,10 @@ export class TopicsService {
     });
 
     if (!topic) {
-      throw new NotFoundException('Không tìm thấy chủ đề');
+      throw new NotFoundException({
+        code: ApiErrorCode.TOPIC_NOT_FOUND,
+        message: 'Không tìm thấy chủ đề',
+      });
     }
 
     return topic;
@@ -130,7 +134,10 @@ export class TopicsService {
     });
 
     if (!level) {
-      throw new NotFoundException('Không tìm thấy cấp độ');
+      throw new NotFoundException({
+        code: ApiErrorCode.LEVEL_NOT_FOUND,
+        message: 'Không tìm thấy cấp độ',
+      });
     }
 
     const duplicatedTopic = await this.prisma.topic.findFirst({
@@ -147,7 +154,10 @@ export class TopicsService {
     });
 
     if (duplicatedTopic) {
-      throw new ConflictException('Tên chủ đề đã tồn tại trong cấp độ này');
+      throw new ConflictException({
+        code: ApiErrorCode.TOPIC_ALREADY_EXISTS,
+        message: 'Tên chủ đề đã tồn tại trong cấp độ này',
+      });
     }
 
     return this.prisma.topic.create({
@@ -179,7 +189,10 @@ export class TopicsService {
     });
 
     if (!currentTopic) {
-      throw new NotFoundException('Không tìm thấy chủ đề');
+      throw new NotFoundException({
+        code: ApiErrorCode.TOPIC_NOT_FOUND,
+        message: 'Không tìm thấy chủ đề',
+      });
     }
 
     const targetLevelId = dto.levelId ?? currentTopic.levelId;
@@ -197,7 +210,10 @@ export class TopicsService {
       });
 
       if (!level) {
-        throw new NotFoundException('Không tìm thấy cấp độ');
+        throw new NotFoundException({
+          code: ApiErrorCode.LEVEL_NOT_FOUND,
+          message: 'Không tìm thấy cấp độ',
+        });
       }
     }
 
@@ -218,7 +234,10 @@ export class TopicsService {
     });
 
     if (duplicatedTopic) {
-      throw new ConflictException('Tên chủ đề đã tồn tại trong cấp độ này');
+      throw new ConflictException({
+        code: ApiErrorCode.TOPIC_ALREADY_EXISTS,
+        message: 'Tên chủ đề đã tồn tại trong cấp độ này',
+      });
     }
 
     return this.prisma.topic.update({
@@ -260,11 +279,17 @@ export class TopicsService {
     });
 
     if (!topic) {
-      throw new NotFoundException('Không tìm thấy chủ đề');
+      throw new NotFoundException({
+        code: ApiErrorCode.TOPIC_NOT_FOUND,
+        message: 'Không tìm thấy chủ đề',
+      });
     }
 
     if (topic._count.lessons > 0) {
-      throw new ConflictException('Không thể xóa chủ đề đang có bài học');
+      throw new ConflictException({
+        code: ApiErrorCode.TOPIC_HAS_LESSONS,
+        message: 'Không thể xóa chủ đề đang có bài học',
+      });
     }
 
     return this.prisma.topic.delete({

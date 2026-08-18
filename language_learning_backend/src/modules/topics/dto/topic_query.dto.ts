@@ -3,17 +3,26 @@ import { Type } from 'class-transformer';
 import { IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
 
 export class TopicQueryDto {
-  @ApiPropertyOptional({ example: 'Gia đình', description: 'Tìm theo tên chủ đề' })
+  @ApiPropertyOptional({
+    example: 'Gia đình',
+    description: 'Tìm theo tên chủ đề',
+  })
   @IsOptional()
   @IsString()
   search?: string;
 
-  @ApiPropertyOptional({ example: 'cm123level', description: 'Lọc theo cấp độ' })
+  @ApiPropertyOptional({
+    example: 'cm123level',
+    description: 'Lọc theo cấp độ',
+  })
   @IsOptional()
   @IsString()
   levelId?: string;
 
-  @ApiPropertyOptional({ example: 'cm123language', description: 'Lọc theo ngôn ngữ' })
+  @ApiPropertyOptional({
+    example: 'cm123language',
+    description: 'Lọc theo ngôn ngữ',
+  })
   @IsOptional()
   @IsString()
   languageId?: string;

@@ -10,6 +10,7 @@ import {
 import { PrismaService } from '../../database/prisma.service';
 import { UpdateDailyGoalDto } from './dto/update_daily_goal.dto';
 import { Prisma } from '../../generated/prisma/client';
+import { ApiErrorCode } from '../../common/enums/api_error_code.enum';
 
 @Injectable()
 export class DashboardService {
@@ -136,7 +137,10 @@ export class DashboardService {
       }),
     ]);
     if (!user) {
-      throw new NotFoundException('Không tìm thấy người dùng');
+      throw new NotFoundException({
+        code: ApiErrorCode.USER_NOT_FOUND,
+        message: 'Không tìm thấy người dùng',
+      });
     }
     const todayKey = this.getLocalDateKey(now, profile.timezone);
     const studiedDateKeys = new Set<string>();
@@ -170,6 +174,12 @@ export class DashboardService {
       learningStreak: this.calculateLearningStreak(studiedDateKeys, todayKey),
       totalExperience: profile.totalExperience,
       completedLessons,
+      inProgressLessons,
+      totalStudyMinutes,
+      studiedVocabulary,
+      learningVocabulary,
+      masteredVocabulary,
+      favoriteVocabulary,
       dailyGoalMinutes: profile.dailyGoalMinutes,
       completedMinutesToday,
       dailyGoalProgress,

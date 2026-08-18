@@ -10,6 +10,7 @@ import {
 } from '../dto/user/email_verification.dto';
 import { MailService } from './mail.service';
 import { TokenService } from './token.service';
+import { ApiErrorCode } from '../../../common/enums/api_error_code.enum';
 
 type RegistrationUser = {
   id: string;
@@ -178,6 +179,9 @@ export class EmailVerificationService {
   }
 
   private invalidOtpException(): UnauthorizedException {
-    return new UnauthorizedException('OTP không hợp lệ hoặc đã hết hạn');
+    return new UnauthorizedException({
+      code: ApiErrorCode.INVALID_OR_EXPIRED_OTP,
+      message: 'OTP không hợp lệ hoặc đã hết hạn',
+    });
   }
 }

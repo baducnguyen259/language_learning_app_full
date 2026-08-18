@@ -6,6 +6,7 @@ import { UserRole, UserStatus } from '../../../generated/prisma/enums';
 import { AdminLoginDto } from '../dto/admin/admin_login.dto';
 import { TokenService } from './token.service';
 import { RefreshTokenDto } from '../dto/common/refresh_token.dto';
+import { ApiErrorCode } from '../../../common/enums/api_error_code.enum';
 
 @Injectable()
 export class AdminAuthService {
@@ -20,20 +21,32 @@ export class AdminAuthService {
       where: { email },
     });
     if (!admin || !admin.passwordHash) {
-      throw new UnauthorizedException('Email hoặc mật khẩu không chính xác');
+      throw new UnauthorizedException({
+        code: ApiErrorCode.INVALID_CREDENTIALS,
+        message: 'Email hoặc mật khẩu không chính xác',
+      });
     }
     const isPasswordValid = await bcrypt.compare(
       dto.password,
       admin.passwordHash,
     );
     if (!isPasswordValid) {
-      throw new UnauthorizedException('Email hoặc mật khẩu không chính xác');
+      throw new UnauthorizedException({
+        code: ApiErrorCode.INVALID_CREDENTIALS,
+        message: 'Email hoặc mật khẩu không chính xác',
+      });
     }
     if (admin.status === UserStatus.LOCKED) {
-      throw new UnauthorizedException('Tài khoản đã bị khóa');
+      throw new UnauthorizedException({
+        code: ApiErrorCode.ACCOUNT_LOCKED,
+        message: 'Tài khoản đã bị khóa',
+      });
     }
     if (admin.role !== UserRole.ADMIN) {
-      throw new UnauthorizedException('Tài khoản không có quyền quản trị');
+      throw new UnauthorizedException({
+        code: ApiErrorCode.ADMIN_ACCESS_REQUIRED,
+        message: 'Tài khoản không có quyền quản trị',
+      });
     }
     const tokens = await this.tokenService.issueTokenPair(admin);
     return {

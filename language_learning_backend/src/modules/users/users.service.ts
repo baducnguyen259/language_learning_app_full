@@ -14,6 +14,7 @@ import { UpdateUserDto } from './dto/update_user.dto';
 import { UpdateUserStatusDto } from './dto/update_user_status.dto';
 import { UserQueryDto } from './dto/user_query.dto';
 import { UpdateMyProfileDto } from './dto/update_my_profile.dto';
+import { ApiErrorCode } from '../../common/enums/api_error_code.enum';
 
 @Injectable()
 export class UsersService {
@@ -72,7 +73,10 @@ export class UsersService {
     ]);
 
     if (!user) {
-      throw new NotFoundException('Không tìm thấy người dùng');
+      throw new NotFoundException({
+        code: ApiErrorCode.USER_NOT_FOUND,
+        message: 'Không tìm thấy người dùng',
+      });
     }
 
     const currentLevel = latestProgress?.lesson.topic.level ?? null;
@@ -105,7 +109,10 @@ export class UsersService {
     });
 
     if (!user) {
-      throw new NotFoundException('Không tìm thấy người dùng');
+      throw new NotFoundException({
+        code: ApiErrorCode.USER_NOT_FOUND,
+        message: 'Không tìm thấy người dùng',
+      });
     }
 
     await this.prisma.user.update({
@@ -204,7 +211,10 @@ export class UsersService {
     });
 
     if (!user) {
-      throw new NotFoundException('Không tìm thấy người dùng');
+      throw new NotFoundException({
+        code: ApiErrorCode.USER_NOT_FOUND,
+        message: 'Không tìm thấy người dùng',
+      });
     }
 
     return user;
@@ -221,13 +231,17 @@ export class UsersService {
     });
 
     if (!user) {
-      throw new NotFoundException('Không tìm thấy người dùng');
+      throw new NotFoundException({
+        code: ApiErrorCode.USER_NOT_FOUND,
+        message: 'Không tìm thấy người dùng',
+      });
     }
 
     if (id === currentAdminId && dto.role !== undefined) {
-      throw new BadRequestException(
-        'Không thể tự thay đổi quyền của chính mình',
-      );
+      throw new BadRequestException({
+        code: ApiErrorCode.CANNOT_CHANGE_OWN_ROLE,
+        message: 'Không thể tự thay đổi quyền của chính mình',
+      });
     }
 
     return this.prisma.user.update({
@@ -266,13 +280,17 @@ export class UsersService {
     });
 
     if (!user) {
-      throw new NotFoundException('Không tìm thấy người dùng');
+      throw new NotFoundException({
+        code: ApiErrorCode.USER_NOT_FOUND,
+        message: 'Không tìm thấy người dùng',
+      });
     }
 
     if (id === currentAdminId && dto.status === UserStatus.LOCKED) {
-      throw new BadRequestException(
-        'Không thể tự khóa tài khoản của chính mình',
-      );
+      throw new BadRequestException({
+        code: ApiErrorCode.CANNOT_LOCK_OWN_ACCOUNT,
+        message: 'Không thể tự khóa tài khoản của chính mình',
+      });
     }
 
     return this.prisma.user.update({

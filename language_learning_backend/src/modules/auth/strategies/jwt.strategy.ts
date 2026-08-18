@@ -8,6 +8,7 @@ import {
   JwtPayload,
 } from '../interfaces/jwt_payload.interface';
 import { UserRole, UserStatus } from '../../../generated/prisma/enums';
+import { ApiErrorCode } from '../../../common/enums/api_error_code.enum';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -34,17 +35,22 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       },
     });
     if (!user || user.status === UserStatus.LOCKED) {
-      throw new UnauthorizedException(
-        'Tài khoản không tồn tại hoặc đã bị khóa ',
-      );
+      throw new UnauthorizedException({
+        code: ApiErrorCode.ACCOUNT_UNAVAILABLE,
+        message: 'Tài khoản không tồn tại hoặc đã bị khóa',
+      });
     }
     if (user.role === UserRole.USER && !user.emailVerifiedAt) {
-      throw new UnauthorizedException('Email chưa được xác minh');
+      throw new UnauthorizedException({
+        code: ApiErrorCode.EMAIL_NOT_VERIFIED,
+        message: 'Email chưa được xác minh',
+      });
     }
     if (payload.tokenVersion !== user.tokenVersion) {
-      throw new UnauthorizedException(
-        'Phiên đăng nhập đã hết hiệu lực. Vui lòng đăng nhập lại',
-      );
+      throw new UnauthorizedException({
+        code: ApiErrorCode.INVALID_SESSION,
+        message: 'Phiên đăng nhập đã hết hiệu lực. Vui lòng đăng nhập lại',
+      });
     }
     return { id: user.id, email: user.email, role: user.role };
   }

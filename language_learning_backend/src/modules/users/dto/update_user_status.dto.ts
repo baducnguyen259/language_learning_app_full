@@ -3,7 +3,11 @@ import { IsEnum } from 'class-validator';
 import { UserStatus } from '../../../generated/prisma/enums';
 
 export class UpdateUserStatusDto {
-  @ApiProperty({ enum: UserStatus, example: UserStatus.LOCKED, description: 'Trạng thái tài khoản' })
+  @ApiProperty({
+    enum: UserStatus,
+    example: UserStatus.LOCKED,
+    description: 'Trạng thái tài khoản',
+  })
   @IsEnum(UserStatus)
   status!: UserStatus;
 }

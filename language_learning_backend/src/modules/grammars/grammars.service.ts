@@ -9,6 +9,7 @@ import { GrammarStatus, type Prisma } from '../../generated/prisma/client';
 import { GrammarQueryDto } from './dto/grammar_query.dto';
 import { UpdateGrammarDto } from './dto/update_grammar.dto';
 import { CreateGrammarDto } from './dto/create_grammar.dto';
+import { ApiErrorCode } from '../../common/enums/api_error_code.enum';
 
 @Injectable()
 export class GrammarsService {
@@ -141,7 +142,10 @@ export class GrammarsService {
     });
 
     if (!grammar) {
-      throw new NotFoundException('Không tìm thấy điểm ngữ pháp');
+      throw new NotFoundException({
+        code: ApiErrorCode.GRAMMAR_NOT_FOUND,
+        message: 'Không tìm thấy điểm ngữ pháp',
+      });
     }
 
     return grammar;
@@ -164,7 +168,10 @@ export class GrammarsService {
     });
 
     if (!grammar) {
-      throw new NotFoundException('Không tìm thấy điểm ngữ pháp');
+      throw new NotFoundException({
+        code: ApiErrorCode.GRAMMAR_NOT_FOUND,
+        message: 'Không tìm thấy điểm ngữ pháp',
+      });
     }
 
     return grammar;
@@ -205,7 +212,10 @@ export class GrammarsService {
     });
 
     if (!currentGrammar) {
-      throw new NotFoundException('Không tìm thấy điểm ngữ pháp');
+      throw new NotFoundException({
+        code: ApiErrorCode.GRAMMAR_NOT_FOUND,
+        message: 'Không tìm thấy điểm ngữ pháp',
+      });
     }
 
     const targetLessonId = dto.lessonId ?? currentGrammar.lessonId;
@@ -278,7 +288,10 @@ export class GrammarsService {
     });
 
     if (!lesson) {
-      throw new NotFoundException('Không tìm thấy bài học');
+      throw new NotFoundException({
+        code: ApiErrorCode.LESSON_NOT_FOUND,
+        message: 'Không tìm thấy bài học',
+      });
     }
   }
 
@@ -325,10 +338,16 @@ export class GrammarsService {
     }
 
     if (duplicatedGrammar.order === order) {
-      throw new ConflictException('Thứ tự ngữ pháp đã tồn tại trong bài học');
+      throw new ConflictException({
+        code: ApiErrorCode.GRAMMAR_ORDER_ALREADY_EXISTS,
+        message: 'Thứ tự ngữ pháp đã tồn tại trong bài học',
+      });
     }
 
-    throw new ConflictException('Tên ngữ pháp đã tồn tại trong bài học');
+    throw new ConflictException({
+      code: ApiErrorCode.GRAMMAR_TITLE_ALREADY_EXISTS,
+      message: 'Tên ngữ pháp đã tồn tại trong bài học',
+    });
   }
   private getLessonInclude() {
     return {

@@ -9,6 +9,7 @@ import {
   VocabularyStatus,
 } from '../../generated/prisma/enums';
 import { FavoriteQueryDto } from './dto/favorite_query.dto';
+import { ApiErrorCode } from '../../common/enums/api_error_code.enum';
 
 const vocabularyFavoriteSelect = {
   id: true,
@@ -145,9 +146,10 @@ export class FavoritesService {
       });
 
       if (!vocabulary) {
-        throw new NotFoundException(
-          'Không tìm thấy từ vựng đang được xuất bản',
-        );
+        throw new NotFoundException({
+          code: ApiErrorCode.VOCABULARY_NOT_FOUND,
+          message: 'Không tìm thấy từ vựng đang được xuất bản',
+        });
       }
 
       await transaction.userVocabularyProgress.upsert({

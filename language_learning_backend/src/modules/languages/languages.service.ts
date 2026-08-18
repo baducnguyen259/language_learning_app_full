@@ -8,6 +8,7 @@ import { LanguageQueryDto } from './dto/language_query.dto';
 import { Prisma } from '../../generated/prisma/client';
 import { UpdateLanguageDto } from './dto/update_language.dto';
 import { CreateLanguageDto } from './dto/create_language.dto';
+import { ApiErrorCode } from '../../common/enums/api_error_code.enum';
 
 @Injectable()
 export class LanguagesService {
@@ -57,7 +58,7 @@ export class LanguagesService {
     ]);
     return {
       items,
-      mate: {
+      meta: {
         page,
         limit,
         total,
@@ -79,7 +80,10 @@ export class LanguagesService {
       },
     });
     if (!language) {
-      throw new NotFoundException('Không tìm thấy ngôn ngữ');
+      throw new NotFoundException({
+        code: ApiErrorCode.LANGUAGE_NOT_FOUND,
+        message: 'Không tìm thấy ngôn ngữ',
+      });
     }
     return language;
   }
@@ -105,7 +109,10 @@ export class LanguagesService {
       },
     });
     if (existingLanguage) {
-      throw new ConflictException('Tên hoặc mã ngôn ngữ đã tồn tại');
+      throw new ConflictException({
+        code: ApiErrorCode.LANGUAGE_ALREADY_EXISTS,
+        message: 'Tên hoặc mã ngôn ngữ đã tồn tại',
+      });
     }
     return this.prisma.language.create({
       data: {
@@ -148,7 +155,10 @@ export class LanguagesService {
       });
 
       if (existingLanguage) {
-        throw new ConflictException('Tên hoặc mã ngôn ngữ đã tồn tại');
+        throw new ConflictException({
+          code: ApiErrorCode.LANGUAGE_ALREADY_EXISTS,
+          message: 'Tên hoặc mã ngôn ngữ đã tồn tại',
+        });
       }
     }
     return this.prisma.language.update({
@@ -177,10 +187,16 @@ export class LanguagesService {
     });
 
     if (!language) {
-      throw new NotFoundException('Không tìm thấy ngôn ngữ');
+      throw new NotFoundException({
+        code: ApiErrorCode.LANGUAGE_NOT_FOUND,
+        message: 'Không tìm thấy ngôn ngữ',
+      });
     }
     if (language._count.levels > 0) {
-      throw new ConflictException('Không thể xóa ngôn ngữ đang có cấp độ');
+      throw new ConflictException({
+        code: ApiErrorCode.LANGUAGE_HAS_LEVELS,
+        message: 'Không thể xóa ngôn ngữ đang có cấp độ',
+      });
     }
     return this.prisma.language.delete({
       where: {

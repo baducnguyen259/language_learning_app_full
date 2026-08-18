@@ -28,6 +28,7 @@ import {
   PRACTICE_QUESTION_TYPES,
   PracticeQuestionQueryDto,
 } from './dto/practice_question_query.dto';
+import { ApiErrorCode } from '../../common/enums/api_error_code.enum';
 
 const practiceQuestionSelect = {
   id: true,
@@ -128,7 +129,10 @@ export class QuizzesService {
       include: this.getQuizInclude(),
     });
     if (!quiz) {
-      throw new NotFoundException('Không tìm thấy bài kiểm tra');
+      throw new NotFoundException({
+        code: ApiErrorCode.QUIZ_NOT_FOUND,
+        message: 'Không tìm thấy bài kiểm tra',
+      });
     }
     return quiz;
   }
@@ -137,9 +141,11 @@ export class QuizzesService {
     await this.ensureLessonExists(dto.lessonId);
     await this.ensureLessonDoesNotHaveQuiz(dto.lessonId);
     if (dto.status === QuizStatus.ACTIVE) {
-      throw new BadRequestException(
-        'Hãy tạo Quiz ở trạng thái DRAFT và thêm câu hỏi trước khi kích hoạt',
-      );
+      throw new BadRequestException({
+        code: ApiErrorCode.QUIZ_MUST_START_AS_DRAFT,
+        message:
+          'Hãy tạo Quiz ở trạng thái DRAFT và thêm câu hỏi trước khi kích hoạt',
+      });
     }
 
     return this.prisma.quiz.create({
@@ -159,7 +165,10 @@ export class QuizzesService {
     });
 
     if (!currentQuiz) {
-      throw new NotFoundException('Không tìm thấy bài kiểm tra');
+      throw new NotFoundException({
+        code: ApiErrorCode.QUIZ_NOT_FOUND,
+        message: 'Không tìm thấy bài kiểm tra',
+      });
     }
     const targetLessonId = dto.lessonId ?? currentQuiz.lessonId;
 
@@ -198,7 +207,10 @@ export class QuizzesService {
       include: { options: { orderBy: { order: 'asc' } } },
     });
     if (!question) {
-      throw new NotFoundException('Không tìm thấy câu hỏi');
+      throw new NotFoundException({
+        code: ApiErrorCode.QUIZ_QUESTION_NOT_FOUND,
+        message: 'Không tìm thấy câu hỏi',
+      });
     }
     return question;
   }
@@ -234,7 +246,10 @@ export class QuizzesService {
     });
 
     if (!currentQuestion) {
-      throw new NotFoundException('Không tìm thấy câu hỏi');
+      throw new NotFoundException({
+        code: ApiErrorCode.QUIZ_QUESTION_NOT_FOUND,
+        message: 'Không tìm thấy câu hỏi',
+      });
     }
 
     const targetOrder = dto.order ?? currentQuestion.order;
@@ -547,12 +562,16 @@ export class QuizzesService {
     });
 
     if (!question) {
-      throw new NotFoundException('Không tìm thấy câu hỏi đang hoạt động');
+      throw new NotFoundException({
+        code: ApiErrorCode.QUIZ_QUESTION_NOT_FOUND,
+        message: 'Không tìm thấy câu hỏi đang hoạt động',
+      });
     }
     if (question.type === QuizQuestionType.pronunciation) {
-      throw new BadRequestException(
-        'Câu phát âm cần sử dụng API chấm phát âm riêng',
-      );
+      throw new BadRequestException({
+        code: ApiErrorCode.PRONUNCIATION_SCORING_REQUIRED,
+        message: 'Câu phát âm cần sử dụng API chấm phát âm riêng',
+      });
     }
 
     const userAnswer = this.normalizeRequiredAnswers(dto.userAnswer);
@@ -592,7 +611,10 @@ export class QuizzesService {
       select: { id: true },
     });
     if (!lesson) {
-      throw new NotFoundException('Không tìm thấy bài học');
+      throw new NotFoundException({
+        code: ApiErrorCode.LESSON_NOT_FOUND,
+        message: 'Không tìm thấy bài học',
+      });
     }
   }
 
@@ -609,7 +631,10 @@ export class QuizzesService {
     });
 
     if (duplicatedQuiz) {
-      throw new ConflictException('Bài học này đã có bài kiểm tra');
+      throw new ConflictException({
+        code: ApiErrorCode.QUIZ_ALREADY_EXISTS,
+        message: 'Bài học này đã có bài kiểm tra',
+      });
     }
   }
   private async ensureQuizCanBeActivated(quizId: string): Promise<void> {
@@ -617,9 +642,10 @@ export class QuizzesService {
       where: { quizId },
     });
     if (questionCount === 0) {
-      throw new BadRequestException(
-        'Quiz phải có ít nhất một câu hỏi trước khi kích hoạt',
-      );
+      throw new BadRequestException({
+        code: ApiErrorCode.QUIZ_QUESTION_REQUIRED,
+        message: 'Quiz phải có ít nhất một câu hỏi trước khi kích hoạt',
+      });
     }
   }
   private async ensureQuizExists(quizId: string): Promise<void> {
@@ -629,7 +655,10 @@ export class QuizzesService {
     });
 
     if (!quiz) {
-      throw new NotFoundException('Không tìm thấy bài kiểm tra');
+      throw new NotFoundException({
+        code: ApiErrorCode.QUIZ_NOT_FOUND,
+        message: 'Không tìm thấy bài kiểm tra',
+      });
     }
   }
 
@@ -647,7 +676,10 @@ export class QuizzesService {
       select: { id: true },
     });
     if (duplicatedQuestion) {
-      throw new ConflictException('Thứ tự câu hỏi đã tồn tại trong Quiz');
+      throw new ConflictException({
+        code: ApiErrorCode.QUIZ_QUESTION_ORDER_ALREADY_EXISTS,
+        message: 'Thứ tự câu hỏi đã tồn tại trong Quiz',
+      });
     }
   }
 
@@ -662,19 +694,24 @@ export class QuizzesService {
     const optionOrders = options.map((option) => option.order);
 
     if (new Set(optionKeys).size !== optionKeys.length) {
-      throw new ConflictException(
-        'optionKey không được trùng trong cùng câu hỏi',
-      );
+      throw new ConflictException({
+        code: ApiErrorCode.QUIZ_OPTION_KEY_DUPLICATED,
+        message: 'optionKey không được trùng trong cùng câu hỏi',
+      });
     }
 
     if (new Set(optionOrders).size !== optionOrders.length) {
-      throw new ConflictException('Thứ tự lựa chọn không được trùng');
+      throw new ConflictException({
+        code: ApiErrorCode.QUIZ_OPTION_ORDER_DUPLICATED,
+        message: 'Thứ tự lựa chọn không được trùng',
+      });
     }
 
     if (type === QuizQuestionType.matching && options.length !== 8) {
-      throw new BadRequestException(
-        'Câu hỏi matching hiện cần đúng 8 lựa chọn',
-      );
+      throw new BadRequestException({
+        code: ApiErrorCode.MATCHING_OPTIONS_COUNT_INVALID,
+        message: 'Câu hỏi matching hiện cần đúng 8 lựa chọn',
+      });
     }
 
     if (type === QuizQuestionType.matching) {
@@ -682,7 +719,10 @@ export class QuizzesService {
       for (const option of options) {
         const pairId = option.pairId?.trim();
         if (!pairId) {
-          throw new BadRequestException('Mọi lựa chọn matching phải có pairId');
+          throw new BadRequestException({
+            code: ApiErrorCode.MATCHING_PAIR_ID_REQUIRED,
+            message: 'Mọi lựa chọn matching phải có pairId',
+          });
         }
         pairCounts.set(pairId, (pairCounts.get(pairId) ?? 0) + 1);
       }
@@ -690,18 +730,23 @@ export class QuizzesService {
         (count) => count !== 2,
       );
       if (hasInvalidPair) {
-        throw new BadRequestException(
-          'Mỗi pairId của câu matching phải xuất hiện đúng hai lần',
-        );
+        throw new BadRequestException({
+          code: ApiErrorCode.MATCHING_PAIR_INVALID,
+          message: 'Mỗi pairId của câu matching phải xuất hiện đúng hai lần',
+        });
       }
     }
     if (type === QuizQuestionType.missingWord && options.length !== 4) {
-      throw new BadRequestException(
-        'Câu hỏi missingWord hiện cần đúng 4 lựa chọn',
-      );
+      throw new BadRequestException({
+        code: ApiErrorCode.MISSING_WORD_OPTIONS_COUNT_INVALID,
+        message: 'Câu hỏi missingWord hiện cần đúng 4 lựa chọn',
+      });
     }
     if (type === QuizQuestionType.sentenceOrder && options.length === 0) {
-      throw new BadRequestException('Câu hỏi sentenceOrder phải có lựa chọn');
+      throw new BadRequestException({
+        code: ApiErrorCode.SENTENCE_ORDER_OPTIONS_REQUIRED,
+        message: 'Câu hỏi sentenceOrder phải có lựa chọn',
+      });
     }
   }
 
@@ -717,7 +762,10 @@ export class QuizzesService {
   private normalizeAnswers(answers: string[]): string[] {
     const normalizedAnswers = answers.map((answer) => answer.trim());
     if (normalizedAnswers.some((answer) => !answer)) {
-      throw new BadRequestException('Đáp án không được là chuỗi rỗng');
+      throw new BadRequestException({
+        code: ApiErrorCode.QUIZ_ANSWER_EMPTY,
+        message: 'Đáp án không được là chuỗi rỗng',
+      });
     }
     return normalizedAnswers;
   }
@@ -725,7 +773,10 @@ export class QuizzesService {
   private normalizeRequiredAnswers(answers: string[]): string[] {
     const normalizedAnswers = this.normalizeAnswers(answers);
     if (normalizedAnswers.length === 0) {
-      throw new BadRequestException('Câu hỏi phải có ít nhất một đáp án đúng');
+      throw new BadRequestException({
+        code: ApiErrorCode.QUIZ_CORRECT_ANSWER_REQUIRED,
+        message: 'Câu hỏi phải có ít nhất một đáp án đúng',
+      });
     }
     return normalizedAnswers;
   }
@@ -740,9 +791,11 @@ export class QuizzesService {
     });
 
     if (quiz?.status === QuizStatus.ACTIVE && quiz._count.questions <= 1) {
-      throw new BadRequestException(
-        'Không thể xóa câu hỏi cuối cùng của Quiz đang ACTIVE. Hãy chuyển Quiz về DRAFT trước',
-      );
+      throw new BadRequestException({
+        code: ApiErrorCode.ACTIVE_QUIZ_LAST_QUESTION,
+        message:
+          'Không thể xóa câu hỏi cuối cùng của Quiz đang ACTIVE. Hãy chuyển Quiz về DRAFT trước',
+      });
     }
   }
   private normalizeAnswersForComparison(answers: string[]): string[] {

@@ -10,6 +10,7 @@ import { PrismaService } from '../../../database/prisma.service';
 import { UserRole, UserStatus } from '../../../generated/prisma/enums';
 import { GoogleLoginDto } from '../dto/user/google_login.dto';
 import { TokenService } from './token.service';
+import { ApiErrorCode } from '../../../common/enums/api_error_code.enum';
 
 @Injectable()
 export class GoogleAuthService {
@@ -31,7 +32,10 @@ export class GoogleAuthService {
     const email = payload.email?.trim().toLowerCase();
 
     if (!googleId || !email || payload.email_verified !== true) {
-      throw new UnauthorizedException('Tài khoản Google chưa xác minh email');
+      throw new UnauthorizedException({
+        code: ApiErrorCode.GOOGLE_EMAIL_NOT_VERIFIED,
+        message: 'Tài khoản Google chưa xác minh email',
+      });
     }
     const existingByGoogleId = await this.prisma.user.findUnique({
       where: { googleId },
@@ -71,14 +75,17 @@ export class GoogleAuthService {
         existingByEmail.status,
       );
       if (existingByEmail.googleId && existingByEmail.googleId !== googleId) {
-        throw new ConflictException(
-          'Email đã được liên kết với một tài khoản Google khác',
-        );
+        throw new ConflictException({
+          code: ApiErrorCode.GOOGLE_ACCOUNT_CONFLICT,
+          message: 'Email đã được liên kết với một tài khoản Google khác',
+        });
       }
       if (!this.isGoogleAuthoritativeForEmail(email, payload.hd)) {
-        throw new ConflictException(
-          'Email đã có tài khoản. Hãy đăng nhập bằng mật khẩu để liên kết Google',
-        );
+        throw new ConflictException({
+          code: ApiErrorCode.GOOGLE_PASSWORD_LOGIN_REQUIRED,
+          message:
+            'Email đã có tài khoản. Hãy đăng nhập bằng mật khẩu để liên kết Google',
+        });
       }
       const linkedUser = await this.prisma.user.update({
         where: { id: existingByEmail.id },
@@ -102,9 +109,10 @@ export class GoogleAuthService {
       return this.createLoginResponse(linkedUser);
     }
     if (dto.acceptTerms !== true) {
-      throw new BadRequestException(
-        'Bạn phải đồng ý điều khoản và chính sách bảo mật',
-      );
+      throw new BadRequestException({
+        code: ApiErrorCode.TERMS_NOT_ACCEPTED,
+        message: 'Bạn phải đồng ý điều khoản và chính sách bảo mật',
+      });
     }
     const name = payload.name?.trim() || email.split('@')[0] || 'Người học';
     const newUser = await this.prisma.user.create({
@@ -139,16 +147,20 @@ export class GoogleAuthService {
       });
       const payload = ticket.getPayload();
       if (!payload) {
-        throw new UnauthorizedException('Google ID token không hợp lệ');
+        throw new UnauthorizedException({
+          code: ApiErrorCode.INVALID_GOOGLE_TOKEN,
+          message: 'Google ID token không hợp lệ',
+        });
       }
       return payload;
     } catch (error: unknown) {
       if (error instanceof UnauthorizedException) {
         throw error;
       }
-      throw new UnauthorizedException(
-        'Google ID token không hợp lệ hoặc đã hết hạn',
-      );
+      throw new UnauthorizedException({
+        code: ApiErrorCode.INVALID_GOOGLE_TOKEN,
+        message: 'Google ID token không hợp lệ hoặc đã hết hạn',
+      });
     }
   }
 
@@ -157,12 +169,16 @@ export class GoogleAuthService {
     status: UserStatus,
   ): void {
     if (status === UserStatus.LOCKED) {
-      throw new UnauthorizedException('Tài khoản đã bị khóa');
+      throw new UnauthorizedException({
+        code: ApiErrorCode.ACCOUNT_LOCKED,
+        message: 'Tài khoản đã bị khóa',
+      });
     }
     if (role !== UserRole.USER) {
-      throw new UnauthorizedException(
-        'Tài khoản này không dành cho ứng dụng học',
-      );
+      throw new UnauthorizedException({
+        code: ApiErrorCode.USER_APP_ACCESS_REQUIRED,
+        message: 'Tài khoản này không dành cho ứng dụng học',
+      });
     }
   }
 

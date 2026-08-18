@@ -16,6 +16,7 @@ import {
 } from '../../generated/prisma/enums';
 import { ProgressQueryDto } from './dto/progress_query.dto';
 import { FinishStudySessionDto } from './dto/finish_study_session.dto';
+import { ApiErrorCode } from '../../common/enums/api_error_code.enum';
 
 const progressInclude = {
   lesson: {
@@ -141,7 +142,10 @@ export class ProgressService {
       include: progressInclude,
     });
     if (!progress) {
-      throw new NotFoundException('Người học chưa bắt đầu bài học này');
+      throw new NotFoundException({
+        code: ApiErrorCode.LESSON_PROGRESS_NOT_FOUND,
+        message: 'Người học chưa bắt đầu bài học này',
+      });
     }
     return this.toResponse(progress);
   }
@@ -168,9 +172,10 @@ export class ProgressService {
       ]);
 
       if (answeredQuestions < lesson.totalQuestions) {
-        throw new BadRequestException(
-          `Bạn mới hoàn thành ${answeredQuestions}/${lesson.totalQuestions} câu hỏi`,
-        );
+        throw new BadRequestException({
+          code: ApiErrorCode.LESSON_QUESTIONS_INCOMPLETE,
+          message: `Bạn mới hoàn thành ${answeredQuestions}/${lesson.totalQuestions} câu hỏi`,
+        });
       }
     }
     const currentProgress = await this.prisma.lessonProgress.findUnique({
@@ -383,9 +388,10 @@ export class ProgressService {
           await this.ensureVocabularyProgresses(transaction, userId, lessonId);
           return activeSession;
         }
-        throw new ConflictException(
-          'Bạn đang có một phiên học khác chưa kết thúc',
-        );
+        throw new ConflictException({
+          code: ApiErrorCode.ACTIVE_STUDY_SESSION_EXISTS,
+          message: 'Bạn đang có một phiên học khác chưa kết thúc',
+        });
       }
 
       await transaction.userLearningProfile.upsert({
@@ -429,7 +435,10 @@ export class ProgressService {
       select: studySessionSelect,
     });
     if (!session) {
-      throw new NotFoundException('Không tìm thấy phiên học của người dùng');
+      throw new NotFoundException({
+        code: ApiErrorCode.STUDY_SESSION_NOT_FOUND,
+        message: 'Không tìm thấy phiên học của người dùng',
+      });
     }
     if (session.endedAt) return session;
     const endedAt = new Date();
@@ -481,7 +490,10 @@ export class ProgressService {
     });
 
     if (!lesson) {
-      throw new NotFoundException('Không tìm thấy bài học đang được xuất bản');
+      throw new NotFoundException({
+        code: ApiErrorCode.LESSON_NOT_FOUND,
+        message: 'Không tìm thấy bài học đang được xuất bản',
+      });
     }
     return {
       id: lesson.id,

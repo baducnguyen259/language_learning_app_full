@@ -4,17 +4,28 @@ import { IsEnum, IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
 import { UserRole, UserStatus } from '../../../generated/prisma/enums';
 
 export class UserQueryDto {
-  @ApiPropertyOptional({ example: 'admin@example.com', description: 'Tìm theo tên hoặc email' })
+  @ApiPropertyOptional({
+    example: 'admin@example.com',
+    description: 'Tìm theo tên hoặc email',
+  })
   @IsOptional()
   @IsString()
   search?: string;
 
-  @ApiPropertyOptional({ enum: UserRole, example: UserRole.USER, description: 'Lọc theo quyền' })
+  @ApiPropertyOptional({
+    enum: UserRole,
+    example: UserRole.USER,
+    description: 'Lọc theo quyền',
+  })
   @IsOptional()
   @IsEnum(UserRole)
   role?: UserRole;
 
-  @ApiPropertyOptional({ enum: UserStatus, example: UserStatus.ACTIVE, description: 'Lọc theo trạng thái' })
+  @ApiPropertyOptional({
+    enum: UserStatus,
+    example: UserStatus.ACTIVE,
+    description: 'Lọc theo trạng thái',
+  })
   @IsOptional()
   @IsEnum(UserStatus)
   status?: UserStatus;

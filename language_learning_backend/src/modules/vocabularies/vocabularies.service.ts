@@ -21,6 +21,7 @@ import {
   UserVocabularyQueryDto,
 } from './dto/user_vocabulary_query.dto';
 import { VocabularyReviewQueryDto } from './dto/vocabulary_review_query.dto';
+import { ApiErrorCode } from '../../common/enums/api_error_code.enum';
 
 @Injectable()
 export class VocabulariesService {
@@ -233,9 +234,10 @@ export class VocabulariesService {
       });
 
       if (!vocabulary) {
-        throw new NotFoundException(
-          'Không tìm thấy từ vựng đang được xuất bản',
-        );
+        throw new NotFoundException({
+          code: ApiErrorCode.VOCABULARY_NOT_FOUND,
+          message: 'Không tìm thấy từ vựng đang được xuất bản',
+        });
       }
 
       const currentProgress =
@@ -337,7 +339,10 @@ export class VocabulariesService {
       include: this.getLessonInclude(),
     });
     if (!vocabulary) {
-      throw new NotFoundException('Không tìm thấy từ vựng');
+      throw new NotFoundException({
+        code: ApiErrorCode.VOCABULARY_NOT_FOUND,
+        message: 'Không tìm thấy từ vựng',
+      });
     }
     return vocabulary;
   }
@@ -347,7 +352,10 @@ export class VocabulariesService {
       select: { id: true },
     });
     if (!lesson) {
-      throw new NotFoundException('Không tìm thấy bài học');
+      throw new NotFoundException({
+        code: ApiErrorCode.LESSON_NOT_FOUND,
+        message: 'Không tìm thấy bài học',
+      });
     }
     const term = dto.term.trim();
     await this.ensureTermIsUnique(dto.lessonId, term);
@@ -372,7 +380,10 @@ export class VocabulariesService {
     });
 
     if (!currentVocabulary) {
-      throw new NotFoundException('Không tìm thấy từ vựng');
+      throw new NotFoundException({
+        code: ApiErrorCode.VOCABULARY_NOT_FOUND,
+        message: 'Không tìm thấy từ vựng',
+      });
     }
 
     const targetLessonId = dto.lessonId ?? currentVocabulary.lessonId;
@@ -385,7 +396,10 @@ export class VocabulariesService {
       });
 
       if (!lesson) {
-        throw new NotFoundException('Không tìm thấy bài học');
+        throw new NotFoundException({
+          code: ApiErrorCode.LESSON_NOT_FOUND,
+          message: 'Không tìm thấy bài học',
+        });
       }
     }
 
@@ -425,7 +439,10 @@ export class VocabulariesService {
     });
 
     if (existingCount !== dto.ids.length) {
-      throw new NotFoundException('Một hoặc nhiều từ vựng không tồn tại');
+      throw new NotFoundException({
+        code: ApiErrorCode.VOCABULARIES_NOT_FOUND,
+        message: 'Một hoặc nhiều từ vựng không tồn tại',
+      });
     }
 
     const result = await this.prisma.vocabulary.deleteMany({
@@ -450,7 +467,10 @@ export class VocabulariesService {
     });
 
     if (duplicatedVocabulary) {
-      throw new ConflictException('Từ vựng đã tồn tại trong bài học này');
+      throw new ConflictException({
+        code: ApiErrorCode.VOCABULARY_ALREADY_EXISTS,
+        message: 'Từ vựng đã tồn tại trong bài học này',
+      });
     }
   }
   private getUserVocabularySelect(userId: string) {

@@ -9,11 +9,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   ApiAdminErrorResponses,
   ApiCreatedEnvelope,
@@ -42,9 +38,7 @@ import { VocabulariesService } from '../vocabularies.service';
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles(UserRole.ADMIN)
 export class AdminVocabulariesController {
-  constructor(
-    private readonly vocabulariesService: VocabulariesService,
-  ) {}
+  constructor(private readonly vocabulariesService: VocabulariesService) {}
 
   @Get()
   @ApiOperation({ summary: 'Lấy danh sách từ vựng' })
@@ -72,10 +66,7 @@ export class AdminVocabulariesController {
   @ApiOperation({ summary: 'Cập nhật từ vựng' })
   @ApiOkEnvelope(VocabularyResponseDto)
   @ApiNotFoundErrorResponse()
-  update(
-    @Param('id') id: string,
-    @Body() dto: UpdateVocabularyDto,
-  ) {
+  update(@Param('id') id: string, @Body() dto: UpdateVocabularyDto) {
     return this.vocabulariesService.update(id, dto);
   }
 

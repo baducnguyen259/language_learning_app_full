@@ -14,6 +14,7 @@ import {
   VerifyPasswordResetOtpDto,
 } from '../dto/user/password_reset.dto';
 import { MailService } from './mail.service';
+import { ApiErrorCode } from '../../../common/enums/api_error_code.enum';
 
 @Injectable()
 export class PasswordResetService {
@@ -114,7 +115,6 @@ export class PasswordResetService {
 
   async verifyOtp(dto: VerifyPasswordResetOtpDto) {
     const email = dto.email.trim().toLowerCase();
-
     const user = await this.prisma.user.findUnique({
       where: { email },
       select: {
@@ -131,11 +131,9 @@ export class PasswordResetService {
     ) {
       throw this.invalidOtpException();
     }
-
     const resetRequest = await this.prisma.passwordResetRequest.findUnique({
       where: { userId: user.id },
     });
-
     if (
       !resetRequest ||
       resetRequest.verifiedAt ||
@@ -154,7 +152,6 @@ export class PasswordResetService {
       });
       throw this.invalidOtpException();
     }
-
     const resetToken = randomBytes(48).toString('base64url');
     const now = new Date();
     await this.prisma.passwordResetRequest.update({
@@ -167,13 +164,15 @@ export class PasswordResetService {
         ),
       },
     });
-
     return { resetToken };
   }
 
   async resetPassword(dto: ResetPasswordDto) {
     if (dto.newPassword !== dto.confirmNewPassword) {
-      throw new BadRequestException('Mật khẩu xác nhận không khớp');
+      throw new BadRequestException({
+        code: ApiErrorCode.PASSWORD_CONFIRMATION_MISMATCH,
+        message: 'Mật khẩu xác nhận không khớp',
+      });
     }
     const resetTokenHash = this.hashToken(dto.resetToken);
     const resetRequest = await this.prisma.passwordResetRequest.findUnique({
@@ -203,30 +202,28 @@ export class PasswordResetService {
       resetRequest.user.role !== UserRole.USER ||
       resetRequest.user.status !== UserStatus.ACTIVE
     ) {
-      throw new UnauthorizedException(
-        'Reset token không hợp lệ hoặc đã hết hạn',
-      );
+      throw new UnauthorizedException({
+        code: ApiErrorCode.INVALID_OR_EXPIRED_RESET_TOKEN,
+        message: 'Reset token không hợp lệ hoặc đã hết hạn',
+      });
     }
-
     this.ensurePasswordDoesNotMatchAccount(
       dto.newPassword,
       resetRequest.user.name,
       resetRequest.user.email,
     );
-
     if (resetRequest.user.passwordHash) {
       const isSamePassword = await bcrypt.compare(
         dto.newPassword,
         resetRequest.user.passwordHash,
       );
-
       if (isSamePassword) {
-        throw new BadRequestException(
-          'Mật khẩu mới không được trùng mật khẩu hiện tại',
-        );
+        throw new BadRequestException({
+          code: ApiErrorCode.PASSWORD_REUSED,
+          message: 'Mật khẩu mới không được trùng mật khẩu hiện tại',
+        });
       }
     }
-
     const passwordHash = await bcrypt.hash(
       dto.newPassword,
       PasswordResetService.PASSWORD_SALT_ROUNDS,
@@ -240,12 +237,10 @@ export class PasswordResetService {
           tokenVersion: { increment: 1 },
         },
       }),
-
       this.prisma.refreshToken.updateMany({
         where: { userId: resetRequest.user.id, revokedAt: null },
         data: { revokedAt: new Date() },
       }),
-
       this.prisma.passwordResetRequest.delete({
         where: { id: resetRequest.id },
       }),
@@ -259,7 +254,10 @@ export class PasswordResetService {
   }
 
   private invalidOtpException(): UnauthorizedException {
-    return new UnauthorizedException('OTP không hợp lệ hoặc đã hết hạn');
+    return new UnauthorizedException({
+      code: ApiErrorCode.INVALID_OR_EXPIRED_OTP,
+      message: 'OTP không hợp lệ hoặc đã hết hạn',
+    });
   }
 
   private ensurePasswordDoesNotMatchAccount(
@@ -268,18 +266,16 @@ export class PasswordResetService {
     email: string,
   ): void {
     const normalizedPassword = password.trim().toLowerCase();
-
     const normalizedName = name.trim().toLowerCase().replace(/\s+/g, '');
-
     const emailUsername = email.split('@')[0]?.toLowerCase() ?? '';
-
     if (
       normalizedPassword === normalizedName ||
       normalizedPassword === emailUsername
     ) {
-      throw new BadRequestException(
-        'Mật khẩu không được trùng với họ tên hoặc tên email',
-      );
+      throw new BadRequestException({
+        code: ApiErrorCode.PASSWORD_MATCHES_ACCOUNT,
+        message: 'Mật khẩu không được trùng với họ tên hoặc tên email',
+      });
     }
   }
 }

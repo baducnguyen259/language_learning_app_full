@@ -8,7 +8,10 @@ export class LevelQueryDto {
   @IsString()
   search?: string;
 
-  @ApiPropertyOptional({ example: 'cm123language', description: 'Lọc theo ngôn ngữ' })
+  @ApiPropertyOptional({
+    example: 'cm123language',
+    description: 'Lọc theo ngôn ngữ',
+  })
   @IsOptional()
   @IsString()
   languageId?: string;

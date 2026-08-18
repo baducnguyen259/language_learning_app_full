@@ -14,6 +14,7 @@ import { ChangePasswordDto } from '../dto/user/change_password.dto';
 import { TokenService } from './token.service';
 import { RefreshTokenDto } from '../dto/common/refresh_token.dto';
 import { EmailVerificationService } from './email_verification.service';
+import { ApiErrorCode } from '../../../common/enums/api_error_code.enum';
 
 @Injectable()
 export class UserAuthService {
@@ -34,7 +35,10 @@ export class UserAuthService {
         'Đăng ký thành công. Vui lòng kiểm tra email để xác minh tài khoản',
     };
     if (dto.password !== dto.confirmPassword) {
-      throw new BadRequestException('Mật khẩu xác nhận không khớp');
+      throw new BadRequestException({
+        code: ApiErrorCode.PASSWORD_CONFIRMATION_MISMATCH,
+        message: 'Mật khẩu xác nhận không khớp',
+      });
     }
     this.ensurePasswordDoesNotMatchAccount(dto.password, name, email);
     const existingUser = await this.prisma.user.findUnique({
@@ -55,7 +59,10 @@ export class UserAuthService {
         existingUser.status === UserStatus.ACTIVE &&
         !existingUser.emailVerifiedAt;
       if (!isUnverifiedUser) {
-        throw new ConflictException('Email này đã được đăng ký');
+        throw new ConflictException({
+          code: ApiErrorCode.EMAIL_ALREADY_REGISTERED,
+          message: 'Email này đã được đăng ký',
+        });
       }
       const expirationTime =
         existingUser.createdAt.getTime() +
@@ -85,9 +92,10 @@ export class UserAuthService {
           },
         });
         if (deletedUser.count !== 1) {
-          throw new ConflictException(
-            'Trạng thái đăng ký đã thay đổi. Vui lòng thử lại',
-          );
+          throw new ConflictException({
+            code: ApiErrorCode.REGISTRATION_STATE_CHANGED,
+            message: 'Trạng thái đăng ký đã thay đổi. Vui lòng thử lại',
+          });
         }
       }
       return transaction.user.create({
@@ -115,25 +123,38 @@ export class UserAuthService {
       where: { email },
     });
     if (!user || !user.passwordHash) {
-      throw new UnauthorizedException('Email hoặc mật khẩu không chính xác');
+      throw new UnauthorizedException({
+        code: ApiErrorCode.INVALID_CREDENTIALS,
+        message: 'Email hoặc mật khẩu không chính xác',
+      });
     }
     const isPasswordValid = await bcrypt.compare(
       dto.password,
       user.passwordHash,
     );
     if (!isPasswordValid) {
-      throw new UnauthorizedException('Email hoặc mật khẩu không chính xác');
+      throw new UnauthorizedException({
+        code: ApiErrorCode.INVALID_CREDENTIALS,
+        message: 'Email hoặc mật khẩu không chính xác',
+      });
     }
     if (user.status === UserStatus.LOCKED) {
-      throw new UnauthorizedException('Tài khoản đã bị khóa');
+      throw new UnauthorizedException({
+        code: ApiErrorCode.ACCOUNT_LOCKED,
+        message: 'Tài khoản đã bị khóa',
+      });
     }
     if (user.role !== UserRole.USER) {
-      throw new UnauthorizedException(
-        'Tài khoản này không dành cho ứng dụng học',
-      );
+      throw new UnauthorizedException({
+        code: ApiErrorCode.USER_APP_ACCESS_REQUIRED,
+        message: 'Tài khoản này không dành cho ứng dụng học',
+      });
     }
     if (!user.emailVerifiedAt) {
-      throw new UnauthorizedException('Email chưa được xác minh');
+      throw new UnauthorizedException({
+        code: ApiErrorCode.EMAIL_NOT_VERIFIED,
+        message: 'Email chưa được xác minh',
+      });
     }
     const tokens = await this.tokenService.issueTokenPair(user);
     return {
@@ -150,7 +171,10 @@ export class UserAuthService {
 
   async changePassword(userId: string, dto: ChangePasswordDto) {
     if (dto.newPassword !== dto.confirmNewPassword) {
-      throw new BadRequestException('Mật khẩu mới xác nhận không khớp');
+      throw new BadRequestException({
+        code: ApiErrorCode.PASSWORD_CONFIRMATION_MISMATCH,
+        message: 'Mật khẩu mới xác nhận không khớp',
+      });
     }
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
@@ -162,12 +186,16 @@ export class UserAuthService {
       },
     });
     if (!user) {
-      throw new UnauthorizedException('Phiên đăng nhập không hợp lệ');
+      throw new UnauthorizedException({
+        code: ApiErrorCode.INVALID_SESSION,
+        message: 'Phiên đăng nhập không hợp lệ',
+      });
     }
     if (!user.passwordHash) {
-      throw new BadRequestException(
-        'Tài khoản Google không có mật khẩu để thay đổi',
-      );
+      throw new BadRequestException({
+        code: ApiErrorCode.PASSWORD_NOT_AVAILABLE,
+        message: 'Tài khoản Google không có mật khẩu để thay đổi',
+      });
     }
     const isCurrentPasswordValid = await bcrypt.compare(
       dto.currentPassword,
@@ -175,16 +203,20 @@ export class UserAuthService {
     );
 
     if (!isCurrentPasswordValid) {
-      throw new UnauthorizedException('Mật khẩu hiện tại không chính xác');
+      throw new UnauthorizedException({
+        code: ApiErrorCode.CURRENT_PASSWORD_INCORRECT,
+        message: 'Mật khẩu hiện tại không chính xác',
+      });
     }
     const isSameAsCurrentPassword = await bcrypt.compare(
       dto.newPassword,
       user.passwordHash,
     );
     if (isSameAsCurrentPassword) {
-      throw new BadRequestException(
-        'Mật khẩu mới không được trùng với mật khẩu hiện tại',
-      );
+      throw new BadRequestException({
+        code: ApiErrorCode.PASSWORD_REUSED,
+        message: 'Mật khẩu mới không được trùng với mật khẩu hiện tại',
+      });
     }
     this.ensurePasswordDoesNotMatchAccount(
       dto.newPassword,
@@ -245,9 +277,10 @@ export class UserAuthService {
       normalizedPassword === normalizedName ||
       normalizedPassword === emailUsername
     ) {
-      throw new BadRequestException(
-        'Mật khẩu không được trùng với họ tên hoặc tên email',
-      );
+      throw new BadRequestException({
+        code: ApiErrorCode.PASSWORD_MATCHES_ACCOUNT,
+        message: 'Mật khẩu không được trùng với họ tên hoặc tên email',
+      });
     }
   }
 }

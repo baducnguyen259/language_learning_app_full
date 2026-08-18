@@ -15,6 +15,7 @@ import { PrismaService } from '../../database/prisma.service';
 import { CreateLessonDto } from './dto/create_lesson.dto';
 import { LessonQueryDto } from './dto/lesson_query.dto';
 import { UpdateLessonDto } from './dto/update_lesson.dto';
+import { ApiErrorCode } from '../../common/enums/api_error_code.enum';
 
 const appLessonDetailSelect = {
   id: true,
@@ -108,7 +109,10 @@ export class LessonsService {
     });
 
     if (!lesson) {
-      throw new NotFoundException('Không tìm thấy bài học đang được xuất bản');
+      throw new NotFoundException({
+        code: ApiErrorCode.LESSON_NOT_FOUND,
+        message: 'Không tìm thấy bài học đang được xuất bản',
+      });
     }
     const { quiz, ...lessonData } = lesson;
 
@@ -214,7 +218,10 @@ export class LessonsService {
     });
 
     if (!lesson) {
-      throw new NotFoundException('Không tìm thấy bài học');
+      throw new NotFoundException({
+        code: ApiErrorCode.LESSON_NOT_FOUND,
+        message: 'Không tìm thấy bài học',
+      });
     }
     return lesson;
   }
@@ -226,17 +233,24 @@ export class LessonsService {
     });
 
     if (!topic) {
-      throw new NotFoundException('Không tìm thấy chủ đề');
+      throw new NotFoundException({
+        code: ApiErrorCode.TOPIC_NOT_FOUND,
+        message: 'Không tìm thấy chủ đề',
+      });
     }
     const status = dto.status ?? LessonStatus.DRAFT;
     if (status === LessonStatus.SCHEDULED && !dto.scheduledAt) {
-      throw new BadRequestException('Bài học hẹn giờ phải có scheduledAt');
+      throw new BadRequestException({
+        code: ApiErrorCode.LESSON_SCHEDULE_REQUIRED,
+        message: 'Bài học hẹn giờ phải có scheduledAt',
+      });
     }
 
     if (status !== LessonStatus.SCHEDULED && dto.scheduledAt) {
-      throw new BadRequestException(
-        'scheduledAt chỉ được sử dụng khi trạng thái là SCHEDULED',
-      );
+      throw new BadRequestException({
+        code: ApiErrorCode.LESSON_SCHEDULE_NOT_ALLOWED,
+        message: 'scheduledAt chỉ được sử dụng khi trạng thái là SCHEDULED',
+      });
     }
     const publishedAt = status === LessonStatus.PUBLISHED ? new Date() : null;
 
@@ -278,7 +292,10 @@ export class LessonsService {
       where: { id },
     });
     if (!currentLesson) {
-      throw new NotFoundException('Không tìm thấy bài học');
+      throw new NotFoundException({
+        code: ApiErrorCode.LESSON_NOT_FOUND,
+        message: 'Không tìm thấy bài học',
+      });
     }
     if (dto.topicId !== undefined) {
       const topic = await this.prisma.topic.findUnique({
@@ -286,7 +303,10 @@ export class LessonsService {
         select: { id: true },
       });
       if (!topic) {
-        throw new NotFoundException('Không tìm thấy chủ đề');
+        throw new NotFoundException({
+          code: ApiErrorCode.TOPIC_NOT_FOUND,
+          message: 'Không tìm thấy chủ đề',
+        });
       }
     }
     const targetStatus = dto.status ?? currentLesson.status;
@@ -296,14 +316,18 @@ export class LessonsService {
 
     if (dto.scheduledAt !== undefined) {
       if (targetStatus !== LessonStatus.SCHEDULED) {
-        throw new BadRequestException(
-          'scheduledAt chỉ được sử dụng khi trạng thái là SCHEDULED',
-        );
+        throw new BadRequestException({
+          code: ApiErrorCode.LESSON_SCHEDULE_NOT_ALLOWED,
+          message: 'scheduledAt chỉ được sử dụng khi trạng thái là SCHEDULED',
+        });
       }
       scheduledAt = new Date(dto.scheduledAt);
     }
     if (targetStatus === LessonStatus.SCHEDULED && !scheduledAt) {
-      throw new BadRequestException('Bài học hẹn giờ phải có scheduledAt');
+      throw new BadRequestException({
+        code: ApiErrorCode.LESSON_SCHEDULE_REQUIRED,
+        message: 'Bài học hẹn giờ phải có scheduledAt',
+      });
     }
     if (dto.status !== undefined && targetStatus !== LessonStatus.SCHEDULED) {
       scheduledAt = null;
@@ -364,7 +388,10 @@ export class LessonsService {
       select: { id: true },
     });
     if (!lesson) {
-      throw new NotFoundException('Không tìm thấy bài học');
+      throw new NotFoundException({
+        code: ApiErrorCode.LESSON_NOT_FOUND,
+        message: 'Không tìm thấy bài học',
+      });
     }
     return this.prisma.lesson.delete({
       where: { id },
