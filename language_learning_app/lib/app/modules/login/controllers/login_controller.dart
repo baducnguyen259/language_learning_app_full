@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:language_learning_app/app/data/exceptions/api_exception.dart';
 import 'package:language_learning_app/app/data/services/user_auth_service.dart';
 import 'package:language_learning_app/app/routes/app_pages.dart';
 
@@ -28,6 +29,28 @@ class LoginController extends GetxController {
       _showLoginError(error.message);
     } catch (_) {
       _showLoginError('Đăng nhập Google thất bại. Vui lòng thử lại.');
+    }
+  }
+
+  Future<void> signInWithEmail() async {
+    final email = emailLoginController.text.trim();
+    final password = passwordLoginController.text.trim();
+
+    if (!GetUtils.isEmail(email)) {
+      _showLoginError('Vui lòng nhập email hợp lệ');
+      return;
+    }
+    if (password.isEmpty) {
+      _showLoginError('Vui lòng nhập mật khẩu');
+      return;
+    }
+    try {
+      await _userAuthService.signInWithEmail(email: email, password: password);
+      await Get.offAllNamed<void>(AppRoutes.main);
+    } on ApiException catch (error) {
+      _showLoginError(error.message);
+    } catch (_) {
+      _showLoginError('Đăng nhập thất bại.Vui lòng thử lại');
     }
   }
 

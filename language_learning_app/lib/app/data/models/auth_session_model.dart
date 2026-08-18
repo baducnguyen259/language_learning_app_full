@@ -32,7 +32,7 @@ class AuthSessionModel {
   });
 
   final String accessToken;
-  final dynamic refreshToken;
+  final String refreshToken;
   final AuthUserModel user;
 
   factory AuthSessionModel.fromJson(Map<String, dynamic> json) {
