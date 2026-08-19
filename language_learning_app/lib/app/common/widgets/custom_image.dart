@@ -3,16 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 /// Khung cơ sở áp dụng padding, margin, nền và cắt ảnh.
-///
 /// Mở rộng class này khi tính năng cần image provider khác nhưng vẫn giữ
 /// cùng một container hiển thị.
-///
 /// Ví dụ:
 /// ```dart
 /// class RoundedImage extends BaseImage {
 ///   const RoundedImage(Widget child) : super(child, radius: 12);
 /// }
-/// ```
 abstract class BaseImage extends StatelessWidget {
   /// Tạo khung ảnh được cắt quanh [child].
   const BaseImage(
@@ -55,14 +52,10 @@ abstract class BaseImage extends StatelessWidget {
 }
 
 /// Tải ảnh raster/SVG cục bộ hoặc từ xa, kèm giao diện dự phòng khi tải và khi lỗi.
-///
-/// Ví dụ:
-/// ```dart
 /// CustomImage.asset(
 ///   'assets/icons/book.svg',
 ///   semanticLabel: 'Sách',
 /// );
-/// ```
 class CustomImage extends BaseImage {
   /// Tạo ảnh từ asset Flutter.
   ///

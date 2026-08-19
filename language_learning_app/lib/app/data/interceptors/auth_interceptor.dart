@@ -44,7 +44,6 @@ final class AuthInterceptor extends Interceptor {
   ) async {
     if (!_publicPaths.contains(options.path)) {
       final accessToken = await _tokenStorage.readAccessToken();
-
       if (accessToken != null && accessToken.isNotEmpty) {
         options.headers['Authorization'] = 'Bearer $accessToken';
       }
@@ -54,17 +53,15 @@ final class AuthInterceptor extends Interceptor {
   }
 
   @override
-  void onError(DioException error, ErrorInterceptorHandler handler) async {
-    if (!_shouldTryRefresh(error)) {
-      handler.next(error);
+  void onError(DioException err, ErrorInterceptorHandler handler) async {
+    if (!_shouldTryRefresh(err)) {
+      handler.next(err);
       return;
     }
 
-    final requestOptions = error.requestOptions;
+    final requestOptions = err.requestOptions;
     final currentAccessToken = await _tokenStorage.readAccessToken();
-
     final failedAuthorization = requestOptions.headers['Authorization'];
-
     // Request này dùng token cũ, nhưng một request khác đã
     // refresh thành công. Chỉ cần thử lại bằng token mới.
     if (currentAccessToken != null &&
@@ -73,7 +70,7 @@ final class AuthInterceptor extends Interceptor {
       await _retryRequest(
         requestOptions: requestOptions,
         accessToken: currentAccessToken,
-        originalError: error,
+        originalError: err,
         handler: handler,
       );
       return;
@@ -81,81 +78,63 @@ final class AuthInterceptor extends Interceptor {
 
     try {
       final refreshFuture = _refreshFuture ??= _refreshAccessToken();
-
       final newAccessToken = await refreshFuture;
-
       if (identical(_refreshFuture, refreshFuture)) {
         _refreshFuture = null;
       }
-
       await _retryRequest(
         requestOptions: requestOptions,
         accessToken: newAccessToken,
-        originalError: error,
+        originalError: err,
         handler: handler,
       );
     } catch (_) {
       _refreshFuture = null;
       await _tokenStorage.clearTokens();
-      handler.next(error);
+      handler.next(err);
     }
   }
 
   bool _shouldTryRefresh(DioException error) {
     final options = error.requestOptions;
-
     if (error.response?.statusCode != 401 ||
         options.extra[_retriedKey] == true ||
         _publicPaths.contains(options.path)) {
       return false;
     }
-
     final responseData = error.response?.data;
-
     if (responseData is Map<String, dynamic>) {
       final errorData = responseData['error'];
-
       if (errorData is Map<String, dynamic>) {
         final code = errorData['code'] as String?;
-
         return code == null ||
             code == 'UNAUTHORIZED' ||
             code == 'INVALID_SESSION';
       }
     }
-
     return true;
   }
 
   Future<String> _refreshAccessToken() async {
     final refreshToken = await _tokenStorage.readRefreshToken();
-
     if (refreshToken == null || refreshToken.isEmpty) {
       throw StateError('Không có refresh token');
     }
-
     final response = await _refreshDio.post<Map<String, dynamic>>(
       '/auth/refresh',
       data: <String, dynamic>{'refreshToken': refreshToken},
     );
-
     final responseBody = response.data;
-
     if (responseBody == null) {
       throw StateError('Backend không trả về token mới');
     }
-
     final tokenData = responseBody['data'] as Map<String, dynamic>;
-
     final accessToken = tokenData['accessToken'] as String;
-
     final newRefreshToken = tokenData['refreshToken'] as String;
-
     await _tokenStorage.saveTokenPair(
       accessToken: accessToken,
       refreshToken: newRefreshToken,
     );
-
     return accessToken;
   }
 
@@ -170,7 +149,6 @@ final class AuthInterceptor extends Interceptor {
 
     try {
       final response = await _dio.fetch<dynamic>(requestOptions);
-
       handler.resolve(response);
     } on DioException catch (retryError) {
       handler.next(retryError);
