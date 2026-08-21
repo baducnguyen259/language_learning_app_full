@@ -25,6 +25,15 @@ export const UserStatus = {
 export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]
 
 
+export const UserGender = {
+  MALE: 'MALE',
+  FEMALE: 'FEMALE',
+  OTHER: 'OTHER'
+} as const
+
+export type UserGender = (typeof UserGender)[keyof typeof UserGender]
+
+
 export const LessonStatus = {
   DRAFT: 'DRAFT',
   SCHEDULED: 'SCHEDULED',

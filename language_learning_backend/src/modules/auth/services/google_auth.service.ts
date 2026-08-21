@@ -55,10 +55,12 @@ export class GoogleAuthService {
         select: {
           id: true,
           name: true,
+          displayName: true,
           email: true,
           role: true,
           avatarUrl: true,
           tokenVersion: true,
+          profileCompletedAt: true,
         },
       });
       await this.prisma.emailVerificationOtp.deleteMany({
@@ -97,10 +99,12 @@ export class GoogleAuthService {
         select: {
           id: true,
           name: true,
+          displayName: true,
           email: true,
           role: true,
           avatarUrl: true,
           tokenVersion: true,
+          profileCompletedAt: true,
         },
       });
       await this.prisma.emailVerificationOtp.deleteMany({
@@ -118,6 +122,7 @@ export class GoogleAuthService {
     const newUser = await this.prisma.user.create({
       data: {
         name,
+        displayName: name,
         email,
         passwordHash: null,
         googleId,
@@ -130,10 +135,12 @@ export class GoogleAuthService {
       select: {
         id: true,
         name: true,
+        displayName: true,
         email: true,
         role: true,
         avatarUrl: true,
         tokenVersion: true,
+        profileCompletedAt: true,
       },
     });
     return this.createLoginResponse(newUser);
@@ -192,10 +199,12 @@ export class GoogleAuthService {
   private async createLoginResponse(user: {
     id: string;
     name: string;
+    displayName: string | null;
     email: string;
     role: UserRole;
     avatarUrl: string | null;
     tokenVersion: number;
+    profileCompletedAt: Date | null;
   }) {
     const tokens = await this.tokenService.issueTokenPair(user);
     return {
@@ -203,9 +212,11 @@ export class GoogleAuthService {
       user: {
         id: user.id,
         name: user.name,
+        displayName: user.displayName,
         email: user.email,
         role: user.role,
         avatarUrl: user.avatarUrl,
+        requiresProfileSetup: !user.profileCompletedAt,
       },
     };
   }

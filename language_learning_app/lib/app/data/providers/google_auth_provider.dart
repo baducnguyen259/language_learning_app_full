@@ -10,7 +10,7 @@ final class GoogleAuthProvider {
   final GoogleSignIn _googleSignIn;
   bool _isInitialized = false;
 
-  Future<AuthSessionModel> signIn() async {
+  Future<AuthSessionModel> signIn({bool acceptTerms = false}) async {
     await _ensureInitialized();
     final account = await _googleSignIn.authenticate();
     final idToken = account.authentication.idToken;
@@ -21,7 +21,7 @@ final class GoogleAuthProvider {
 
     final response = await _dio.post<Map<String, dynamic>>(
       '/auth/google',
-      data: <String, dynamic>{'idToken': idToken},
+      data: <String, dynamic>{'idToken': idToken, 'acceptTerms': acceptTerms},
     );
 
     final responseBody = response.data;

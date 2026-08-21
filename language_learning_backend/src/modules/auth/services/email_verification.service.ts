@@ -81,11 +81,13 @@ export class EmailVerificationService {
       select: {
         id: true,
         name: true,
+        displayName: true,
         email: true,
         role: true,
         status: true,
         avatarUrl: true,
         tokenVersion: true,
+        profileCompletedAt: true,
         emailVerifiedAt: true,
         emailVerificationOtp: true,
       },
@@ -133,9 +135,11 @@ export class EmailVerificationService {
       user: {
         id: user.id,
         name: user.name,
+        displayName: user.displayName,
         email: user.email,
         role: user.role,
         avatarUrl: user.avatarUrl,
+        requiresProfileSetup: !user.profileCompletedAt,
       },
     };
   }

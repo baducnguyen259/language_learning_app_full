@@ -65,13 +65,6 @@ class RegisterView extends GetView<RegisterController> {
         spacing: 8,
         children: [
           CustomTextField(
-            controller: controller.fullnameController,
-            prefixWidget: CustomImage.asset(AppIcons.icAccount),
-            hintText: 'Nhập họ và tên',
-            labelInput: 'Họ và tên',
-            isRequired: true,
-          ),
-          CustomTextField(
             controller: controller.emailRegisterController,
             prefixWidget: CustomImage.asset(AppIcons.icMail),
             labelInput: 'Email',
@@ -84,10 +77,26 @@ class RegisterView extends GetView<RegisterController> {
             labelInput: 'Mật khẩu',
             hintText: 'Tạo mật khẩu',
             isRequired: true,
+            obscureText: true,
+            suffixWidget: CustomImage.asset(AppIcons.icEyeHide).marginAll(10),
+          ),
+          CustomTextField(
+            controller: controller.confirmPasswordController,
+            prefixWidget: CustomImage.asset(AppIcons.icLock),
+            labelInput: 'Xác nhận mật khẩu',
+            hintText: 'Nhập lại mật khẩu',
+            isRequired: true,
+            obscureText: true,
             suffixWidget: CustomImage.asset(AppIcons.icEyeHide).marginAll(10),
           ),
           _buildPasswordRules(),
           _buildPolicyAgreement(),
+          CustomButton.primary(
+            title: 'Đăng ký',
+            showLoading: true,
+            onPressed: controller.register,
+            backgroundColor: AppColors.purple100,
+          ),
           _buildSocialLogin(),
           _buildRegisterText(),
         ],
@@ -158,7 +167,7 @@ class RegisterView extends GetView<RegisterController> {
           const SizedBox(height: 6),
           _buildTextPass('Độ dài từ 9-16 ký tự'),
           _buildTextPass('Bao gồm ký tự số, chữ hoa, chữ thường'),
-          _buildTextPass('Không trùng với tên đăng nhập'),
+          _buildTextPass('Không chứa khoảng trắng'),
         ],
       ).marginAll(12),
     );
@@ -208,7 +217,8 @@ class RegisterView extends GetView<RegisterController> {
           backgroundColor: AppColors.colorNeutralN01,
           foregroundColor: AppColors.colorNeutralN11,
           radius: 14,
-          onPressed: () {},
+          showLoading: true,
+          onPressed: controller.signUpWithGoogle,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

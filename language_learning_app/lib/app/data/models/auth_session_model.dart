@@ -2,24 +2,30 @@ class AuthUserModel {
   const AuthUserModel({
     required this.id,
     required this.name,
+    required this.displayName,
     required this.email,
     required this.role,
+    required this.requiresProfileSetup,
     this.avatarUrl,
   });
 
   final String id;
   final String name;
+  final String? displayName;
   final String email;
   final String role;
   final String? avatarUrl;
+  final bool requiresProfileSetup;
 
   factory AuthUserModel.fromJson(Map<String, dynamic> json) {
     return AuthUserModel(
       id: json['id'] as String,
       name: json['name'] as String,
+      displayName: json['displayName'] as String?,
       email: json['email'] as String,
       role: json['role'] as String,
       avatarUrl: json['avatarUrl'] as String?,
+      requiresProfileSetup: json['requiresProfileSetup'] as bool,
     );
   }
 }

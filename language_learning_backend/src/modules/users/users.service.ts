@@ -27,8 +27,13 @@ export class UsersService {
         select: {
           id: true,
           name: true,
+          displayName: true,
           email: true,
           avatarUrl: true,
+          phoneNumber: true,
+          dateOfBirth: true,
+          gender: true,
+          profileCompletedAt: true,
           createdAt: true,
           learningProfile: {
             select: {
@@ -84,8 +89,14 @@ export class UsersService {
     return {
       id: user.id,
       name: user.name,
+      displayName: user.displayName,
       email: user.email,
       avatarUrl: user.avatarUrl,
+      phoneNumber: user.phoneNumber,
+      dateOfBirth: user.dateOfBirth,
+      gender: user.gender,
+      profileCompletedAt: user.profileCompletedAt,
+      requiresProfileSetup: !user.profileCompletedAt,
       dailyGoalMinutes: user.learningProfile?.dailyGoalMinutes ?? 15,
       totalExperience: user.learningProfile?.totalExperience ?? 0,
       timezone: user.learningProfile?.timezone ?? 'Asia/Ho_Chi_Minh',
@@ -103,6 +114,13 @@ export class UsersService {
   }
 
   async updateMyProfile(userId: string, dto: UpdateMyProfileDto) {
+    const dateOfBirth = new Date(`${dto.dateOfBirth}T00:00:00.000Z`);
+    if (dateOfBirth.getTime() > Date.now()) {
+      throw new BadRequestException({
+        code: ApiErrorCode.INVALID_DATE_OF_BIRTH,
+        message: 'Ngày sinh không được nằm trong tương lai',
+      });
+    }
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
       select: { id: true },
@@ -117,7 +135,14 @@ export class UsersService {
 
     await this.prisma.user.update({
       where: { id: userId },
-      data: { name: dto.name },
+      data: {
+        name: dto.name,
+        displayName: dto.displayName,
+        phoneNumber: dto.phoneNumber,
+        dateOfBirth,
+        gender: dto.gender,
+        profileCompletedAt: new Date(),
+      },
     });
 
     return this.getMyProfile(userId);

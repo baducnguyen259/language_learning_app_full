@@ -18,6 +18,12 @@ enum UserStatus {
   LOCKED
 }
 
+enum UserGender {
+  MALE
+  FEMALE
+  OTHER
+}
+
 enum LessonStatus {
   DRAFT
   SCHEDULED
@@ -63,26 +69,31 @@ enum LessonProgressStatus {
 }
 
 model User {
-  id                  String                 @id @default(cuid())
-  name                String
-  email               String                 @unique
-  passwordHash        String?
-  googleId            String?                @unique
-  avatarUrl           String?
-  role                UserRole               @default(USER)
-  status              UserStatus             @default(ACTIVE)
-  emailVerifiedAt     DateTime?
-  termsAcceptedAt     DateTime?
-  tokenVersion        Int                    @default(0)
-  createdAt           DateTime               @default(now())
-  updatedAt           DateTime               @updatedAt
-  lessonProgresses    LessonProgress[]
-  questionProgresses  UserQuestionProgress[]
-  learningProfile     UserLearningProfile?
-  studySessions       StudySession[]
-  vocabularyFavorites VocabularyFavorite[]
+  id                   String                   @id @default(cuid())
+  name                 String                   @default("")
+  displayName          String?
+  email                String                   @unique
+  passwordHash         String?
+  googleId             String?                  @unique
+  avatarUrl            String?
+  phoneNumber          String?
+  dateOfBirth          DateTime?
+  gender               UserGender?
+  profileCompletedAt   DateTime?
+  role                 UserRole                 @default(USER)
+  status               UserStatus               @default(ACTIVE)
+  emailVerifiedAt      DateTime?
+  termsAcceptedAt      DateTime?
+  tokenVersion         Int                      @default(0)
+  createdAt            DateTime                 @default(now())
+  updatedAt            DateTime                 @updatedAt
+  lessonProgresses     LessonProgress[]
+  questionProgresses   UserQuestionProgress[]
+  learningProfile      UserLearningProfile?
+  studySessions        StudySession[]
+  vocabularyFavorites  VocabularyFavorite[]
   vocabularyProgresses UserVocabularyProgress[]
-  refreshTokens       RefreshToken[]
+  refreshTokens        RefreshToken[]
   passwordResetRequest PasswordResetRequest?
   emailVerificationOtp EmailVerificationOtp?
 }
@@ -196,20 +207,20 @@ model Lesson {
 }
 
 model Vocabulary {
-  id            String           @id @default(cuid())
-  term          String
-  pronunciation String?
-  meaning       String
-  wordType      String?
-  imageUrl      String?
-  audioUrl      String?
-  status        VocabularyStatus @default(DRAFT)
-  lessonId      String
-  lesson        Lesson           @relation(fields: [lessonId], references: [id], onDelete: Cascade)
-  favorites     VocabularyFavorite[]
+  id                  String                   @id @default(cuid())
+  term                String
+  pronunciation       String?
+  meaning             String
+  wordType            String?
+  imageUrl            String?
+  audioUrl            String?
+  status              VocabularyStatus         @default(DRAFT)
+  lessonId            String
+  lesson              Lesson                   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  favorites           VocabularyFavorite[]
   userProgressRecords UserVocabularyProgress[]
-  createdAt     DateTime         @default(now())
-  updatedAt     DateTime         @updatedAt
+  createdAt           DateTime                 @default(now())
+  updatedAt           DateTime                 @updatedAt
 
   @@unique([lessonId, term])
   @@index([lessonId])

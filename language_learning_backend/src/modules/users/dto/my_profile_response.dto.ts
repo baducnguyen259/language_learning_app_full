@@ -29,6 +29,9 @@ export class MyProfileResponseDto {
   @ApiProperty({ example: 'Nguyễn Bá Đức' })
   name!: string;
 
+  @ApiPropertyOptional({ nullable: true, example: 'Đức' })
+  displayName!: string | null;
+
   @ApiProperty({ example: 'duc@example.com' })
   email!: string;
 
@@ -37,6 +40,21 @@ export class MyProfileResponseDto {
     example: 'https://lh3.googleusercontent.com/a/...',
   })
   avatarUrl!: string | null;
+
+  @ApiPropertyOptional({ nullable: true, example: '0912345678' })
+  phoneNumber!: string | null;
+
+  @ApiPropertyOptional({ nullable: true, format: 'date-time' })
+  dateOfBirth!: Date | null;
+
+  @ApiPropertyOptional({ nullable: true, enum: ['MALE', 'FEMALE', 'OTHER'] })
+  gender!: string | null;
+
+  @ApiPropertyOptional({ nullable: true, format: 'date-time' })
+  profileCompletedAt!: Date | null;
+
+  @ApiProperty({ example: false })
+  requiresProfileSetup!: boolean;
 
   @ApiProperty({
     example: 15,

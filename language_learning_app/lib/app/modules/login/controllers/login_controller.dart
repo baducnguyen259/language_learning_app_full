@@ -15,10 +15,17 @@ class LoginController extends GetxController {
   final passwordLoginController = TextEditingController();
   final RxBool isSavePassword = RxBool(false);
 
+  Future<void> _navigateAfterLogin(bool requiresProfileSetup) async {
+    final route = requiresProfileSetup
+        ? AppRoutes.completeProfile
+        : AppRoutes.main;
+    await Get.offAllNamed<void>(route);
+  }
+
   Future<void> signInWithGoogle() async {
     try {
-      await _userAuthService.signInWithGoogle();
-      await Get.offAllNamed<void>(AppRoutes.main);
+      final session = await _userAuthService.signInWithGoogle();
+      await _navigateAfterLogin(session.user.requiresProfileSetup);
     } on GoogleSignInException catch (error) {
       if (error.code == GoogleSignInExceptionCode.canceled) return;
 
@@ -34,7 +41,7 @@ class LoginController extends GetxController {
 
   Future<void> signInWithEmail() async {
     final email = emailLoginController.text.trim();
-    final password = passwordLoginController.text.trim();
+    final password = passwordLoginController.text;
 
     if (!GetUtils.isEmail(email)) {
       _showLoginError('Vui lòng nhập email hợp lệ');
@@ -45,12 +52,15 @@ class LoginController extends GetxController {
       return;
     }
     try {
-      await _userAuthService.signInWithEmail(email: email, password: password);
-      await Get.offAllNamed<void>(AppRoutes.main);
+      final session = await _userAuthService.signInWithEmail(
+        email: email,
+        password: password,
+      );
+      await _navigateAfterLogin(session.user.requiresProfileSetup);
     } on ApiException catch (error) {
       _showLoginError(error.message);
     } catch (_) {
-      _showLoginError('Đăng nhập thất bại.Vui lòng thử lại');
+      _showLoginError('Đăng nhập thất bại. Vui lòng thử lại');
     }
   }
 

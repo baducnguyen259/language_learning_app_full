@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:language_learning_app/app/modules/complete_profile/bindings/complete_profile_binding.dart';
+import 'package:language_learning_app/app/modules/complete_profile/views/complete_profile_view.dart';
 import 'package:language_learning_app/app/modules/forgot_password/bindings/forgot_password_binding.dart';
 import 'package:language_learning_app/app/modules/forgot_password/views/forgot_password_view.dart';
 import 'package:language_learning_app/app/modules/login/bindings/login_binding.dart';
@@ -28,6 +30,11 @@ class AppPages {
       name: Routes.REGISTER,
       page: () => const RegisterView(),
       binding: RegisterBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.completeProfile,
+      page: () => const CompleteProfileView(),
+      binding: CompleteProfileBinding(),
     ),
     GetPage(
       name: Routes.FORGOT_PASSWORD,

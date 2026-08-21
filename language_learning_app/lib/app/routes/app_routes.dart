@@ -4,6 +4,7 @@ abstract class AppRoutes {
   AppRoutes._();
 
   static const String main = '/main';
+  static const String completeProfile = '/complete-profile';
 }
 
 abstract class Routes {

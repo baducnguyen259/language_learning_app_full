@@ -28,7 +28,6 @@ export class UserAuthService {
   ) {}
 
   async register(dto: RegisterDto) {
-    const name = dto.name.trim();
     const email = dto.email.trim().toLowerCase();
     const response = {
       message:
@@ -40,7 +39,7 @@ export class UserAuthService {
         message: 'Mật khẩu xác nhận không khớp',
       });
     }
-    this.ensurePasswordDoesNotMatchAccount(dto.password, name, email);
+    this.ensurePasswordDoesNotMatchAccount(dto.password, email);
     const existingUser = await this.prisma.user.findUnique({
       where: { email },
       select: {
@@ -100,7 +99,6 @@ export class UserAuthService {
       }
       return transaction.user.create({
         data: {
-          name,
           email,
           passwordHash,
           role: UserRole.USER,
@@ -162,9 +160,11 @@ export class UserAuthService {
       user: {
         id: user.id,
         name: user.name,
+        displayName: user.displayName,
         email: user.email,
         role: user.role,
         avatarUrl: user.avatarUrl,
+        requiresProfileSetup: !user.profileCompletedAt,
       },
     };
   }
@@ -181,6 +181,7 @@ export class UserAuthService {
       select: {
         id: true,
         name: true,
+        displayName: true,
         email: true,
         passwordHash: true,
       },
@@ -220,8 +221,8 @@ export class UserAuthService {
     }
     this.ensurePasswordDoesNotMatchAccount(
       dto.newPassword,
-      user.name,
       user.email,
+      user.name,
     );
     const newPasswordHash = await bcrypt.hash(
       dto.newPassword,
@@ -267,14 +268,14 @@ export class UserAuthService {
 
   private ensurePasswordDoesNotMatchAccount(
     password: string,
-    name: string,
     email: string,
+    name = '',
   ): void {
     const normalizedPassword = password.trim().toLowerCase();
     const normalizedName = name.trim().toLowerCase().replace(/\s+/g, '');
     const emailUsername = email.split('@')[0]?.toLowerCase() ?? '';
     if (
-      normalizedPassword === normalizedName ||
+      (normalizedName.length > 0 && normalizedPassword === normalizedName) ||
       normalizedPassword === emailUsername
     ) {
       throw new BadRequestException({

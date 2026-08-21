@@ -3,7 +3,6 @@ import {
   Equals,
   IsBoolean,
   IsEmail,
-  IsNotEmpty,
   IsString,
   Matches,
   MaxLength,
@@ -11,15 +10,6 @@ import {
 } from 'class-validator';
 
 export class RegisterDto {
-  @ApiProperty({
-    example: 'Nguyễn Văn An',
-  })
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(2)
-  @MaxLength(100)
-  name!: string;
-
   @ApiProperty({
     example: 'user@example.com',
   })
@@ -36,6 +26,9 @@ export class RegisterDto {
   @IsString()
   @MinLength(9)
   @MaxLength(16)
+  @Matches(/^\S+$/, {
+    message: 'Mật khẩu không được chứa khoảng trắng',
+  })
   @Matches(/[a-z]/, {
     message: 'Mật khẩu phải có ít nhất một chữ thường',
   })
@@ -53,6 +46,9 @@ export class RegisterDto {
   @IsString()
   @MinLength(9)
   @MaxLength(16)
+  @Matches(/^\S+$/, {
+    message: 'Mật khẩu xác nhận không được chứa khoảng trắng',
+  })
   confirmPassword!: string;
 
   @ApiProperty({
