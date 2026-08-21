@@ -23,7 +23,6 @@ final class UserProfileModel {
     required this.displayName,
     required this.email,
     required this.avatarUrl,
-    required this.phoneNumber,
     required this.dateOfBirth,
     required this.gender,
     required this.requiresProfileSetup,
@@ -34,7 +33,6 @@ final class UserProfileModel {
   final String? displayName;
   final String email;
   final String? avatarUrl;
-  final String? phoneNumber;
   final DateTime? dateOfBirth;
   final UserGender? gender;
   final bool requiresProfileSetup;
@@ -49,7 +47,6 @@ final class UserProfileModel {
       displayName: json['displayName'] as String?,
       email: json['email'] as String,
       avatarUrl: json['avatarUrl'] as String?,
-      phoneNumber: json['phoneNumber'] as String?,
       dateOfBirth: dateOfBirth == null ? null : DateTime.parse(dateOfBirth),
       gender: gender == null ? null : UserGender.fromApi(gender),
       requiresProfileSetup: json['requiresProfileSetup'] as bool,

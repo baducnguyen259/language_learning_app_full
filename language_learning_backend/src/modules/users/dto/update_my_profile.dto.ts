@@ -4,7 +4,6 @@ import {
   IsDateString,
   IsEnum,
   IsString,
-  Matches,
   MaxLength,
   MinLength,
 } from 'class-validator';
@@ -36,13 +35,6 @@ export class UpdateMyProfileDto {
   @MinLength(2)
   @MaxLength(50)
   displayName!: string;
-
-  @ApiProperty({ example: '0912345678' })
-  @IsString()
-  @Matches(/^\+?[0-9]{9,15}$/, {
-    message: 'Số điện thoại không hợp lệ',
-  })
-  phoneNumber!: string;
 
   @ApiProperty({
     format: 'date',

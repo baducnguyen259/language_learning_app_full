@@ -15,7 +15,6 @@ class CompleteProfileController extends GetxController {
   final fullNameController = TextEditingController();
   final displayNameController = TextEditingController();
   final emailController = TextEditingController();
-  final phoneNumberController = TextEditingController();
   final dateOfBirthController = TextEditingController();
 
   final RxBool isLoading = true.obs;
@@ -44,16 +43,12 @@ class CompleteProfileController extends GetxController {
   String? _validationMessage() {
     final fullName = fullNameController.text.trim();
     final displayName = displayNameController.text.trim();
-    final phoneNumber = phoneNumberController.text.trim();
 
     if (fullName.length < 2) {
       return 'Họ và tên phải có ít nhất 2 ký tự';
     }
     if (displayName.length < 2) {
       return 'Tên hiển thị phải có ít nhất 2 ký tự';
-    }
-    if (!RegExp(r'^\+?[0-9]{9,15}$').hasMatch(phoneNumber)) {
-      return 'Số điện thoại không hợp lệ';
     }
     if (selectedDateOfBirth.value == null) {
       return 'Vui lòng chọn ngày sinh';
@@ -68,7 +63,6 @@ class CompleteProfileController extends GetxController {
     fullNameController.text = profile.name;
     displayNameController.text = profile.displayName ?? '';
     emailController.text = profile.email;
-    phoneNumberController.text = profile.phoneNumber ?? '';
     avatarUrl.value = profile.avatarUrl;
     selectedGender.value = profile.gender;
     selectedDateOfBirth.value = profile.dateOfBirth;
@@ -153,7 +147,6 @@ class CompleteProfileController extends GetxController {
       await _profileService.updateMyProfile(
         name: fullNameController.text.trim(),
         displayName: displayNameController.text.trim(),
-        phoneNumber: phoneNumberController.text.trim(),
         dateOfBirth: _formatApiDate(dateOfBirth),
         gender: gender,
       );
@@ -172,7 +165,6 @@ class CompleteProfileController extends GetxController {
     fullNameController.dispose();
     displayNameController.dispose();
     emailController.dispose();
-    phoneNumberController.dispose();
     dateOfBirthController.dispose();
     super.onClose();
   }

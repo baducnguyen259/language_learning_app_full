@@ -34,7 +34,6 @@ final class UserProfileProvider {
   Future<UserProfileModel> updateMyProfile({
     required String name,
     required String displayName,
-    required String phoneNumber,
     required String dateOfBirth,
     required UserGender gender,
   }) async {
@@ -44,7 +43,6 @@ final class UserProfileProvider {
         data: <String, dynamic>{
           'name': name,
           'displayName': displayName,
-          'phoneNumber': phoneNumber,
           'dateOfBirth': dateOfBirth,
           'gender': gender.apiValue,
         },

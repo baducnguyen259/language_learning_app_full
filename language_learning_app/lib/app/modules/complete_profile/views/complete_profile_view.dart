@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:language_learning_app/app/common/values/values.dart';
 import 'package:language_learning_app/app/common/widgets/base_scaffold.dart';
@@ -141,17 +140,6 @@ class CompleteProfileView extends GetView<CompleteProfileController> {
           labelInput: 'Email',
           prefixWidget: CustomImage.asset(AppIcons.icMail),
           readOnly: true,
-        ),
-        CustomTextField(
-          controller: controller.phoneNumberController,
-          labelInput: 'Số điện thoại',
-          hintText: 'Nhập số điện thoại',
-          prefixWidget: CustomImage.asset(AppIcons.icPhone),
-          keyboardType: TextInputType.phone,
-          inputFormatters: [
-            FilteringTextInputFormatter.allow(RegExp(r'[0-9+]')),
-          ],
-          isRequired: true,
         ),
       ],
     );

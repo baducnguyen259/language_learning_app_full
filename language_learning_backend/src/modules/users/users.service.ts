@@ -30,7 +30,6 @@ export class UsersService {
           displayName: true,
           email: true,
           avatarUrl: true,
-          phoneNumber: true,
           dateOfBirth: true,
           gender: true,
           profileCompletedAt: true,
@@ -92,7 +91,6 @@ export class UsersService {
       displayName: user.displayName,
       email: user.email,
       avatarUrl: user.avatarUrl,
-      phoneNumber: user.phoneNumber,
       dateOfBirth: user.dateOfBirth,
       gender: user.gender,
       profileCompletedAt: user.profileCompletedAt,
@@ -138,7 +136,6 @@ export class UsersService {
       data: {
         name: dto.name,
         displayName: dto.displayName,
-        phoneNumber: dto.phoneNumber,
         dateOfBirth,
         gender: dto.gender,
         profileCompletedAt: new Date(),

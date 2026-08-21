@@ -13,14 +13,12 @@ final class UserProfileService {
   Future<UserProfileModel> updateMyProfile({
     required String name,
     required String displayName,
-    required String phoneNumber,
     required String dateOfBirth,
     required UserGender gender,
   }) {
     return _provider.updateMyProfile(
       name: name,
       displayName: displayName,
-      phoneNumber: phoneNumber,
       dateOfBirth: dateOfBirth,
       gender: gender,
     );

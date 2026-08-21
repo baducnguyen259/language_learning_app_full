@@ -41,9 +41,6 @@ export class MyProfileResponseDto {
   })
   avatarUrl!: string | null;
 
-  @ApiPropertyOptional({ nullable: true, example: '0912345678' })
-  phoneNumber!: string | null;
-
   @ApiPropertyOptional({ nullable: true, format: 'date-time' })
   dateOfBirth!: Date | null;
 
